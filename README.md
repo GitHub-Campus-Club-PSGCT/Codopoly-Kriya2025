@@ -33,10 +33,10 @@
 
 | Endpoint             | Method | Purpose                                 | Request Payload | Status |
 | -------------------- | ------ | --------------------------------------- | --------------- | ------ |
-| /teams/auth/register | POST   | Register a new team (with 2–4 members) |                 | tbd    |
-| /teams/auth/login    | POST   | Team Login                              |                 | tbd    |
+| /teams/register | POST   | Register a new team (with 2–4 members) |                 | tbd    |
+| /teams/login    | POST   | Team Login                              |                 | tbd    |
 | /teams/getall        | GET    | Get all the team details(leaderboards)  |                 | tbd    |
-| /teams/{team_id}     | GET    | Get the specific team details           |                 | tbd    |
+| /teams/details        | GET    | Get the specific team details           |                 | tbd    |
 
 Note : Maybe include assigning POCs the moment a team registers - will have to decide
 Maybe remove /teamid
@@ -50,9 +50,9 @@ Maybe remove /teamid
 
 ### Pre Auction phase
 
-| Endpoint   | Method | Purpose                          | Request Payload | Status |
-| ---------- | ------ | -------------------------------- | --------------- | ------ |
-| /bank | GET    | Get the list of pocs in the bank |                 | tbd    |
+| Endpoint | Method | Purpose                          | Request Payload | Status |
+| -------- | ------ | -------------------------------- | --------------- | ------ |
+| /bank    | GET    | Get the list of pocs in the bank |                 | tbd    |
 
 ### Auctioning phase
 
