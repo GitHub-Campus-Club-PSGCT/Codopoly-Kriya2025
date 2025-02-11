@@ -1,4 +1,4 @@
-const { QuestionWIthError } = require('../models/question');
+const { QuestionWIthError, QuestionCorrect } = require('../models/question');
 const Debug = require('../models/debug');
 const Team = require('../models/team');
 const { runPythonCode } = require('../utils/pythonRunner');
@@ -42,7 +42,7 @@ const submitDebugs = async (req, res) => {
         const {questionTitle, pocTitle, debugs} = req.body;
         const teamId = req.teamId;
 
-        const question = await QuestionWithError.findOne({
+        const question = await QuestionCorrect.findOne({
             title: questionTitle
         })
         if(!question){
@@ -51,6 +51,7 @@ const submitDebugs = async (req, res) => {
             });
         }
 
+        let allPOCs = {...question.POC};
         let pocCode = question.POC[pocTitle];
         if(!pocCode){
             return res.status(404).json({
@@ -62,7 +63,12 @@ const submitDebugs = async (req, res) => {
 
         for(const debug of debugs){
             const modifiedCode = applyDebug(pocCode, debug.line, debug.newCode);
-            const result = await runPythonCode(modifiedCode); // In future, would need to also pass test cases here
+            allPOCs[pocTitle] = modifiedCode;
+
+            const fullCode = Object.values(allPOCs).join("\n\n");
+            
+            
+            const result = await runPythonCode(fullCode); // In future, would need to also pass test cases here
 
             if(result.error){
                 return res.status(400).json({
