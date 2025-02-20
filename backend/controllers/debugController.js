@@ -1,7 +1,11 @@
 const { QuestionWIthError, QuestionCorrect } = require('../models/question');
+const { QuestionWithError } = require('../models/question');
 const Debug = require('../models/debug');
 const Team = require('../models/team');
 const { runPythonCode } = require('../utils/pythonRunner');
+
+
+
 
 const getTeamPOC = async (req, res) => {
     try{
@@ -102,8 +106,9 @@ const applyDebug = (code, line, newCode) => {
     lines[line - 1] = newCode;
     return lines.join("\n");
 };
+console.log("Debug Controller Loaded", { getTeamPOC, submitDebugs });
 
 module.exports = {
     getTeamPOC,
-    submitDebugs
-}
+    submitDebugs,
+};
