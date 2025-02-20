@@ -13,6 +13,6 @@ const questionSchema = new mongoose.Schema({
   
 const QuestionWithError = mongoose.model('QuestionWithError', questionSchema);
 const QuestionCorrect = mongoose.model('QuestionCorrect', questionSchema);
-  
+
 module.exports = { QuestionWithError, QuestionCorrect };
   
