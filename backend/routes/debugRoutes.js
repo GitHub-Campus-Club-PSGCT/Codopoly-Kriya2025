@@ -8,6 +8,6 @@ console.log("Imported Functions:", { getTeamPOC, submitDebugs });
 
 
 router.post('/submit', submitDebugs);
-router.get('/poc',getTeamPOC);
+router.get('/poc', getTeamPOC);
 
 module.exports = router;
