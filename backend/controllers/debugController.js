@@ -51,7 +51,7 @@ const submitDebugs = async (req, res) => {
             });
         }
 
-        let allPOCs = {...question.POC};
+        let allPOCs = {...question.POC}; // ... to create a shallow copy
         let pocCode = question.POC[pocTitle];
         if(!pocCode){
             return res.status(404).json({
@@ -105,5 +105,5 @@ const applyDebug = (code, line, newCode) => {
 
 module.exports = {
     getTeamPOC,
-    submitDebugs,
+    submitDebugs
 }

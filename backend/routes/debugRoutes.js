@@ -2,13 +2,13 @@ const express = require('express');
 
 const {
     getTeamPOC,
-    submitDebugs,
+    submitDebugs
 } = require('../controllers/debugController');
-const authMiddleware = require('../middlewares/authMiddleware');
+const { protect } = require('../middlewares/authMiddleware');
 
 const router = express.Router();
 
-router.post('/submit', authMiddleware, submitDebugs);
-router.get('/poc', authMiddleware, getTeamPOC);
+router.post('/submit', protect, submitDebugs);
+router.get('/poc', protect, getTeamPOC);
 
 module.exports = router;
