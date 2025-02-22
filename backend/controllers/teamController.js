@@ -11,9 +11,7 @@ const registerTeam = async (req, res) => {
     if (existingTeam) {
       return res.status(400).json({ message: 'Team name already exists!' });
     }
-
     const hashedPassword = await bcrypt.hash(password, 10);
-
     const newTeam = new Team({
       team_name: teamName,
       password: hashedPassword,

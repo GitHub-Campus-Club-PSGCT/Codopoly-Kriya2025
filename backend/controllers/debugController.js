@@ -1,7 +1,10 @@
-const { QuestionWIthError, QuestionCorrect } = require('../models/question');
+const { QuestionWithError, QuestionCorrect } = require('../models/question');
 const Debug = require('../models/debug');
 const Team = require('../models/team');
 //const { runPythonCode } = require('../utils/pythonRunner');
+
+
+
 
 const getTeamPOC = async (req, res) => {
     try{
@@ -51,7 +54,7 @@ const submitDebugs = async (req, res) => {
             });
         }
 
-        let allPOCs = {...question.POC};
+        let allPOCs = JSON.parse(JSON.stringify(question.POC)); // Deep copy of POC
         let pocCode = question.POC[pocTitle];
         if(!pocCode){
             return res.status(404).json({
@@ -102,8 +105,9 @@ const applyDebug = (code, line, newCode) => {
     lines[line - 1] = newCode;
     return lines.join("\n");
 };
+console.log("Debug Controller Loaded", { getTeamPOC, submitDebugs });
 
 module.exports = {
     getTeamPOC,
     submitDebugs,
-}
+};

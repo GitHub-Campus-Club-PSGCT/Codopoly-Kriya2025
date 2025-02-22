@@ -31,7 +31,7 @@ const Register = () => {
       alert(response.data.message);
     } catch (err) {
       console.error(err);
-      alert('Registration failed!');
+      alert('Registration failed! : ',err.message);
     }
   };
 
