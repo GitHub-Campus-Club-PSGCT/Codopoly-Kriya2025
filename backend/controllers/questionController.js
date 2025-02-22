@@ -1,4 +1,5 @@
 const { QuestionWithError, QuestionCorrect } = require('../models/question');
+const { runPythonCode } = require('../utils/pythonRunner');
 
 const getQuestions = async (req, res) => {
     try{
@@ -14,8 +15,8 @@ const getQuestions = async (req, res) => {
 
 const submitQuestions = async (req, res) => {
     try{
-        const { title, POC, errorPOC } = req.body;
-        console.log(POC);
+        const { title, POC, errorPOC, testCases } = req.body;
+        console.log(testCases);
 
         const check = await QuestionCorrect.findOne({
             title: title
@@ -27,9 +28,55 @@ const submitQuestions = async (req, res) => {
             });
         }
 
-        const correctQuestion = new QuestionCorrect({ title, POC: { "1": POC["0"], "2": POC["1"], "3": POC["2"] } });
+        let processedTestCases = [];
+
+        try {
+            for (const testCase of testCases) {
+                const jsonInput = testCase.input;
+                console.log('input : ',jsonInput);
+
+                const mainFunction = POC["0"];
+                const otherFunctions = Object.values(POC).slice(1).join("\n\n");
+                const codeToRun = `
+${otherFunctions}
+
+${mainFunction}
+
+if __name__ == "__main__":
+    import json
+    parsed_input = json.loads('${jsonInput}')
+    print(main(parsed_input))
+`;
+
+                const result = await runPythonCode(codeToRun);
+                console.log(result);
+
+                if (result.error) {
+                    return res.status(400).json({ message: "Error running correct code", error: result.error });
+                }
+
+                processedTestCases.push({
+                    input: testCase.input,
+                    expectedOutput: result.output.trim()
+                });
+            }
+        }catch (error) {
+            return res.status(400).json({ message: "Error processing test cases", error: error.message });
+        }
+
+        const correctQuestion = new QuestionCorrect({
+            title,
+            POC: { "1": POC["0"], "2": POC["1"], "3": POC["2"] },
+            testCases: processedTestCases
+        });
         console.log(correctQuestion);
-        const errorQuestion = new QuestionWithError({ title, POC: { "1": errorPOC["0"], "2": errorPOC["1"], "3": errorPOC["2"] } });
+
+        const errorQuestion = new QuestionWithError({
+            title,
+            POC: { "1": errorPOC["0"], "2": errorPOC["1"], "3": errorPOC["2"] },
+            testCases: processedTestCases
+        });
+
         try{
             await correctQuestion.save();
         }catch(error){

@@ -3,22 +3,20 @@ const Debug = require('../models/debug');
 const Team = require('../models/team');
 const { runPythonCode } = require('../utils/pythonRunner');
 
-
-
-
 const getTeamPOC = async (req, res) => {
     try{
         const teamId = req.teamId;
 
         const team = await Team.findById(teamId);
         if(!team){
+            console.log("Team not found!");
             return res.status(404).json({
                 message : "Team not found!"
             });
         }
 
         const assignedPOCs = team.POC  //to get all the POCs of a specific team - like [A1, B2, C3]
-
+        console.log("Assigned POCs", assignedPOCs);
         const questions = await QuestionWithError.find({// question schema of A,B,C
             title: { $in: assignedPOCs.map(poc => poc[0]) }
         });
@@ -42,8 +40,10 @@ const getTeamPOC = async (req, res) => {
 
 const submitDebugs = async (req, res) => {
     try{
-        const {questionTitle, pocTitle, debugs} = req.body;
+        const {questionTitle, pocName, debugs} = req.body;
         const teamId = req.teamId;
+
+        console.log(questionTitle, "\n", pocName, "\n", debugs);
 
         const question = await QuestionCorrect.findOne({
             title: questionTitle
@@ -55,23 +55,25 @@ const submitDebugs = async (req, res) => {
         }
 
         let allPOCs = JSON.parse(JSON.stringify(question.POC)); // Deep copy of POC
-        let pocCode = question.POC[pocTitle];
+        let pocCode = question.POC[pocName];
+
         if(!pocCode){
             return res.status(404).json({
                 message: "POC not found"
             });
         }
-
+        
         let correctDebugs = [];
 
         for(const debug of debugs){
             const modifiedCode = applyDebug(pocCode, debug.line, debug.newCode);
-            allPOCs[pocTitle] = modifiedCode;
+            allPOCs[pocName] = modifiedCode;
 
             const fullCode = Object.values(allPOCs).join("\n\n");
             
             
             const result = await runPythonCode(fullCode); // In future, would need to also pass test cases here
+            console.log("Result", result);
 
             if(result.error){
                 return res.status(400).json({
@@ -84,7 +86,7 @@ const submitDebugs = async (req, res) => {
         }
 
         await Debug.findOneAndUpdate(
-            { teamId, questionTitle, pocTitle },
+            { teamId, questionTitle, pocName },
             { $push: { debugs: { $each: correctDebugs }}},
             { upsert: true, new: true } // new:true so that it returns the updated document
         );
