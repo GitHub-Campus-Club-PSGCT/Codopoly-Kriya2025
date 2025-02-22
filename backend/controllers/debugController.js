@@ -54,7 +54,7 @@ const submitDebugs = async (req, res) => {
             });
         }
 
-        let allPOCs = {...question.POC}; // ... to create a shallow copy
+        let allPOCs = JSON.parse(JSON.stringify(question.POC)); // Deep copy of POC
         let pocCode = question.POC[pocTitle];
         if(!pocCode){
             return res.status(404).json({

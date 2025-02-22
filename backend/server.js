@@ -7,6 +7,7 @@ const teamRoutes = require('./routes/teamRoutes');
 const debugRoutes = require('./routes/debugRoutes');
 const bankRoutes = require('./routes/bankRoutes');
 const auctionRoutes = require('./routes/auctionRoutes');
+const questionRoutes = require('./routes/questionRoutes');
 const cors = require('cors');
 require('dotenv').config();
 
@@ -28,6 +29,7 @@ app.use('/debug', debugRoutes);
 app.use('/bank', bankRoutes);
 app.use('/auction', auctionRoutes);
 app.use('/team', teamRoutes);
+app.use('/question', questionRoutes);
 
 app.get('/', (req, res) => {
   res.send('Sample text');
