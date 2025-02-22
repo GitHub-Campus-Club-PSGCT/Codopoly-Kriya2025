@@ -1,7 +1,7 @@
 const { QuestionWIthError, QuestionCorrect } = require('../models/question');
 const Debug = require('../models/debug');
 const Team = require('../models/team');
-const { runPythonCode } = require('../utils/pythonRunner');
+//const { runPythonCode } = require('../utils/pythonRunner');
 
 const getTeamPOC = async (req, res) => {
     try{

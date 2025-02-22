@@ -6,7 +6,8 @@ const socketHandler = require('./socket');
 const teamRoutes = require('./routes/teamRoutes');
 const debugRoutes = require('./routes/debugRoutes');
 const bankRoutes = require('./routes/bankRoutes');
-const auctionRoutes = require('./routes/auctionRoutes');
+const adminRoutes = require('./routes/adminRoutes')
+const checkEventStatus = require('./middlewares/checkEventStatus')
 const cors = require('cors');
 require('dotenv').config();
 
@@ -21,13 +22,14 @@ const io = new Server(server, {
 const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
+//app.use(checkEventStatus);
 connectDB();
 
 // Define routes
 app.use('/debug', debugRoutes);
 app.use('/bank', bankRoutes);
-app.use('/auction', auctionRoutes);
 app.use('/team', teamRoutes);
+app.use('/admin',adminRoutes);
 
 app.get('/', (req, res) => {
   res.send('Sample text');
