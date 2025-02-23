@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Code from "../components/debugging_phase/Code";
 import AddDebugs from "../components/debugging_phase/AddDebugs";
+import SubmittedDebugs from "../components/debugging_phase/SubmittedDebugs";
 
 const DebuggingPage = () => {
     const [teamPOCs, setTeamPOCs] = useState([]); // Store all POCs
@@ -14,6 +15,10 @@ const DebuggingPage = () => {
                 setTeamPOCs={setTeamPOCs}
                 currentPOCIndex={currentPOCIndex}
                 setCurrentPOCIndex={setCurrentPOCIndex}
+            />
+            <SubmittedDebugs
+                questionTitle={teamPOCs[currentPOCIndex]?.questionTitle} // ✅ Correct key
+                pocName={teamPOCs[currentPOCIndex]?.pocName} // ✅ Directly use pocName
             />
             <AddDebugs
                 currentPOC={teamPOCs[currentPOCIndex]} // Pass the currently displayed POC
