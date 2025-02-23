@@ -6,13 +6,9 @@ const socketHandler = require('./socket');
 const teamRoutes = require('./routes/teamRoutes');
 const debugRoutes = require('./routes/debugRoutes');
 const bankRoutes = require('./routes/bankRoutes');
-<<<<<<< HEAD
 const adminRoutes = require('./routes/adminRoutes')
-const checkEventStatus = require('./middlewares/checkEventStatus')
-=======
-const auctionRoutes = require('./routes/auctionRoutes');
 const questionRoutes = require('./routes/questionRoutes');
->>>>>>> b7db3e638b89bf3ee2270c32ab641267184ec2b4
+
 const cors = require('cors');
 require('dotenv').config();
 
@@ -34,11 +30,9 @@ connectDB();
 app.use('/debug', debugRoutes);
 app.use('/bank', bankRoutes);
 app.use('/team', teamRoutes);
-<<<<<<< HEAD
 app.use('/admin',adminRoutes);
-=======
+
 app.use('/question', questionRoutes);
->>>>>>> b7db3e638b89bf3ee2270c32ab641267184ec2b4
 
 app.get('/', (req, res) => {
   res.send('Sample text');
