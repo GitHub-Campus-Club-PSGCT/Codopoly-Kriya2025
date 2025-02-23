@@ -19,7 +19,7 @@ const debugSchema = mongoose.Schema({
             type: Number,
             required: true
         },
-        neCode: {
+        newCode: {
             type: String,
             required: true
         }
