@@ -5,22 +5,27 @@ const SubmitQuestion = () => {
     const [title, setTitle] = useState("");
     const [correctPOCs, setCorrectPOCs] = useState(["", "", ""]);
     const [errorPOCs, setErrorPOCs] = useState(["", "", ""]);
+    const [testCases, setTestCases] = useState(""); //will be stored as JSON string
     const [message, setMessage] = useState("");
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
+            const formattedTestCases = JSON.parse(testCases); // Convert to JSON array
+
             const response = await axios.post("http://localhost:3000/question/submit", {
                 title,
                 POC: correctPOCs,
                 errorPOC: errorPOCs,
+                testCases: formattedTestCases
             });
 
             setMessage(response.data.message);
             setTitle("");
             setCorrectPOCs(["", "", ""]);
             setErrorPOCs(["", "", ""]);
+            setTestCases("");
         } catch (error) {
             setMessage(error.response?.data?.message || "Error submitting question");
         }
@@ -32,7 +37,6 @@ const SubmitQuestion = () => {
             {message && <p className="text-center text-red-500">{message}</p>}
 
             <form onSubmit={handleSubmit} className="space-y-4">
-                {/* Title Input */}
                 <input
                     type="text"
                     placeholder="Enter question title"
@@ -42,7 +46,6 @@ const SubmitQuestion = () => {
                     required
                 />
 
-                {/* Correct POCs Inputs */}
                 <h3 className="text-lg font-semibold">Correct POCs</h3>
                 {correctPOCs.map((poc, index) => (
                     <textarea
@@ -59,7 +62,6 @@ const SubmitQuestion = () => {
                     />
                 ))}
 
-                {/* Buggy POCs Inputs */}
                 <h3 className="text-lg font-semibold">Buggy POCs</h3>
                 {errorPOCs.map((poc, index) => (
                     <textarea
@@ -76,7 +78,15 @@ const SubmitQuestion = () => {
                     />
                 ))}
 
-                {/* Submit Button */}
+                <h3 className="text-lg font-semibold">Test Cases (JSON format)</h3>
+                <textarea
+                    placeholder='[{"input": "[1,2,3]", "expected": "{1: [0], 2: [1], 3: [2]}"}]'
+                    value={testCases}
+                    onChange={(e) => setTestCases(e.target.value)}
+                    className="w-full p-2 border rounded"
+                    required
+                />
+
                 <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded">
                     Submit Question
                 </button>
