@@ -7,6 +7,7 @@ const registerTeam = async (req, res) => {
   const { teamName, password, members } = req.body;
 
   try {
+    
     const existingTeam = await Team.findOne({ team_name: teamName });
     if (existingTeam) {
       return res.status(400).json({ message: 'Team name already exists!' });
@@ -31,6 +32,7 @@ const loginTeam = async (req, res) => {
   const { teamName, password } = req.body;
 
   try {
+    console.log("Logging in");
     const team = await Team.findOne({ team_name: teamName });
     if (!team) {
       return res.status(404).json({ message: 'Team not found!' });
@@ -61,4 +63,6 @@ const getTeamDetails = async (req, res) => {
       res.status(500).json({ message: 'Failed to get team details!', error: err.message });
     }
   };
+
+  
 module.exports = { registerTeam, loginTeam, getTeamDetails };

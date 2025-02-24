@@ -1,4 +1,4 @@
-const admin = require("../models/admin");
+const Admin = require('../models/admin');  
 
 const logic= async(req,res) => {
     try{

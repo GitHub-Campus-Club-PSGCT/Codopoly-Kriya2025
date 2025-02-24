@@ -6,11 +6,12 @@ const socket = io('http://localhost:3000');
 
 const Bidding = () => {
   const [currentBid, setCurrentBid] = useState({ amount: 0, team: '' });
-  const [bidAmount, setBidAmount] = useState('');
+  const [newBidAmount, setNewBidAmount] = useState(0);
   const [teamName, setTeamName] = useState('');
   const [teamId, setTeamId] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [bidMessage, setBidMessage] = useState('');
+  const [showConfirmBox, setShowConfirmBox] = useState(false);
 
   useEffect(() => {
     const fetchTeamDetails = async () => {
@@ -37,17 +38,9 @@ const Bidding = () => {
 
     fetchTeamDetails();
 
-    socket.on('currentBid', (bid) => {
-      setCurrentBid(bid);
-    });
-
-    socket.on('newBid', (bid) => {
-      setCurrentBid(bid);
-    });
-
-    socket.on('bidFailed', (data) => {
-      setBidMessage(data.message);
-    });
+    socket.on('currentBid', (bid) => setCurrentBid(bid));
+    socket.on('newBid', (bid) => setCurrentBid(bid));
+    socket.on('bidFailed', (data) => setBidMessage(data.message));
 
     return () => {
       socket.off('currentBid');
@@ -56,15 +49,18 @@ const Bidding = () => {
     };
   }, []);
 
-  const handleBid = () => {
-    if (!bidAmount || bidAmount <= 0) {
-      alert('Please enter a valid bid amount.');
-      return;
-    }
+  const handleIncrementBid = (amount) => {
+    setNewBidAmount((prev) => prev + amount);
+    setShowConfirmBox(true);
+  };
 
+  const handleBid = () => {
+    if (newBidAmount === 0) return;
+    const finalBid = currentBid.amount + newBidAmount;
     setBidMessage('Placing your bid...');
-    socket.emit('placeBid', { teamId, teamName, bidAmount: Number(bidAmount) });
-    setBidAmount('');  // Clear the input field
+    socket.emit('placeBid', { teamId, teamName, bidAmount: finalBid });
+    setNewBidAmount(0);
+    setShowConfirmBox(false);
   };
 
   return (
@@ -76,19 +72,43 @@ const Bidding = () => {
         <>
           <p className="mb-2 text-lg font-semibold">Team: {teamName || 'N/A'}</p>
           <p className="mb-4">Current Highest Bid: ₹{currentBid.amount} by {currentBid.team || 'N/A'}</p>
-          <div className="mb-4">
-            <label className="block text-gray-700">Enter Your Bid</label>
-            <input
-              type="number"
-              value={bidAmount}
-              onChange={(e) => setBidAmount(e.target.value)}
-              className="w-full p-2 border rounded-md"
-              min="1"
-            />
+          
+          <div className="grid grid-cols-5 gap-2 mb-4">
+            {[5, 10, 20, 30, 40].map((amount) => (
+              <button
+                key={amount}
+                onClick={() => handleIncrementBid(amount)}
+                className="bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition"
+              >
+                +₹{amount}
+              </button>
+            ))}
           </div>
-          <button onClick={handleBid} className="w-full bg-green-500 text-white py-2 rounded-md">
-            Place Bid
-          </button>
+          
+          {showConfirmBox && (
+            <div className="bg-gray-100 p-4 rounded-md shadow-md mt-4">
+              <p className="text-lg font-semibold text-center">Confirm your bid</p>
+              <p className="text-center">New Bid Amount: ₹{currentBid.amount + newBidAmount}</p>
+              <div className="flex justify-around mt-4">
+                <button
+                  onClick={handleBid}
+                  className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
+                >
+                  Bid
+                </button>
+                <button
+                  onClick={() => {
+                    setNewBidAmount(0);
+                    setShowConfirmBox(false);
+                  }}
+                  className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          )}
+
           {bidMessage && <p className="mt-4 text-center text-red-500">{bidMessage}</p>}
         </>
       )}
