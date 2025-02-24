@@ -1,5 +1,5 @@
 const express = require('express');
-
+const {logic} = require('../controllers/qn_distribution_logic')
 const {
     TeamCount,
     registerAdmin,
@@ -19,5 +19,6 @@ router.get('/teamCount',adminAuthMiddleware,TeamCount);
 router.post('/changeEventStatus',adminAuthMiddleware,ChangeEventStatus);
 router.post('/sold',adminAuthMiddleware,sellPOC);
 router.post('/biddingPOC',adminAuthMiddleware,updateCurrentAuctionPOC);
+router.post('/distributePOC',adminAuthMiddleware,logic);
 
 module.exports = router;
