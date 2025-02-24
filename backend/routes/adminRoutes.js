@@ -6,7 +6,8 @@ const {
     loginAdmin,
     ChangeEventStatus,
     sellPOC,
-    updateCurrentAuctionPOC
+    updateCurrentAuctionPOC,
+    toggleRegistration
 } = require('../controllers/adminController');
 const adminAuthMiddleware = require('../middlewares/adminAuthMiddleware');
 
@@ -20,5 +21,5 @@ router.post('/changeEventStatus',adminAuthMiddleware,ChangeEventStatus);
 router.post('/sold',adminAuthMiddleware,sellPOC);
 router.post('/biddingPOC',adminAuthMiddleware,updateCurrentAuctionPOC);
 router.post('/distributePOC',adminAuthMiddleware,logic);
-
+router.post('/toggle-registration',toggleRegistration);
 module.exports = router;
