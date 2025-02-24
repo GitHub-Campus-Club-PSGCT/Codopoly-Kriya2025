@@ -14,6 +14,8 @@ const adminSchema = new mongoose.Schema({
     currentBiddingPOC : {type : String},
     eventStatus: { type: String, enum: ['debugging', 'auction', 'closed'], default: 'closed' },
     currentAuctionRound:{type: Number, default: 0},
+    maximumBiddingAmount: {type: Number,default : 0},
+    isRegistrationOpen : {type:Boolean,default : true},
     createdAt: { type: Date, default: Date.now }
   });
   

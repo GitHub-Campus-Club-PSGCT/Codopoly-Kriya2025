@@ -98,11 +98,12 @@ const sellPOC = async(req,res) =>{
 
 const updateCurrentAuctionPOC = async (req, res) => {
   try {
-      const { round, POC_name } = req.body;
+      const { round, POC_name,max_amount } = req.body;
       const admin = await Admin.findOneAndUpdate(
           { username: req.user.username },
           { currentBiddingPOC: POC_name,
             currentAuctionRound: round,
+            maximumBiddingAmount : max_amount,
           [`highBidAmount.${round - 1}`]: 0,
           [`highBidHoldingTeamId.${round - 1}`]: null
            },
@@ -120,5 +121,26 @@ const updateCurrentAuctionPOC = async (req, res) => {
   }
 };
 
+const toggleRegistration = async(req,res)=>{
 
-module.exports = {loginAdmin,registerAdmin,TeamCount,ChangeEventStatus,sellPOC,updateCurrentAuctionPOC}
+  try{
+    const admin = await Admin.findOneAndUpdate(
+      { username: req.user.username },
+      { currentBiddingPOC: POC_name,
+        isRegistrationOpen : !isRegistrationOpen
+       },
+      { new: true }
+  );
+    res.status(201).json({
+      message: `Registration Status toggled Successfully! Current Registration Status = ${
+        admin.isRegistrationOpen ? 'Opened' : 'Closed'
+      }`
+    });
+  }catch(error){
+    console.error('Error toggling registration status:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+
+}
+
+module.exports = {loginAdmin,registerAdmin,TeamCount,ChangeEventStatus,sellPOC,updateCurrentAuctionPOC,toggleRegistration}
