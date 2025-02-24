@@ -5,7 +5,6 @@ const path = require("path");
 
 const runPythonCode = (code) => {
     console.log("Running Python code...");
-    console.log(code);
     return new Promise((resolve) => {
         const tempFilePath = path.join(__dirname, "temp_script.py");
 

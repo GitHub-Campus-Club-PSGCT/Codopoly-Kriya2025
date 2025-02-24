@@ -17,7 +17,6 @@ const getTeamPOC = async (req, res) => {
         }
 
         const assignedPOCs = team.POC  //to get all the POCs of a specific team - like [A1, B2, C3]
-        console.log("Assigned POCs", assignedPOCs);
         const questions = await QuestionWithError.find({// question schema of A,B,C
             title: { $in: assignedPOCs.map(poc => poc[0]) }
         });
@@ -39,130 +38,167 @@ const getTeamPOC = async (req, res) => {
     }
 }
 
+const isRedundantDebug = (originalLine, debugLine) => {
+    const normalize = (str) => {
+        return str
+            .replace(/#.*/g, "")  // Remove comments
+            .replace(/\s+/g, ""); // Remove all spaces
+    };
+
+    const originalWithoutComments = originalLine.replace(/#.*/g, "").trim();
+    const debugWithoutComments = debugLine.replace(/#.*/g, "").trim();
+
+    const normalizedOriginal = normalize(originalLine);
+    const normalizedDebug = normalize(debugLine);
+
+    // If both lines are empty or only contain comments/spaces → Redundant
+    if (normalizedOriginal === "" && normalizedDebug === "") return true;
+
+    // If the only difference is the presence/removal of a comment → Redundant
+    if (originalWithoutComments === debugWithoutComments) return true;
+
+    return normalizedOriginal === normalizedDebug;
+};
+
+
 const submitDebugs = async (req, res) => {
-    try{
-        const {questionTitle, pocName, debugs} = req.body;
+    try {
+        const { questionTitle, pocName, debugs } = req.body;
         const teamId = req.teamId;
-
-        console.log(questionTitle, "\n", pocName, "\n", debugs);
-
-        const question = await QuestionCorrect.findOne({
-            title: questionTitle
-        })
-        if(!question){
-            return res.status(404).json({
-                message: "Question not found"
-            });
+        const question = await QuestionCorrect.findOne({ title: questionTitle });
+        if (!question) {
+            return res.status(404).json({ message: "Question not found" });
         }
 
         let allPOCs = JSON.parse(JSON.stringify(question.POC)); // Deep copy of POC
         let pocCode = question.POC[pocName];
 
-        if(!pocCode){
-            return res.status(404).json({
-                message: "POC not found"
-            });
+        if (!pocCode) {
+            return res.status(404).json({ message: "POC not found" });
         }
 
-        const existingDebugs = await Debug.findOne({ teamId, questionTitle, pocName });
+
+        let existingDebugs = await Debug.findOne({ teamId, questionTitle, 'pocTitle': pocName });
         let appliedDebugs = existingDebugs ? [...existingDebugs.debugs] : [];
+
+        // Apply existing debugs
         for (const prevDebug of appliedDebugs) {
             pocCode = applyDebug(pocCode, prevDebug.line, prevDebug.newCode);
         }
-        
+
         let correctDebugs = [];
         const testCases = question.testCases;
 
-        for(const debug of debugs){
-            if (appliedDebugs.some(d => d.line === debug.line)) {
-                return res.status(400).json({ message: `Debug conflicts with an existing one at line ${debug.line}` });
+        for (const debug of debugs) {
+            const originalLine = pocCode.split("\n")[debug.line - 1];
+
+            if (isRedundantDebug(originalLine, debug.newCode)) {
+                console.log('Redundant debug at line', debug.line);
+                return res.status(400).json({ message: `Redundant debug at line ${debug.line}` });
             }
 
+            if (appliedDebugs.some(d => d.line == debug.line)) {
+                return res.status(400).json({ message: `Debug conflicts with an existing one at line ${debug.line}` });
+            }
             const modifiedCode = applyDebug(pocCode, debug.line, debug.newCode);
             allPOCs[pocName] = modifiedCode;
 
-            const mainFunction = allPOCs[0];
+            const mainFunction = allPOCs["1"];
             const otherFunctions = Object.values(allPOCs).slice(1).join("\n\n");
 
             let allTestsPass = true;
+
             for (const test of testCases) {
                 const { input, expectedOutput } = test;
                 const codeToRun = `
-${otherFunctions}
+${otherFunctions.trim()}
 
-${mainFunction}
+${mainFunction.trim()}
 
 if __name__ == "__main__":
     import json
-    parsed_input = json.loads('${JSON.stringify(input)}')
+    parsed_input = json.loads('${input}')
     print(main(parsed_input))
 `;
-            
-            
-                const result = await runPythonCode(fullCode); // In future, would need to also pass test cases here
-                console.log("Result", result);
-
-                if(result.error){
+                console.log(codeToRun);
+                const result = await runPythonCode(codeToRun);
+                console.log(result);
+                if (result.error) {
                     return res.status(400).json({
-                        message: "Debug caused an error!"
-                    })
+                        message: "Debug caused an error!",
+                        errorDetails: result.error,
+                    });
                 }
 
                 if (result.output.trim() !== expectedOutput.trim()) {
                     return res.status(400).json({
-                        message: `Output mismatch! Expected: ${expectedOutput}, Got: ${result.output.trim()}`
+                        message: "Output mismatch!",
+                        expected: expectedOutput,
+                        received: result.output.trim(),
                     });
                 }
+            }
 
-                if(allTestsPass){
-                    pocCode = modifiedCode;
-                    correctDebugs.push(debug);
-                    appliedDebugs.push(debug);
-                }
+            if (allTestsPass) {
+                pocCode = modifiedCode;
+                correctDebugs.push(debug);
             }
         }
-        
-        if (correctDebugs.length > 0){
-            await Debug.findOneAndUpdate(
-                { teamId, questionTitle, pocName },
-                { $push: { debugs: { $each: correctDebugs }}},
-                { upsert: true, new: true } // new:true so that it returns the updated document
-            );
+
+        if (correctDebugs.length > 0) {
+            let debugRecord = await Debug.findOne({ teamId, questionTitle, pocTitle: pocName });
+
+            if (debugRecord) {
+                console.log("Appending debug to existing record");
+                debugRecord.debugs.push(...correctDebugs);
+                await debugRecord.save();
+            } else {
+                console.log("Creating a new debug record");
+                debugRecord = new Debug({
+                    teamId,
+                    questionTitle,
+                    pocTitle: pocName,
+                    debugs: correctDebugs,
+                });
+                await debugRecord.save();
+            }
         }
 
-        res.status(200).json({
-            message: 'Submitted Debugs!'
-        });   
-    }catch(error){
+        res.status(200).json({ message: "Submitted Debugs!" });
+    } catch (error) {
         res.status(500).json({
-            message: "Server error",
-            error: error.message
+            message: "An error occurred!",
+            error: error.message,
         });
     }
-}
+};
+
+
 
 const applyDebug = (code, line, newCode) => {
     const lines = code.split("\n");
-    lines[line - 1] = newCode;
+    if (line < 1 || line > lines.length) return code;
+
+    const originalIndent = lines[line - 1].match(/^\s*/)[0]; // Capture leading spaces
+    lines[line - 1] = originalIndent + newCode; // Preserve indentation
+
     return lines.join("\n");
 };
-console.log("Debug Controller Loaded", { getTeamPOC, submitDebugs });
 
 const getDebugs = async (req, res) => {
     try{
-        console.log('test Fetching debugs');
         const { questionTitle, pocName } = req.query;
         const teamId = req.teamId;
 
-        if (!questionTitle || !pocName) {
+        if (questionTitle===null || pocName===null) {
             return res.status(400).json({
                 message: "Missing required parameters: questionTitle or pocName."
             });
         }
 
-        const debugData = await Debug.findOne({ teamId, questionTitle, pocName });
+        const debugData = await Debug.findOne({ teamId, questionTitle, 'pocTitle': pocName });
         
-        console.log('test Fetching debugs');
+        
 
         if (!debugData) {
             return res.status(200).json({

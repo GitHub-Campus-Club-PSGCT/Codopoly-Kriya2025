@@ -1,34 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const SubmittedDebugs = ({ questionTitle, pocName, teamId}) => {
+const SubmittedDebugs = ({ questionTitle, pocName, teamId }) => {
     const [debugs, setDebugs] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
         const fetchDebugs = async () => {
-            try{
+            try {
                 const token = localStorage.getItem("token");
-                if(!token){
-                    alert("No token found. Please log in.")
+                if (!token) {
+                    alert("No token found. Please log in.");
+                    return;
                 }
 
                 const response = await axios.get('http://localhost:3000/debug/getdebugs', {
                     params: { questionTitle, pocName },
                     headers: { Authorization: `Bearer ${token}` }
-                })
-                const data = await response.json();
-
-                if(!response.ok){
-                    throw new Error(data.message || "Something went wrong when fetching debugs");
-                }
-
+                });
+                
                 setDebugs(response.data.debugs || []);
-
-            }catch(error){
-                setError(error.message);
-            }finally{
+            } catch (error) {
+                setError(error.response?.data?.message || error.message);
+            } finally {
                 setLoading(false);
             }
         };
@@ -52,6 +47,6 @@ const SubmittedDebugs = ({ questionTitle, pocName, teamId}) => {
             </ul>
         </div>
     );
-}
+};
 
 export default SubmittedDebugs;

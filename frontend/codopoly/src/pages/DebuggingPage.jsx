@@ -17,8 +17,8 @@ const DebuggingPage = () => {
                 setCurrentPOCIndex={setCurrentPOCIndex}
             />
             <SubmittedDebugs
-                questionTitle={teamPOCs[currentPOCIndex]?.questionTitle} // ✅ Correct key
-                pocName={teamPOCs[currentPOCIndex]?.pocName} // ✅ Directly use pocName
+                questionTitle={teamPOCs[currentPOCIndex]?.pocName.charAt(0)} // ✅ Correct key
+                pocName={teamPOCs[currentPOCIndex]?.pocName.charAt(1)} // ✅ Directly use pocName
             />
             <AddDebugs
                 currentPOC={teamPOCs[currentPOCIndex]} // Pass the currently displayed POC
