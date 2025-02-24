@@ -3,7 +3,6 @@ const jwt = require('jsonwebtoken');
 const Admin = require('../models/admin');  
 const Team = require('../models/team');
 const Auction = require('../models/auction')
-const logic = require('./qn_distribution_logic');
 //Not in use
 const registerAdmin = async (req, res) => {
     try {
@@ -63,31 +62,6 @@ const loginAdmin = async (req, res) => {
     }
   };
 
-  const StartAuction = async (req, res) => {
-    try {
-      const {round}=req.body;
-  
-      // Step 2: Update the teamCount field in the Admin collection
-      const admin = await Admin.findOneAndUpdate(
-        { username: req.user.username },  // filter
-        { 
-          currentAuctionRound: round,
-          [`highBidAmount.${round - 1}`]: 0,
-          [`highBidHoldingTeamId.${round - 1}`]: null
-        },
-        { new: true }
-      );
-  
-      if (!admin) {
-        return res.status(404).json({ error: 'Admin not found' });
-      }
-  
-      res.status(200).json({ message: 'Round updated successfully', Round: admin.currentAuctionRound });
-    } catch (error) {
-      console.error('Error updating round:', error);
-      res.status(500).json({ error: 'Server error' });
-    }
-  };
 
   const ChangeEventStatus = async (req, res) => {
     const { newStatus } = req.body;
@@ -147,4 +121,4 @@ const updateCurrentAuctionPOC = async (req, res) => {
 };
 
 
-module.exports = {loginAdmin,registerAdmin,TeamCount,StartAuction,ChangeEventStatus,sellPOC,updateCurrentAuctionPOC}
+module.exports = {loginAdmin,registerAdmin,TeamCount,ChangeEventStatus,sellPOC,updateCurrentAuctionPOC}

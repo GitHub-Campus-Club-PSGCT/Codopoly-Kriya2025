@@ -61,4 +61,6 @@ const getTeamDetails = async (req, res) => {
       res.status(500).json({ message: 'Failed to get team details!', error: err.message });
     }
   };
+
+  
 module.exports = { registerTeam, loginTeam, getTeamDetails };
