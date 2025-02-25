@@ -7,6 +7,7 @@ const AppRouter = () => {
         <Router>
             <Routes>
                 <Route path='/' element={<HomePage/>}/>
+                <Route path="/question" element={<QuestionPage/>}/>
              </Routes>
         </Router>
     );
