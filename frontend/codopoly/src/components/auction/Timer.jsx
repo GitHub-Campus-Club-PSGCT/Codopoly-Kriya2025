@@ -1,0 +1,1 @@
+// Should implement the timer component from the Figma design
