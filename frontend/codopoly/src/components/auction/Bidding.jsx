@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
 import axios from 'axios';
+import styles from '../../styles/bidding.module.css';
 
 const socket = io('http://localhost:3000');
 
@@ -9,7 +10,7 @@ const Bidding = () => {
   const [newBidAmount, setNewBidAmount] = useState(0);
   const [teamName, setTeamName] = useState('');
   const [teamId, setTeamId] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false); //set for false for styling
   const [bidMessage, setBidMessage] = useState('');
   const [showConfirmBox, setShowConfirmBox] = useState(false);
 
@@ -64,35 +65,35 @@ const Bidding = () => {
   };
 
   return (
-    <div className="max-w-lg mx-auto bg-white p-8 rounded-xl shadow-md">
-      <h2 className="text-2xl font-bold text-center mb-4">Bidding</h2>
+    <div className={styles.biddingcontainer}>
+      <h2 className={styles.maintext}>Bidding</h2>
       {isLoading ? (
-        <p className="text-center text-gray-600">Loading team details...</p>
+        <p className={styles.text}>Loading team details...</p>
       ) : (
         <>
-          <p className="mb-2 text-lg font-semibold">Team: {teamName || 'N/A'}</p>
-          <p className="mb-4">Current Highest Bid: ₹{currentBid.amount} by {currentBid.team || 'N/A'}</p>
-          
-          <div className="grid grid-cols-5 gap-2 mb-4">
+          <p className={styles.text}>Team: {teamName || 'N/A'}</p>
+          <p className={styles.text}>Current Highest Bid: ₹{currentBid.amount} by {currentBid.team || 'N/A'}</p>
+
+          <div className={styles.amtcont}>
             {[5, 10, 20, 30, 40].map((amount) => (
               <button
                 key={amount}
                 onClick={() => handleIncrementBid(amount)}
-                className="bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition"
+                className={styles.btn}
               >
                 +₹{amount}
               </button>
             ))}
           </div>
-          
+
           {showConfirmBox && (
-            <div className="bg-gray-100 p-4 rounded-md shadow-md mt-4">
-              <p className="text-lg font-semibold text-center">Confirm your bid</p>
-              <p className="text-center">New Bid Amount: ₹{currentBid.amount + newBidAmount}</p>
-              <div className="flex justify-around mt-4">
+            <div className={styles.confirmbox}>
+              <p className={styles.text}>Confirm your bid</p>
+              <p className={styles.text}>New Bid Amount: ₹{currentBid.amount + newBidAmount}</p>
+              <div className={styles.bidconfrmcontainer}>
                 <button
                   onClick={handleBid}
-                  className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
+                  className={styles.btn}
                 >
                   Bid
                 </button>
@@ -101,7 +102,7 @@ const Bidding = () => {
                     setNewBidAmount(0);
                     setShowConfirmBox(false);
                   }}
-                  className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
+                  className={styles.btn}
                 >
                   Cancel
                 </button>
@@ -109,7 +110,7 @@ const Bidding = () => {
             </div>
           )}
 
-          {bidMessage && <p className="mt-4 text-center text-red-500">{bidMessage}</p>}
+          {bidMessage && <p className={styles.text}>{bidMessage}</p>}
         </>
       )}
     </div>
