@@ -44,21 +44,20 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: #374151;
+    background-color:#282828;
     height: 550px;
     width: 27vw;
     border-radius: 30px;
-    border: 1px solid #3FB6E9;
 }
 
 .maintext{
-    color: #3FB6E9;
+    color:#F96024;
     font-weight: bold;
     font-size: 30px;
 }
 
 .text{
-    color: #3FB6E9;
+    color:#F96024;
     font-weight: bold;
     font-size: 24px;
 }
@@ -71,7 +70,7 @@
 }
 
 .btn{
-    background-color: #3FB6E9;
+    background-color:#F96024;
     width: 80px;
     height: 50px;
     border: none;
@@ -104,7 +103,7 @@
     flex-direction: row;
     align-items: center;
     height: 9vh;
-    border-bottom: 1px solid #3FB6E9;
+    border-bottom: 1px solid #F96024;
 }
 
 .sidebarbtn{
@@ -124,7 +123,7 @@
     position: fixed;
     height: 90vh;
     width: 300px;
-    background-color:#374151;
+    background-color:#282828;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     transition: transform 0.5s ease-in-out;
 }
@@ -141,9 +140,9 @@
     height: 60px;
     width: 250px;
     text-align: center;
-    color: #3FB6E9;
+    color:#F96024;
     font-size: 24px;
-    background-color: #515E72;
+    background-color: #363434;
     margin-top: 30px;
     border: none;
     border-radius: 10px;
@@ -162,7 +161,7 @@
     position: fixed;
     height: 90vh;
     width: 30vw;
-    background-color:#374151;
+    background-color:#282828;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     transition: transform 0.5s ease-in-out;
 }
@@ -176,7 +175,7 @@
 .mainpart{
     width: 90%;
     height: 85%;
-    background-color: #111827;
+    background-color:#171717;
     border-radius: 20px;
     overflow: scroll;
 }
@@ -190,17 +189,16 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 600px;
-    height: 750px;
-    background-color: #374151;
+    width: 550px;
+    height: 650px;
+    background-color:#282828;
     border-radius: 20px;
-    border: 1px solid #3FB6E9;
 }
 
 .auctioncodesubcontainer {
-    width: 85%;
-    height: 75%;
-    background-color: #111827;
+    width: 90%;
+    height: 85%;
+    background-color:#171717;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
@@ -242,21 +240,21 @@
 }
 
 ::-webkit-scrollbar-track {
-    background: #1F2937;
+    background: #282828;
     border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #3FB6E9;
+    background: #F96024;
     border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #2d9ed0;
+    background: #F96024;
 }
 
 /* For Firefox */
 * {
     scrollbar-width: thin;
-    scrollbar-color: #3FB6E9 #1F2937;
+    scrollbar-color:#F96024 #282828;
 }
