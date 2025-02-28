@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
 import axios from 'axios';
+import styles from '../../styles/bidding.module.css';
 
 const socket = io('http://localhost:3000');
 
@@ -9,7 +10,7 @@ const Bidding = () => {
   const [bidAmount, setBidAmount] = useState('');
   const [teamName, setTeamName] = useState('');
   const [teamId, setTeamId] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false); //set for false for styling
   const [bidMessage, setBidMessage] = useState('');
   const [auctionStatus, setAuctionStatus] = useState('');
 
@@ -103,6 +104,7 @@ const Bidding = () => {
   }
 
   return (
+<<<<<<< HEAD:frontend/codopoly/src/components/Bidding.jsx
     <div className="max-w-lg mx-auto bg-white p-8 rounded-xl shadow-md">
       <h2 className="text-2xl font-bold text-center mb-6">Live Auction Bidding</h2>
       
@@ -155,6 +157,54 @@ const Bidding = () => {
               {bidMessage}
             </div>
           )}
+=======
+    <div className={styles.biddingcontainer}>
+      <h2 className={styles.maintext}>Bidding</h2>
+      {isLoading ? (
+        <p className={styles.text}>Loading team details...</p>
+      ) : (
+        <>
+          <p className={styles.text}>Team: {teamName || 'N/A'}</p>
+          <p className={styles.text}>Current Highest Bid: ₹{currentBid.amount} by {currentBid.team || 'N/A'}</p>
+
+          <div className={styles.amtcont}>
+            {[5, 10, 20, 30, 40].map((amount) => (
+              <button
+                key={amount}
+                onClick={() => handleIncrementBid(amount)}
+                className={styles.btn}
+              >
+                +₹{amount}
+              </button>
+            ))}
+          </div>
+
+          {showConfirmBox && (
+            <div className={styles.confirmbox}>
+              <p className={styles.text}>Confirm your bid</p>
+              <p className={styles.text}>New Bid Amount: ₹{currentBid.amount + newBidAmount}</p>
+              <div className={styles.bidconfrmcontainer}>
+                <button
+                  onClick={handleBid}
+                  className={styles.btn}
+                >
+                  Bid
+                </button>
+                <button
+                  onClick={() => {
+                    setNewBidAmount(0);
+                    setShowConfirmBox(false);
+                  }}
+                  className={styles.btn}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          )}
+
+          {bidMessage && <p className={styles.text}>{bidMessage}</p>}
+>>>>>>> upstream/master:frontend/codopoly/src/components/auction/Bidding.jsx
         </>
       )}
     </div>

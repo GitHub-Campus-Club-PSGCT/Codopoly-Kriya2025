@@ -1,0 +1,262 @@
+/*
+    Styles for the Bidding Page
+*/
+
+.container {
+    position: relative;
+    display: flex;
+    height: 90vh;
+    width: 100vw;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-left: 0;
+    transition: all 0.6s ease-in-out;
+}
+
+.narrowed {
+    width: calc(100vw - 30vw);
+    margin-left: 30vw;
+}
+
+.scoreContainer {
+    position: absolute;
+    top: 20px;
+    right: 40px;
+    z-index: 2;
+}
+
+.contentContainer {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+}
+
+/*
+    Styles for the Bidding component
+*/
+
+.biddingcontainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #374151;
+    height: 550px;
+    width: 27vw;
+    border-radius: 30px;
+    border: 1px solid #3FB6E9;
+}
+
+.maintext{
+    color: #3FB6E9;
+    font-weight: bold;
+    font-size: 30px;
+}
+
+.text{
+    color: #3FB6E9;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.amtcont{
+    display: flex;
+    flex-direction: row;
+    width: 90%;
+    justify-content: space-between;
+}
+
+.btn{
+    background-color: #3FB6E9;
+    width: 80px;
+    height: 50px;
+    border: none;
+    border-radius: 10px;
+    font-size: 20px;
+}
+
+.confirmbox{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.bidconfrmcontainer{
+    display: flex;
+    width: 80%;
+    justify-content: space-between;
+}
+
+/*
+    Styles for the Header component
+*/
+
+.header{
+    padding: 0;
+    margin: 0;
+    width: 100vw;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 9vh;
+    border-bottom: 1px solid #3FB6E9;
+}
+
+.sidebarbtn{
+    margin-left: 30px;
+}
+
+/*
+    Styles for the SideBar component
+*/
+
+.sidebarcontainer {
+    margin: none;
+    top: 9vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: fixed;
+    height: 90vh;
+    width: 300px;
+    background-color:#374151;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.5s ease-in-out;
+}
+
+.open {
+    transform: translateX(0);
+}
+
+.closed {
+    transform: translateX(-100%);
+}
+
+.sidebarsubcontainer{
+    height: 60px;
+    width: 250px;
+    text-align: center;
+    color: #3FB6E9;
+    font-size: 24px;
+    background-color: #515E72;
+    margin-top: 30px;
+    border: none;
+    border-radius: 10px;
+}
+
+/*
+    Styles for the Main Part component
+*/
+
+.mainpartcontainer{
+    margin: none;
+    top: 9vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: fixed;
+    height: 90vh;
+    width: 30vw;
+    background-color:#374151;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.5s ease-in-out;
+}
+
+.mainpartsubcontainer{
+    display: flex;
+    width: 90%;
+    flex-direction: row;
+}
+
+.mainpart{
+    width: 90%;
+    height: 85%;
+    background-color: #111827;
+    border-radius: 20px;
+    overflow: scroll;
+}
+
+/*
+    Styles for the Auction Code
+*/
+
+.auctioncodecontainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 600px;
+    height: 750px;
+    background-color: #374151;
+    border-radius: 20px;
+    border: 1px solid #3FB6E9;
+}
+
+.auctioncodesubcontainer {
+    width: 85%;
+    height: 75%;
+    background-color: #111827;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px;
+    overflow: scroll;
+}
+
+/*
+    Styles for the Score Component
+*/
+
+.scorecontainer{
+    display: flex;
+    width: 200px;
+    height: 100px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.score{
+    font-size: 40px;
+    color: #FBBD13;
+    font-weight: bolder;
+    padding: 0;
+    margin: 0;
+}
+
+/*
+    Custom Scrollbar Styles
+*/
+
+/* For Webkit browsers (Chrome, Safari) */
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #1F2937;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #3FB6E9;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #2d9ed0;
+}
+
+/* For Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #3FB6E9 #1F2937;
+}

@@ -12,7 +12,7 @@ const Code = ({ teamPOCs, setTeamPOCs, currentPOCIndex, setCurrentPOCIndex }) =>
                 }
 
                 const response = await axios.get("http://localhost:3000/debug/poc", {
-                    headers: { Authorization: `Bearer ${token}` },
+                    headers: { Authorization: `Bearer ${token}` }
                 });
 
                 setTeamPOCs(response.data.teamPOCs);
