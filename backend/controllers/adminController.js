@@ -20,19 +20,26 @@ const registerAdmin = async (req, res) => {
 
 const loginAdmin = async (req, res) => {
     try {
+      console.log("In admin login");
       const { username, password } = req.body;
       const admin = await Admin.findOne({ username });
   
       if (!admin) {
+        
+      console.log("admin error");
         return res.status(404).json({ error: 'Admin not found' });
       }
   
       const isPasswordValid = await bcrypt.compare(password, admin.password);
       if (!isPasswordValid) {
+        
+      console.log("password error");
         return res.status(401).json({ error: 'Invalid credentials' });
       }
   
       const token = jwt.sign({ id: admin._id, username: admin.username }, process.env.JWT_SECRET, { expiresIn: '2h' });
+      
+      console.log("In admin login - token");
       res.status(200).json({ message: 'Login successful', token });
     } catch (error) {
       res.status(500).json({ error: 'Login failed' });
@@ -86,8 +93,11 @@ const loginAdmin = async (req, res) => {
 
 const sellPOC = async(req,res) =>{
     try{ 
-      const {round,POC,team_name } = req.body;
-      const newAuction = new Auction({round,POC,team_name});
+      const admin = admin.findOne({username : req.user.username});
+      const round = admin.currentAuctionRound;
+      const POC = admin.currentBiddingPOC;
+      const team_id = admin.highBidHoldingTeamId;
+      const newAuction = new Auction({round,POC,team_id});
       await newAuction.save();
       return res.status(200).json({message : `POC : '${POC}' sold to ${team_name} successfully`});
     }catch(error){
@@ -99,13 +109,16 @@ const sellPOC = async(req,res) =>{
 const updateCurrentAuctionPOC = async (req, res) => {
   try {
       const { round, POC_name,max_amount } = req.body;
+      console.log(round);
+      console.log(POC_name);
+      console.log(max_amount);
       const admin = await Admin.findOneAndUpdate(
           { username: req.user.username },
           { currentBiddingPOC: POC_name,
             currentAuctionRound: round,
             maximumBiddingAmount : max_amount,
-          [`highBidAmount.${round - 1}`]: 0,
-          [`highBidHoldingTeamId.${round - 1}`]: null
+          [`highBidAmount`]: 0,
+          [`highBidHoldingTeamId`]: null
            },
           { new: true }
       );
@@ -124,13 +137,12 @@ const updateCurrentAuctionPOC = async (req, res) => {
 const toggleRegistration = async(req,res)=>{
 
   try{
-    const admin = await Admin.findOneAndUpdate(
-      { username: req.user.username },
-      { currentBiddingPOC: POC_name,
-        isRegistrationOpen : !isRegistrationOpen
-       },
-      { new: true }
-  );
+    const admin = await Admin.findOne({ username: req.user.username });
+
+if (admin) {
+  admin.isRegistrationOpen = !admin.isRegistrationOpen;
+  await admin.save();
+}
     res.status(201).json({
       message: `Registration Status toggled Successfully! Current Registration Status = ${
         admin.isRegistrationOpen ? 'Opened' : 'Closed'
