@@ -23,21 +23,29 @@ const socketHandler = (io) => {
         return;
       }
 
-      const roundIndex = admin.currentAuctionRound - 1;
       let highBidTeamName = null;
 
-      if (admin.highBidHoldingTeamId[roundIndex]) {
-        const highBidTeam = await Team.findOne({ _id: admin.highBidHoldingTeamId[roundIndex] });
+      if (admin.highBidHoldingTeamId) {
+        const highBidTeam = await Team.findOne({ _id: admin.highBidHoldingTeamId});
         highBidTeamName = highBidTeam ? highBidTeam.team_name : null;
       }
 
       currentBid = {
-        amount: admin.highBidAmount[roundIndex] || 0,
+        amount: admin.highBidAmount || 0,
         team: highBidTeamName,
       };
 
       socket.emit('currentBid', currentBid);
       console.log(currentBid);
+      socket.on('adminJoin', () => {
+        console.log('Admin connected:', socket.id);
+        socket.emit('adminLogs', {
+          highBidAmount: admin.highBidAmount,
+          highBidHoldingTeamId: admin.highBidHoldingTeamId ? admin.highBidHoldingTeamId._id : null,
+          highBidHoldingTeamName: highBidTeamName,
+          currentBiddingPOC: admin.currentBiddingPOC,
+        });
+      });
     } catch (error) {
       console.error('Error fetching high bid from database:', error);
     }
@@ -65,8 +73,6 @@ const socketHandler = (io) => {
           socket.emit('bidFailed', { message: 'Auction is not active.' });
           return;
         }
-
-        const roundIndex = admin.currentAuctionRound - 1;
         const teamBalance = team.gitcoins || 0;
 
         if (bidAmount > teamBalance) {
@@ -84,8 +90,8 @@ const socketHandler = (io) => {
         console.log(`New highest bid for round ${admin.currentAuctionRound}: ${bidAmount} by ${teamName}`);
 
         // Update the database
-        admin.highBidAmount[roundIndex] = bidAmount;
-        admin.highBidHoldingTeamId[roundIndex] = teamId;
+        admin.highBidAmount = bidAmount;
+        admin.highBidHoldingTeamId = teamId;
         await admin.save();
 
         console.log(`High bid updated for round ${admin.currentAuctionRound} in database.`);

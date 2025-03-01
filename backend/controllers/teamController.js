@@ -33,6 +33,7 @@ const loginTeam = async (req, res) => {
 
   try {
     console.log("Logging in");
+    console.log(teamName,password);
     const team = await Team.findOne({ team_name: teamName });
     if (!team) {
       return res.status(404).json({ message: 'Team not found!' });
