@@ -39,6 +39,7 @@ const getTeamPOC = async (req, res) => {
 }
 
 const isRedundantDebug = (originalLine, debugLine) => {
+    console.log('Original line :',originalLine,'\nDebug line :', debugLine);
     const normalize = (str) => {
         return str
             .replace(/#.*/g, "")  // Remove comments
@@ -65,13 +66,15 @@ const submitDebugs = async (req, res) => {
     try {
         const { questionTitle, pocName, debugs } = req.body;
         const teamId = req.teamId;
-        const question = await QuestionCorrect.findOne({ title: questionTitle });
-        if (!question) {
+        const questionCorrect = await QuestionCorrect.findOne({ title: questionTitle });
+        const questionError = await QuestionWithError.findOne({ title: questionTitle });
+        if (!questionCorrect) {
             return res.status(404).json({ message: "Question not found" });
         }
 
-        let allPOCs = JSON.parse(JSON.stringify(question.POC)); // Deep copy of POC
-        let pocCode = question.POC[pocName];
+        let allPOCs = JSON.parse(JSON.stringify(questionCorrect.POC)); // Deep copy of POC
+        let pocCode = questionCorrect.POC[pocName];
+        let pocCodeError = questionError.POC[pocName];
 
         if (!pocCode) {
             return res.status(404).json({ message: "POC not found" });
@@ -87,10 +90,10 @@ const submitDebugs = async (req, res) => {
         }
 
         let correctDebugs = [];
-        const testCases = question.testCases;
+        const testCases = questionCorrect.testCases;
 
         for (const debug of debugs) {
-            const originalLine = pocCode.split("\n")[debug.line - 1];
+            const originalLine = pocCodeError.split("\n")[debug.line - 1];
 
             if (isRedundantDebug(originalLine, debug.newCode)) {
                 console.log('Redundant debug at line', debug.line);
