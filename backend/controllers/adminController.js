@@ -155,4 +155,24 @@ if (admin) {
 
 }
 
-module.exports = {loginAdmin,registerAdmin,TeamCount,ChangeEventStatus,sellPOC,updateCurrentAuctionPOC,toggleRegistration}
+const bidHistory = async (req, res) => {
+  try {
+    const auctions = await Auction.find().sort({ createdAt: -1 }); // Sort by createdAt in descending order
+    res.status(200).json(auctions);
+  } catch (error) {
+    console.error('Error fetching bid history:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+const teamStats = async(req,res)=>{
+  try{
+    const teams = await Team.find().sort({gitcoins : -1});
+    res.status(200).json(teams);
+  }catch(error){
+    console.error('Error fetching Team Stats:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+}
+
+module.exports = {loginAdmin,registerAdmin,TeamCount,ChangeEventStatus,sellPOC,updateCurrentAuctionPOC,toggleRegistration,bidHistory,teamStats}

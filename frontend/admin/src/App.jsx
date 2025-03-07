@@ -9,6 +9,7 @@ import Dashboard from './pages/Dashboard';
 import AuctionManagement from './pages/AuctionManagement';
 import POCDistribution from './pages/POCDistribution';
 import Settings from './pages/Settings';
+import Leaderboards from './pages/LeaderBoards';
 
 // Components
 import ProtectedRoute from './components/ProtectedRoute';
@@ -26,6 +27,7 @@ function App() {
           <Route path="auction" element={<AuctionManagement />} />
           <Route path="poc-distribution" element={<POCDistribution />} />
           <Route path="settings" element={<Settings />} />
+          <Route path="leaderboard" element={<Leaderboards/>}/>
         </Route>
       </Routes>
     </Router>
