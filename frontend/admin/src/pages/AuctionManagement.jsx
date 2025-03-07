@@ -71,6 +71,16 @@ const AuctionManagement = () => {
       toast.success('Auction timer ended');
     });
 
+    newSocket.on('sellPOCSuccess',(data)=>{
+      toast.success(data.message);
+      setCurrentPOC('');
+      loadTeamStats();
+    });
+
+    newSocket.on('sellPOCFailed',(data)=>{
+      toast.error(data.message);
+    });
+
     // Join as admin to get logs
     newSocket.emit('adminJoin');
 
@@ -133,15 +143,7 @@ const AuctionManagement = () => {
     setIsSelling(true);
     
     try {
-      await adminAPI.sellPOC();
-      toast.success(`POC ${currentPOC} sold successfully!`);
-      
-      // Clear the current POC after selling
-      setCurrentPOC('');
-      setRound(prev => prev + 1);
-      
-      // Refresh stats after selling
-      loadTeamStats();
+      socket.emit('sellPOC');
     } catch (error) {
       console.error('Error selling POC:', error);
       toast.error('Failed to sell POC');

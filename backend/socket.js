@@ -1,17 +1,40 @@
+const { Server } = require('socket.io');
 const Admin = require('./models/admin');
 const Team = require('./models/team');
+const Auction = require('./models/auction');  // Assuming you have this model
 
 let currentBid = {
   amount: 0,
   team: null,
 };
 
-const socketHandler = (io) => {
+let auctionTimer = null;
+let auctionTimeLeft = 0;
+
+const socketHandler = (server) => {
+  const io = new Server(server, {
+    cors: {
+      origin: '*',  // Allow all origins for development (restrict in production)
+    }
+  });
+
+  const emitLeaderboard = async () => {
+    try {
+      const teams = await Team.find().sort({ gitcoins: -1 }); // Sort by gitcoins in descending order
+      const leaderboard = teams.map((team, index) => ({
+        ...team.toObject(),
+        place: index + 1
+      }));
+      io.emit('leaderboard', leaderboard);
+    } catch (error) {
+      console.error('Error fetching leaderboard:', error);
+    }
+  };
+
   io.on('connection', async (socket) => {
     console.log('New client connected:', socket.id);
 
     try {
-      // Fetch the admin record only once
       const admin = await Admin.findOne({ username: 'Akash' });
       if (!admin) {
         socket.emit('error', { message: 'Admin record not found.' });
@@ -24,9 +47,8 @@ const socketHandler = (io) => {
       }
 
       let highBidTeamName = null;
-
       if (admin.highBidHoldingTeamId) {
-        const highBidTeam = await Team.findOne({ _id: admin.highBidHoldingTeamId});
+        const highBidTeam = await Team.findById(admin.highBidHoldingTeamId);
         highBidTeamName = highBidTeam ? highBidTeam.team_name : null;
       }
 
@@ -37,6 +59,10 @@ const socketHandler = (io) => {
 
       socket.emit('currentBid', currentBid);
       console.log(currentBid);
+
+      emitLeaderboard();
+
+      // Admin joins to view logs
       socket.on('adminJoin', () => {
         console.log('Admin connected:', socket.id);
         socket.emit('adminLogs', {
@@ -44,19 +70,107 @@ const socketHandler = (io) => {
           highBidHoldingTeamId: admin.highBidHoldingTeamId ? admin.highBidHoldingTeamId._id : null,
           highBidHoldingTeamName: highBidTeamName,
           currentBiddingPOC: admin.currentBiddingPOC,
+          auctionTimeLeft
         });
       });
+
+      // Handle POC selling
+      socket.on('sellPOC', async () => {
+        try {
+          console.log('Processing POC sale...');
+          const admin = await Admin.findOne({ username: 'Akash' });
+          const round = admin.currentAuctionRound;
+          const POC = admin.currentBiddingPOC;
+          const team_id = admin.highBidHoldingTeamId;
+          const amount = admin.highBidAmount;
+
+          if (!team_id) {
+            socket.emit('sellPOCFailed', { message: 'No team found for the current round.' });
+            return;
+          }
+
+          const team = await Team.findOne({ _id: team_id });
+          if (!team) {
+            socket.emit('sellPOCFailed', { message: 'Team not found.' });
+            return;
+          }
+
+          const teamName = team.team_name;
+          console.log(round, POC, team_id, teamName);
+
+          if (!round || !POC || !team_id || !teamName || !amount) {
+            socket.emit('sellPOCFailed', { message: 'Invalid data. Please check the input values.' });
+            return;
+          }
+
+          // Save auction details
+          const newAuction = new Auction({
+            round,
+            POC,
+            bought_by: team_id,
+            gitcoins: amount,
+            team_name: teamName
+          });
+
+          team.gitcoins -= amount;
+          team.POC.push(POC);
+          if (team.POC.length === round) {
+            team.canBuyPOC = false;
+          }
+
+          await team.save();
+          await newAuction.save();
+
+          // Reset current bid
+          currentBid = { amount: 0, team: null };
+          admin.highBidAmount = 0;
+          admin.highBidHoldingTeamId = null;
+          await admin.save();
+
+          console.log(`POC: '${POC}' sold successfully to ${teamName}`);
+          io.emit('sellPOCSuccess', { message: `POC: '${POC}' sold successfully` });
+          io.emit('currentBid', currentBid);  // Broadcast updated bid
+          clearInterval(auctionTimer);
+          io.emit('auctionEnded');
+          emitLeaderboard();  // Update leaderboard
+
+        } catch (error) {
+          console.error('Error in confirming the bid:', error);
+          socket.emit('sellPOCFailed', { message: 'Server error.' });
+        }
+      });
+
+      // Admin starts the auction timer
+      socket.on('startAuction', (duration) => {
+        if (auctionTimer) {
+          clearInterval(auctionTimer);
+        }
+
+        auctionTimeLeft = duration;
+        io.emit('auctionStarted', auctionTimeLeft,admin.currentBiddingPOC);
+
+        auctionTimer = setInterval(() => {
+          if (auctionTimeLeft > 0) {
+            auctionTimeLeft -= 1;
+            io.emit('timerUpdate', auctionTimeLeft);
+          } else {
+            clearInterval(auctionTimer);
+            io.emit('auctionEnded');
+          }
+        }, 1000);
+      });
+
     } catch (error) {
-      console.error('Error fetching high bid from database:', error);
+      console.error('Error fetching admin data:', error);
     }
 
+    // Handle placing bids
     socket.on('placeBid', async ({ teamId, teamName, bidAmount }) => {
       try {
-        // Fetch admin and team in parallel
         console.log("Inside place bid");
         const [admin, team] = await Promise.all([
           Admin.findOne({ username: 'Akash' }),
-          Team.findOne({ _id: teamId }),
+          Team.findById(teamId),
         ]);
 
         if (!admin) {
@@ -73,6 +187,7 @@ const socketHandler = (io) => {
           socket.emit('bidFailed', { message: 'Auction is not active.' });
           return;
         }
+
         const teamBalance = team.gitcoins || 0;
 
         if (bidAmount > teamBalance) {
@@ -85,19 +200,17 @@ const socketHandler = (io) => {
           return;
         }
 
-        // Update the current highest bid
         currentBid = { amount: bidAmount, team: teamName };
-        console.log(`New highest bid for round ${admin.currentAuctionRound}: ${bidAmount} by ${teamName}`);
+        console.log(`New highest bid: ${bidAmount} by ${teamName}`);
 
-        // Update the database
         admin.highBidAmount = bidAmount;
         admin.highBidHoldingTeamId = teamId;
         await admin.save();
 
-        console.log(`High bid updated for round ${admin.currentAuctionRound} in database.`);
+        console.log(`High bid updated in database.`);
 
-        // Broadcast the new bid to all clients
-        io.emit('newBid', { currentAuctionRound: admin.currentAuctionRound, ...currentBid });
+        io.emit('newBid', { ...currentBid });
+        emitLeaderboard();
 
       } catch (error) {
         console.error('Error processing bid:', error);
@@ -109,6 +222,8 @@ const socketHandler = (io) => {
       console.log('Client disconnected:', socket.id);
     });
   });
+
+  return io;
 };
 
 module.exports = socketHandler;

@@ -93,13 +93,35 @@ const loginAdmin = async (req, res) => {
 
 const sellPOC = async(req,res) =>{
     try{ 
-      const admin = admin.findOne({username : req.user.username});
+      console.log(req.user.username);
+      const admin = await Admin.findOne({username : req.user.username});
       const round = admin.currentAuctionRound;
       const POC = admin.currentBiddingPOC;
       const team_id = admin.highBidHoldingTeamId;
-      const newAuction = new Auction({round,POC,team_id});
+      const amount = admin.highBidAmount;
+      if (!team_id) {
+        return res.status(404).json({ message: 'No team found for the current round' });
+      }
+  
+      const team = await Team.findOne({ _id: team_id });
+      if (!team) {
+        return res.status(404).json({ message: 'Team not found' });
+      }
+      const teamName = team.team_name;
+      console.log(round,POC,team_id,teamName);
+      if (!round || !POC || !team_id || !teamName || !amount) {
+        return res.status(400).json({ message: 'Invalid data. Please check the input values.' });
+      }
+      const newAuction = new Auction({round,POC,bought_by: team_id,gitcoins:amount, team_name: teamName});
+      team.gitcoins -= amount;
+      team.POC.push(POC);
+      if(team.POC.length === round){
+        team.canBuyPOC=false;
+      }
+      await team.save();
       await newAuction.save();
-      return res.status(200).json({message : `POC : '${POC}' sold to ${team_name} successfully`});
+
+      return res.status(200).json({message : `POC : '${POC}' sold  successfully`});
     }catch(error){
       console.error('Error in confirming the bid :',error);
       res.status(500).json({message:'Server error. '});
