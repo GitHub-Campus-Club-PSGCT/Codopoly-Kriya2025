@@ -19,7 +19,7 @@ const Dashboard = () => {
         
         // In a real app, you would fetch the event status and registration status here
         // For now, we'll use placeholder data
-        setEventStatus('closed');
+        //setEventStatus('closed');
         setIsRegistrationOpen(true);
       } catch (error) {
         console.error('Error fetching dashboard data:', error);

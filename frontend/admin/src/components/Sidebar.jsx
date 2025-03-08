@@ -11,6 +11,7 @@ const Sidebar = () => {
     { name: 'Auction Management', path: '/auction', icon: <Gavel size={20} /> },
     { name: 'POC Distribution', path: '/poc-distribution', icon: <Share2 size={20} /> },
     { name: 'Settings', path: '/settings', icon: <Settings size={20} /> },
+    { name: 'LeaderBoard', path: '/leaderboard', icon : <Settings size={20} /> },
   ];
 
   return (

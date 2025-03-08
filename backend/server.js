@@ -8,7 +8,7 @@ const debugRoutes = require('./routes/debugRoutes');
 const bankRoutes = require('./routes/bankRoutes');
 const adminRoutes = require('./routes/adminRoutes')
 const questionRoutes = require('./routes/questionRoutes');
-
+const checkEventStatus = require('./middlewares/checkEventStatus');
 const cors = require('cors');
 require('dotenv').config();
 
@@ -39,7 +39,7 @@ app.get('/', (req, res) => {
 });
 
 // Use the socket handler
-socketHandler(io);
+socketHandler(server);
 
 // Start the server
 server.listen(PORT, () => {

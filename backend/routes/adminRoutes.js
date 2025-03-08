@@ -7,7 +7,9 @@ const {
     ChangeEventStatus,
     sellPOC,
     updateCurrentAuctionPOC,
-    toggleRegistration
+    toggleRegistration,
+    bidHistory,
+    teamStats
 } = require('../controllers/adminController');
 const adminAuthMiddleware = require('../middlewares/adminAuthMiddleware');
 
@@ -22,4 +24,6 @@ router.post('/sold',adminAuthMiddleware,sellPOC); //confirm the bid and selling 
 router.post('/biddingPOC',adminAuthMiddleware,updateCurrentAuctionPOC);
 router.post('/distributePOC',adminAuthMiddleware,logic);
 router.post('/toggle-registration',adminAuthMiddleware,toggleRegistration);
+router.get('/bidHistory',adminAuthMiddleware,bidHistory);
+router.get('/teamStats',adminAuthMiddleware,teamStats);
 module.exports = router;
