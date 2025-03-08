@@ -39,92 +39,33 @@ export const socketAPI = {
     }
   },
   
-  joinAsAdmin: () => {
-    if (socket) {
-      socket.emit('adminJoin');
-      console.log('Joined as admin');
-    } else {
-      console.error('Socket not connected');
-    }
-  },
-  
-  startAuction: (duration) => {
-    if (socket) {
-      socket.emit('startAuction', duration);
-      console.log(`Starting auction timer for ${duration} seconds`);
-    } else {
-      console.error('Socket not connected');
-    }
-  },
-  
-  placeBid: (data) => {
-    if (socket) {
-      socket.emit('placeBid', data);
-      console.log(`Placing bid: ${data.bidAmount} by ${data.teamName}`);
-    } else {
-      console.error('Socket not connected');
-    }
-  },
-  
-  onCurrentBid: (callback) => {
-    if (socket) {
-      socket.on('currentBid', callback);
-    }
-  },
-  
-  onNewBid: (callback) => {
-    if (socket) {
-      socket.on('newBid', callback);
-    }
-  },
-  
-  onTimerUpdate: (callback) => {
-    if (socket) {
-      socket.on('timerUpdate', callback);
-    }
-  },
-  
-  onAuctionStarted: (callback) => {
-    if (socket) {
-      socket.on('auctionStarted', callback);
-    }
-  },
-  
-  onAuctionEnded: (callback) => {
-    if (socket) {
-      socket.on('auctionEnded', callback);
-    }
-  },
-  
-  onBidFailed: (callback) => {
-    if (socket) {
-      socket.on('bidFailed', callback);
-    }
-  },
-  
-  onAdminLogs: (callback) => {
-    if (socket) {
-      socket.on('adminLogs', callback);
-    }
-  }
+  joinAsAdmin: () => socket?.emit('adminJoin'),
+  startAuction: (duration) => socket?.emit('startAuction', duration),
+  placeBid: (data) => socket?.emit('placeBid', data),
+  updatePOC: (data) => socket?.emit('updatePOC', data),
+  sellPOC: () => socket?.emit('sellPOC'),
+
+  onCurrentBid: (callback) => socket?.on('currentBid', callback),
+  onNewBid: (callback) => socket?.on('newBid', callback),
+  onTimerUpdate: (callback) => socket?.on('timerUpdate', callback),
+  onAuctionStarted: (callback) => socket?.on('auctionStarted', callback),
+  onAuctionEnded: (callback) => socket?.on('auctionEnded', callback),
+  onSellPOCSuccess: (callback) => socket?.on('sellPOCSuccess', callback),
+  onSellPOCFailed: (callback) => socket?.on('sellPOCFailed', callback),
+  onBidFailed: (callback) => socket?.on('bidFailed', callback),
+  onAdminLogs: (callback) => socket?.on('adminLogs', callback)
 };
 
 // Admin API endpoints
 export const adminAPI = {
   login: (credentials) => API.post('/admin/login', credentials),
-  
   getTeamCount: () => API.get('/admin/teamCount'),
-  
   changeEventStatus: (newStatus) => API.post('/admin/changeEventStatus', { newStatus }),
-  
   sellPOC: () => API.post('/admin/sold'),
-  
   updateCurrentAuctionPOC: (data) => API.post('/admin/biddingPOC', data),
-  
   distributePOC: () => API.post('/admin/distributePOC'),
-  
   toggleRegistration: () => API.post('/admin/toggle-registration'),
-    
+  
   getBidHistory: async () => {
     try {
       const response = await API.get('/admin/bidHistory');

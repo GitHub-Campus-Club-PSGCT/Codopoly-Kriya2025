@@ -14,7 +14,8 @@ const Bidding = () => {
   const [showConfirmBox, setShowConfirmBox] = useState(false);
   const [auctionTimeLeft, setAuctionTimeLeft] = useState(0);
   const [auctionStatus, setAuctionStatus] = useState('');
-  const [currentPOC, setCurrentPOC] = useState('');
+  const [currentPOCName, setCurrentPOCName] = useState('');
+  const [currentPOC,setCurrentPOC] = useState('');
   const [sellPOCDetails, setSellPOCDetails] = useState('');
 
   useEffect(() => {
@@ -92,16 +93,20 @@ const Bidding = () => {
     });
 
     // Listen for auction start
-    socket.on('auctionStarted', (duration, currentBiddingPOC) => {
-      setCurrentPOC(currentBiddingPOC);
-      setAuctionTimeLeft(duration);
+    socket.on('auctionStarted', async (data) => {
+      setCurrentPOCName(data.POC);
+      setAuctionTimeLeft(data.time);
+      const response = await axios.get(`http://localhost:3000/question/getPOC/${currentPOCName}`);
+      setCurrentPOC(response.data.poc);
+      setAuctionTimeLeft(data.time);
       setAuctionStatus('Auction in progress');
     });
 
     // Listen for sell POC success
-    io.on('sellPOCSuccess', (data) => {
-      setSellPOCDetails(`POC sold to ${data.team}`);
+    socket.on('sellPOCSuccess', (data) => {
+      setSellPOCDetails(data.message);
       setCurrentBid({ amount: 0, team: null });
+      setAuctionStatus('Auction has ended');
     });
     
     // Listen for auction end
@@ -156,7 +161,7 @@ const Bidding = () => {
         {auctionStatus && (
           <div className="bg-blue-50 border border-blue-200 rounded-md p-3 mb-4">
             <p className="text-blue-800">{auctionStatus}</p>
-          </div>
+            </div>
         )}
 
         {sellPOCDetails && (
