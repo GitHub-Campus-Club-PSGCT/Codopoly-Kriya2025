@@ -4,17 +4,24 @@ import axios from 'axios';
 import {io} from 'socket.io-client';
 const AuctionCode  = ()=>{
     const [currentPOCForSale, setCurrentPOCForSale] = useState('');
-    useEffect(()=>{
+    useEffect(() => {
+        const savedPOC = localStorage.getItem('currentPOC') || '';
+        setCurrentPOCForSale(savedPOC);
+    
         const socket = io('http://localhost:3000');
-        socket.on('updatePOCSuccess',async (data)=>{
-            console.log(data.message);
-            console.log('POC NAME : ',data.poc);
-            const response = await axios.get(`http://localhost:3000/question/getPOC/${data.poc}`);
-            console.log(response.data.poc);
-            setCurrentPOCForSale(response.data.poc);
-        })
-
-    })
+        socket.on('updatePOCSuccess', async (data) => {
+          console.log(data.message);
+          console.log('POC NAME : ', data.poc);
+          const response = await axios.get(`http://localhost:3000/question/getPOC/${data.poc}`);
+          console.log(response.data.poc);
+          setCurrentPOCForSale(response.data.poc);
+          localStorage.setItem('currentPOC', response.data.poc);
+        });
+        return () => {
+          socket.disconnect();
+        };
+      }, []);
+    
     return(
         <>
             <div className={styles.auctioncodecontainer}>

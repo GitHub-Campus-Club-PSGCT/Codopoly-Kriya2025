@@ -14,8 +14,6 @@ const Bidding = () => {
   const [showConfirmBox, setShowConfirmBox] = useState(false);
   const [auctionTimeLeft, setAuctionTimeLeft] = useState(0);
   const [auctionStatus, setAuctionStatus] = useState('');
-  const [currentPOCName, setCurrentPOCName] = useState('');
-  const [currentPOC,setCurrentPOC] = useState('');
   const [sellPOCDetails, setSellPOCDetails] = useState('');
 
   useEffect(() => {
@@ -94,10 +92,6 @@ const Bidding = () => {
 
     // Listen for auction start
     socket.on('auctionStarted', async (data) => {
-      setCurrentPOCName(data.POC);
-      setAuctionTimeLeft(data.time);
-      const response = await axios.get(`http://localhost:3000/question/getPOC/${currentPOCName}`);
-      setCurrentPOC(response.data.poc);
       setAuctionTimeLeft(data.time);
       setAuctionStatus('Auction in progress');
     });

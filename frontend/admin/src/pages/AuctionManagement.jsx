@@ -55,7 +55,7 @@ const AuctionManagement = () => {
     socketAPI.onAuctionStarted((duration) => {
       setRemainingTime(duration);
       setIsAuctionActive(true);
-      toast.info(`Auction timer started for ${duration} seconds`);
+      toast.info(`Auction timer started for ${duration.time} seconds`);
     });
 
     socketAPI.onAuctionEnded(() => {

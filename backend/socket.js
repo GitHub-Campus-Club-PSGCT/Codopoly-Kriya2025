@@ -237,7 +237,7 @@ const socketHandler = (server) => {
         }
 
         auctionTimeLeft = duration;
-        io.emit('auctionStarted', { time: auctionTimeLeft, POC: admin.currentBiddingPOC });
+        io.emit('auctionStarted', { time: auctionTimeLeft });
 
         auctionTimer = setInterval(() => {
           if (auctionTimeLeft > 0) {
