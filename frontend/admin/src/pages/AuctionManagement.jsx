@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Gavel, DollarSign, Users, Check, Timer, History, TrendingUp, Award } from 'lucide-react';
-import { adminAPI } from '../api/API';
-import { io } from 'socket.io-client';
+import { adminAPI, socketAPI } from '../api/API';
 
 const AuctionManagement = () => {
   const [currentPOC, setCurrentPOC] = useState('');
@@ -12,8 +11,7 @@ const AuctionManagement = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSelling, setIsSelling] = useState(false);
   
-  // Socket related states
-  const [socket, setSocket] = useState(null);
+  // Auction state
   const [currentBid, setCurrentBid] = useState({ amount: 0, team: null });
   const [timerDuration, setTimerDuration] = useState(30);
   const [remainingTime, setRemainingTime] = useState(0);
@@ -27,18 +25,16 @@ const AuctionManagement = () => {
   const [activeTab, setActiveTab] = useState('history'); // 'history' or 'stats'
 
   useEffect(() => {
-    // Connect to the socket server
-    const newSocket = io('http://localhost:3000'); // Adjust URL as needed
-    setSocket(newSocket);
-
-    // Listen for current bid updates
-    newSocket.on('currentBid', (bid) => {
+    // Connect to the socket server using socketAPI
+    socketAPI.connect();
+    
+    // Set up socket event listeners
+    socketAPI.onCurrentBid((bid) => {
       console.log('Current bid received:', bid);
       setCurrentBid(bid);
     });
 
-    // Listen for new bids
-    newSocket.on('newBid', (bid) => {
+    socketAPI.onNewBid((bid) => {
       console.log('New bid received:', bid);
       setCurrentBid(bid);
       
@@ -52,44 +48,42 @@ const AuctionManagement = () => {
       });
     });
 
-    // Listen for timer updates
-    newSocket.on('timerUpdate', (timeLeft) => {
+    socketAPI.onTimerUpdate((timeLeft) => {
       setRemainingTime(timeLeft);
     });
 
-    // Listen for auction start
-    newSocket.on('auctionStarted', (duration) => {
+    socketAPI.onAuctionStarted((duration) => {
       setRemainingTime(duration);
       setIsAuctionActive(true);
       toast.info(`Auction timer started for ${duration} seconds`);
     });
 
-    // Listen for auction end
-    newSocket.on('auctionEnded', () => {
+    socketAPI.onAuctionEnded(() => {
       setIsAuctionActive(false);
       setRemainingTime(0);
       toast.success('Auction timer ended');
     });
 
-    newSocket.on('sellPOCSuccess',(data)=>{
+    socketAPI.onSellPOCSuccess((data) => {
       toast.success(data.message);
       setCurrentPOC('');
       loadTeamStats();
     });
 
-    newSocket.on('sellPOCFailed',(data)=>{
+    socketAPI.onSellPOCFailed((data) => {
       toast.error(data.message);
     });
 
     // Join as admin to get logs
-    newSocket.emit('adminJoin');
+    socketAPI.joinAsAdmin();
 
     // Load initial data
     loadBidHistory();
     loadTeamStats();
 
+    // Cleanup on component unmount
     return () => {
-      newSocket.disconnect();
+      socketAPI.disconnect();
     };
   }, []);
 
@@ -124,12 +118,14 @@ const AuctionManagement = () => {
     setIsLoading(true);
     
     try {
-      await adminAPI.updateCurrentAuctionPOC({
-        round,
+      const data = {
+        round: round,
         POC_name: currentPOC,
         max_amount: maxAmount
-      });
+      };
       
+      socketAPI.updatePOC(data);
+      console.log('Updating POC with data:', data);
       toast.success(`Updated current POC to ${currentPOC}`);
     } catch (error) {
       console.error('Error updating POC:', error);
@@ -143,7 +139,7 @@ const AuctionManagement = () => {
     setIsSelling(true);
     
     try {
-      socket.emit('sellPOC');
+      socketAPI.sellPOC();
     } catch (error) {
       console.error('Error selling POC:', error);
       toast.error('Failed to sell POC');
@@ -153,8 +149,8 @@ const AuctionManagement = () => {
   };
 
   const startAuctionTimer = () => {
-    if (socket && timerDuration > 0) {
-      socket.emit('startAuction', timerDuration);
+    if (timerDuration > 0) {
+      socketAPI.startAuction(timerDuration);
     } else {
       toast.error('Please set a valid timer duration');
     }
@@ -410,13 +406,13 @@ const AuctionManagement = () => {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                {bidHistory.map((bid) => (
-              <tr key={bid._id} className="hover:bg-gray-50">
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{bid.team_name}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{bid.gitcoins}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{bid.POC}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{formatDate(bid.createdAt)}</td>
-              </tr>
+                  {bidHistory.map((bid) => (
+                    <tr key={bid._id} className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{bid.team_name}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{bid.gitcoins}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{bid.POC}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{formatDate(bid.createdAt)}</td>
+                    </tr>
                   ))}
                 </tbody>
               </table>
