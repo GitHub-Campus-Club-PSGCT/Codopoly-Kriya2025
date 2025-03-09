@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import styles from '../../styles/home.module.css';
 
 const ViewQuestion = () => {
     const [questions, setQuestions] = useState([]);
@@ -19,17 +20,17 @@ const ViewQuestion = () => {
     }, []);
 
     return (
-        <div className="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-md">
-            <h2 className="text-2xl font-bold mb-4">Error Questions</h2>
+        <div className={styles.container}>
+            <h2 className={styles.heading}>Error Questions</h2>
             {error ? (
                 <p className="text-red-500">{error}</p>
             ) : (
                 <ul>
                     {questions.length > 0 ? (
                         questions.map((q, index) => (
-                            <li key={index} className="border-b p-2">
+                            <li key={index} className={styles.listItem}>
                                 <strong>{q.title}</strong>
-                                <pre className="bg-gray-100 p-2 rounded">
+                                <pre className={styles.codeBlock}>
                                     {q.POC
                                         ? Object.entries(q.POC)
                                               .map(([key, value]) => `POC ${key}:\n${value}`)
@@ -45,6 +46,9 @@ const ViewQuestion = () => {
             )}
         </div>
     );
+    
+    
+    
 };
 
 export default ViewQuestion;

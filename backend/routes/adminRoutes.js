@@ -9,7 +9,9 @@ const {
     updateCurrentAuctionPOC,
     toggleRegistration,
     bidHistory,
-    teamStats
+    teamStats,
+    getTeamsWithPOCs,
+    deletePOCs
 } = require('../controllers/adminController');
 const adminAuthMiddleware = require('../middlewares/adminAuthMiddleware');
 
@@ -26,4 +28,6 @@ router.post('/distributePOC',adminAuthMiddleware,logic);
 router.post('/toggle-registration',adminAuthMiddleware,toggleRegistration);
 router.get('/bidHistory',adminAuthMiddleware,bidHistory);
 router.get('/teamStats',adminAuthMiddleware,teamStats);
+router.get('/getTeamsWithPOCs',adminAuthMiddleware,getTeamsWithPOCs); //get all teams with their POCs
+router.post('/deletePOCs',adminAuthMiddleware,deletePOCs); //delete POC from all teams
 module.exports = router;
