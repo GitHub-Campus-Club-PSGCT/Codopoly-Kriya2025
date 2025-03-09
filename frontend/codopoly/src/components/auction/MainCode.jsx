@@ -14,9 +14,9 @@ const MainPart = ({mainPart, setmainPart})=>{
                         style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
                         onClick={handleClose}
                     >
-                        <img src={BackButton} alt="Toggle Sidebar" />
+                        <img style={{"height":"20px"}} src={BackButton} alt="Toggle Sidebar" />
                     </button>
-                    <p style={{"marginLeft":"37%"}} className={styles.maintext}>Main Part</p>
+                    <p style={{"marginTop":10, "marginBottom":10, "marginLeft":"37%"}} className={styles.maintext}>Main Part</p>
                 </div>
                 <div className={styles.mainpart}>
                     {/*write a api call to get the user's main part of the code*/}

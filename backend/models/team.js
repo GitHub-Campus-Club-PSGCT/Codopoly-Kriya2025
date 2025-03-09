@@ -15,7 +15,8 @@ const teamSchema = new mongoose.Schema({
   poc_round_1: { type: String },
   gitcoins_round_1: { type: Number, default: 0 },
   poc_round_2: { type: String },
-  gitcoins_round_2: { type: Number, default: 0 }
+  gitcoins_round_2: { type: Number, default: 0 },
+  canBuyPOC : {type:Boolean,default : true}
 });
 
 module.exports = mongoose.model('Team', teamSchema);

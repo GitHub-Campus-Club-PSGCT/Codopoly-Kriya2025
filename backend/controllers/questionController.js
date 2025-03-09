@@ -13,6 +13,33 @@ const getQuestions = async (req, res) => {
     }
 }
 
+const getPOC = async (req, res) => {
+    try {
+        const pocName = req.params.pocName; // Assuming the parameter is named pocName
+        const title = pocName.charAt(0);
+        const pocIndex = pocName.charAt(1);
+        console.log(title,pocIndex);
+        const question = await QuestionCorrect.findOne({ title });
+
+        if (!question) {
+            return res.status(404).json({ message: 'Question not found' });
+        }
+
+        const poc = question.POC[pocIndex];
+
+        if (!poc) {
+            return res.status(404).json({ message: 'POC not found' });
+        }
+
+        res.status(200).json({ poc });
+    } catch (error) {
+        res.status(400).json({
+            message: "Server error",
+            error: error.message
+        });
+    }
+};
+
 const submitQuestions = async (req, res) => {
     try{
         const { title, POC, errorPOC, testCases } = req.body;
@@ -107,5 +134,6 @@ if __name__ == "__main__":
 
 module.exports = {
     getQuestions,
+    getPOC,
     submitQuestions
 }

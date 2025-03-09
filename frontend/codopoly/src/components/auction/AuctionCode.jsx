@@ -1,25 +1,33 @@
-import { useState, useEffect} from "react";
+import { useState, useEffect } from 'react';
 import styles from '../../styles/bidding.module.css';
-
-const AuctionCode = ({ triggerFetch, codeIndex, maxCodes }) => {
-    const fetchAuctionCode = async () => {
-        if (codeIndex < maxCodes) {  
-            // API call to get code to auction
-        }
-    };
-
+import axios from 'axios';
+import {io} from 'socket.io-client';
+const AuctionCode  = ()=>{
+    const [currentPOCForSale, setCurrentPOCForSale] = useState('');
     useEffect(() => {
-        if (codeIndex < maxCodes) {  
-            fetchAuctionCode();
-        } 
-    }, [triggerFetch, codeIndex, maxCodes]); // fetch called every time, timer resets
-    
+        const savedPOC = localStorage.getItem('currentPOC') || '';
+        setCurrentPOCForSale(savedPOC);
+
+        const socket = io('http://localhost:3000');
+        socket.on('updatePOCSuccess', async (data) => {
+          console.log(data.message);
+          console.log('POC NAME : ', data.poc);
+          const response = await axios.get(`http://localhost:3000/question/getPOC/${data.poc}`);
+          console.log(response.data.poc);
+          setCurrentPOCForSale(response.data.poc);
+          localStorage.setItem('currentPOC', response.data.poc);
+        });
+        return () => {
+          socket.disconnect();
+        };
+      }, []);
+
     return(
         <>
             <div className={styles.auctioncodecontainer}>
-                <p style={{"margin":10}} className={styles.maintext}>Auction Code</p>
+                <p style={{"margin":10, "fontSize":"1.5em"}} className={styles.maintext}>Auction Code</p>
                 <div className={styles.auctioncodesubcontainer}>
-                    {/* Display fetches auction code */}
+                    {currentPOCForSale}
                 </div>
             </div>
 
