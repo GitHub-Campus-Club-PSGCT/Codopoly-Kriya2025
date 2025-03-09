@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
 import axios from 'axios';
 import { Clock } from 'lucide-react';
+import styles from '../../styles/bidding.module.css'
 
 const Bidding = () => {
   const [socket, setSocket] = useState(null);
@@ -24,7 +25,7 @@ const Bidding = () => {
     // Fetch team details
     const fetchTeamDetails = async () => {
       try {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('codopoly_token');
         if (!token) {
           setBidMessage('No token found. Please log in.');
           setIsLoading(false);
@@ -102,7 +103,7 @@ const Bidding = () => {
       setCurrentBid({ amount: 0, team: null });
       setAuctionStatus('Auction has ended');
     });
-    
+
     // Listen for auction end
     socket.on('auctionEnded', () => {
       setAuctionTimeLeft(0);
@@ -148,8 +149,8 @@ const Bidding = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
-      <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
+    <div className={styles.biddingcontainer}>
+      <div className={styles.biddingsubcontainer}>
         <h2 className="text-2xl font-bold text-center mb-6">Auction Bidding</h2>
 
         {auctionStatus && (

@@ -197,13 +197,50 @@ const teamStats = async(req,res)=>{
   }
 }
 
-const saveDistributedPOC = async(req,res)=>{
-  try{
-    const admin = Admin.findOne({username : req.user.unsername});
-    
-  }catch(error){
-
+/**
+ * Fetch all teams with their POCs
+ */
+const getTeamsWithPOCs = async (req, res) => {
+  try {
+    const teams = await Team.find({}, 'team_name POC'); // Fetch only name and POCs
+    console.log('Fetched teams:', teams);
+    res.json(teams);
+  } catch (error) {
+    console.error('Error fetching teams:', error);
+    res.status(500).json({ error: 'Failed to fetch teams' });
   }
-}
+};
 
-module.exports = {loginAdmin,registerAdmin,TeamCount,ChangeEventStatus,sellPOC,updateCurrentAuctionPOC,toggleRegistration,bidHistory,teamStats,saveDistributedPOC}
+/**
+ * Delete selected POCs from selected teams
+ */
+const deletePOCs = async (req, res) => {
+  try {
+    console.log('Received request to delete POCs:', req.body);
+    const teamsToDeleteFrom = req.body; // Expecting an array of { teamId, pocIndexes }
+
+    if (!Array.isArray(teamsToDeleteFrom) || teamsToDeleteFrom.length === 0) {
+      return res.status(400).json({ error: 'Invalid request format' });
+    }
+
+    // Iterate over each team and remove the selected POCs
+    for (const { teamId, pocIndexes } of teamsToDeleteFrom) {
+      const team = await Team.findById(teamId);
+      if (!team) continue; // Skip if team not found
+
+      const pocsToRemove = pocIndexes.map((index) => team.POC[index]); // Get actual POC names
+
+      await Team.findByIdAndUpdate(teamId, {
+        $pull: { POC: { $in: pocsToRemove } } // Correct usage of $pull with $in
+      });
+    }
+
+    res.json({ message: 'POCs successfully deleted from selected teams.' });
+  } catch (error) {
+    console.error('Error deleting POCs:', error);
+    res.status(500).json({ error: 'Failed to delete POCs' });
+  }
+};
+
+
+module.exports = {loginAdmin,registerAdmin,TeamCount,ChangeEventStatus,sellPOC,updateCurrentAuctionPOC,toggleRegistration,bidHistory,teamStats,getTeamsWithPOCs,deletePOCs}

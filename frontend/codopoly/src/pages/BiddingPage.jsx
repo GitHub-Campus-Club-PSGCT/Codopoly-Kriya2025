@@ -29,5 +29,4 @@ const BiddingPage = () => {
     </>
   )
 }
-
 export default BiddingPage;

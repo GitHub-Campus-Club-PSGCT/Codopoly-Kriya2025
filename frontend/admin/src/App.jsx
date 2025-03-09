@@ -10,6 +10,8 @@ import AuctionManagement from './pages/AuctionManagement';
 import POCDistribution from './pages/POCDistribution';
 import Settings from './pages/Settings';
 import Leaderboards from './pages/LeaderBoards';
+import QuestionPage from './pages/QuestionPage';
+import RemovePOC from './pages/RemovePOC';
 
 // Components
 import ProtectedRoute from './components/ProtectedRoute';
@@ -28,6 +30,8 @@ function App() {
           <Route path="poc-distribution" element={<POCDistribution />} />
           <Route path="settings" element={<Settings />} />
           <Route path="leaderboard" element={<Leaderboards/>}/>
+          <Route path="question" element={<QuestionPage/>}/>
+          <Route path="removepoc" element={<RemovePOC />} />
         </Route>
       </Routes>
     </Router>

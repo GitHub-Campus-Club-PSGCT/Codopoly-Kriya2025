@@ -37,7 +37,7 @@ const AddDebugs = ({ currentPOC, debugs, setDebugs }) => {
     const handleSubmit = async () => {
         try {
             setError(""); // Clear previous errors
-            const token = localStorage.getItem("token");
+            const token = localStorage.getItem("codopoly_token");
             if (!token) {
                 setError("No token found, please log in");
                 return;

@@ -1,0 +1,84 @@
+.maincontainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    min-width: 320px;
+}
+
+.registercontainer{
+    height: 540px;
+    width: 450px;
+    background-color: #282828;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 30px;
+}
+
+.maintext{
+    color: #F96024;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.text{
+    color: white;
+    font-size: 1em;
+    font-weight: bold;
+}
+
+.inputbox {
+    width: 250px;
+    padding: 12px 15px;
+    margin: 4px 0;
+    border: none;
+    border-radius: 8px;
+    background-color: #333333;
+    color: white;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    outline: none;
+    margin-left: 5px;
+}
+
+.inputbox:focus {
+    background-color: #404040;
+    box-shadow: 0 0 5px rgba(249, 96, 36, 0.5);
+}
+
+.inputbox::placeholder {
+    color: #888888;
+}
+
+.registerbutton {
+    background-color: #F96024;
+    color: white;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+}
+
+.registerbutton:hover {
+    background-color: #e04f15;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(249, 96, 36, 0.3);
+}
+
+.registerbutton:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(249, 96, 36, 0.3);
+}
+
+.form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}

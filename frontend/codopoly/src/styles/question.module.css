@@ -1,0 +1,106 @@
+/* Import Chicago font */
+@font-face {
+    font-family: "Chicago";
+    src: url("/fonts/Chicago.woff2") format("woff2"),
+         url("/fonts/Chicago.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* Global container */
+.container {
+    font-family: "Chicago", sans-serif; /* Apply Chicago font */
+    max-width: 50rem;
+    margin: auto;
+    background: #ffffff;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Modern heading styles */
+.heading {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #ff5733; /* Custom orange-red */
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+/* Stylish input fields */
+.inputField, .textArea {
+    width: 100%;
+    padding: 14px;
+    font-size: 1rem;
+    border: 2px solid #ddd;
+    border-radius: 0.75rem;
+    transition: all 0.3s ease-in-out;
+    background-color: #f9f9f9;
+}
+
+.inputField:focus, .textArea:focus {
+    outline: none;
+    border-color: #ff5733;
+    background-color: #fff;
+    box-shadow: 0px 0px 10px rgba(255, 87, 51, 0.2);
+}
+
+/* Bigger textareas */
+.textArea {
+    height: 6rem;
+    resize: vertical;
+}
+
+/* Modern submit button */
+.submitBtn {
+    width: 100%;
+    background: linear-gradient(135deg, #ff5733, #ff1b6b);
+    color: white;
+    padding: 14px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.submitBtn:hover {
+    background: linear-gradient(135deg, #ff1b6b, #ff5733);
+    box-shadow: 0px 5px 15px rgba(255, 87, 51, 0.4);
+}
+
+/* List item styling */
+.listItem {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+    background: #f8f9fa;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+/* Code block styling */
+.codeBlock {
+    font-family: monospace;
+    background: #282c34;
+    color: #ffffff;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    overflow-x: auto;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .container {
+        padding: 1.5rem;
+    }
+    
+    .heading {
+        font-size: 1.75rem;
+    }
+    
+    .inputField, .textArea {
+        font-size: 0.95rem;
+    }
+}

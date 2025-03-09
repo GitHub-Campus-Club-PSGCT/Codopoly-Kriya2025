@@ -12,6 +12,8 @@ const Sidebar = () => {
     { name: 'POC Distribution', path: '/poc-distribution', icon: <Share2 size={20} /> },
     { name: 'Settings', path: '/settings', icon: <Settings size={20} /> },
     { name: 'LeaderBoard', path: '/leaderboard', icon : <Settings size={20} /> },
+    { name: 'Questions', path: '/question', icon : <Settings size={20} /> },
+    { name: 'Remove POC', path: '/removepoc', icon : <Settings size={20} /> },
   ];
 
   return (

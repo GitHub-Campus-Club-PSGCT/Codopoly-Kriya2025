@@ -9,7 +9,7 @@ const SubmittedDebugs = ({ questionTitle, pocName, teamId }) => {
     useEffect(() => {
         const fetchDebugs = async () => {
             try {
-                const token = localStorage.getItem("token");
+                const token = localStorage.getItem("codopoly_token");
                 if (!token) {
                     alert("No token found. Please log in.");
                     return;

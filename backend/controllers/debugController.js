@@ -165,6 +165,19 @@ if __name__ == "__main__":
                 });
                 await debugRecord.save();
             }
+
+            let team = await Team.findById(teamId);
+            if (team) {
+                const pointsPerDebug = 50; // Adjust this value as needed
+        
+                team.gitcoins += correctDebugs.length * pointsPerDebug;  // Add points
+                team.no_of_debugs.push(correctDebugs.length); // Track number of debugs
+        
+                await team.save();
+                console.log("Updated team points & debug count");
+            } else {
+                console.log("Team not found!");
+            }
         }
 
         res.status(200).json({ message: "Submitted Debugs!" });

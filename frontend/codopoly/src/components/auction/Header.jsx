@@ -1,11 +1,19 @@
 import styles from '../../styles/bidding.module.css';
 import SidebarBtn from '../../assets/sidebarbtn.png';
 import SideBar from './Sidebar.jsx';
+import { useNavigate } from 'react-router-dom';
 
-const Header = ({ sidebarOpen, setSidebarOpen, mainPartOpen, setMainPartOpen }) => {
+const Header = ({ sidebarOpen, setSidebarOpen, mainPartOpen, setMainPartOpen}) => {
+
+    const navigate = useNavigate();
+
     const toggleSidebar = () => {
         setSidebarOpen(!sidebarOpen);
     };
+
+    const handleRedirect = ()=>{
+        navigate('/debugging')
+    }
 
     return (
         <>
@@ -16,9 +24,12 @@ const Header = ({ sidebarOpen, setSidebarOpen, mainPartOpen, setMainPartOpen }) 
                 >
                     <img src={SidebarBtn} alt="Toggle Sidebar" className={styles.sidebarbtn} />
                 </button>
-                <p style={{ marginLeft: '45%', fontSize: 40 }} className={styles.maintext}>
+                <p style={{"fontSize": "2em" }} className={styles.maintext}>
                     Auction
                 </p>
+                <button className={styles.headerbutton} onClick={handleRedirect}>
+                Debugging
+                </button>
             </div>
             <SideBar
                 isOpen={sidebarOpen}
