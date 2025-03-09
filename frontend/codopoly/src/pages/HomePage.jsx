@@ -36,10 +36,7 @@ const HomePage = ()=>{
               How It Works
             </h2>
             <p style={{ color: '#d1d1d1', lineHeight: '1.75' }}>
-              The event unfolds in multiple rounds: participants start by decoding and fixing their main code,
-              followed by trading additional code pieces to maximize their score. Roles like buyer and seller
-              rotate among teammates, encouraging collaboration and adaptability. Action cards, such as Time
-              Boost or Bug Hint, add a layer of strategy to the competition.
+            Codopoly is an exhilarating coding event consisting of multiple rounds, where teams start by decoding and fixing their main code segment. Additionally, each team receives two external code segments belonging to other teams, which they must debug and submit to the auction. Participants take on rotating roles as buyers and sellers, encouraging collaboration and adaptability. Strategic elements, such as action cards like Time Boost or Bug Hint, add an extra layer of excitement, making sharp debugging skills and tactical thinking essential for success.
             </p>
           </div>
           <div className={styles.featuresgrid}>
