@@ -1,9 +1,12 @@
 import Register from '../components/Register.jsx'
+import styles from '../styles/register.module.css'
 
 const RegisterPage = ()=>{
   return(
     <>
-      <Register/>
+      <div className={styles.maincontainer}>
+        <Register/>
+      </div>
     </>
   )
 }
