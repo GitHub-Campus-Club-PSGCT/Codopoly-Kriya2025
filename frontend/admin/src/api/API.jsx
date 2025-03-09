@@ -60,6 +60,7 @@ export const socketAPI = {
 export const adminAPI = {
   login: (credentials) => API.post('/admin/login', credentials),
   getTeamCount: () => API.get('/admin/teamCount'),
+  getEventStatus: () => API.get('/admin/eventStatus'),
   changeEventStatus: (newStatus) => API.post('/admin/changeEventStatus', { newStatus }),
   sellPOC: () => API.post('/admin/sold'),
   updateCurrentAuctionPOC: (data) => API.post('/admin/biddingPOC', data),

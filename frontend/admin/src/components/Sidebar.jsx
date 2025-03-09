@@ -14,6 +14,7 @@ const Sidebar = () => {
     { name: 'LeaderBoard', path: '/leaderboard', icon : <Settings size={20} /> },
     { name: 'Questions', path: '/question', icon : <Settings size={20} /> },
     { name: 'Remove POC', path: '/removepoc', icon : <Settings size={20} /> },
+    { name: 'Add Points', path: '/addpoints', icon : <Settings size={20} /> },
   ];
 
   return (

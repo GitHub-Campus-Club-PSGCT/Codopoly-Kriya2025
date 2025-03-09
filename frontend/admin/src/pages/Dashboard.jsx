@@ -16,6 +16,9 @@ const Dashboard = () => {
       try {
         const teamCountResponse = await adminAPI.getTeamCount();
         setTeamCount(teamCountResponse.data.teamCount);
+
+        const eventStatusResponse = await adminAPI.getEventStatus();
+        setEventStatus(eventStatusResponse.data.eventStatus);
         
         // In a real app, you would fetch the event status and registration status here
         // For now, we'll use placeholder data

@@ -12,6 +12,7 @@ import Settings from './pages/Settings';
 import Leaderboards from './pages/LeaderBoards';
 import QuestionPage from './pages/QuestionPage';
 import RemovePOC from './pages/RemovePOC';
+import AddPoints from './pages/AddPoints';
 
 // Components
 import ProtectedRoute from './components/ProtectedRoute';
@@ -32,6 +33,7 @@ function App() {
           <Route path="leaderboard" element={<Leaderboards/>}/>
           <Route path="question" element={<QuestionPage/>}/>
           <Route path="removepoc" element={<RemovePOC />} />
+          <Route path="addpoints" element={<AddPoints />} />
         </Route>
       </Routes>
     </Router>

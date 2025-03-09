@@ -242,5 +242,48 @@ const deletePOCs = async (req, res) => {
   }
 };
 
+const getTeamWithPoints = async (req, res) => {
+  try{
+    const teams = await Team.find({}, 'team_name gitcoins');
+    res.status(200).json(teams);
+  }catch(error){
+    console.error('Error fetching Team Stats:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
 
-module.exports = {loginAdmin,registerAdmin,TeamCount,ChangeEventStatus,sellPOC,updateCurrentAuctionPOC,toggleRegistration,bidHistory,teamStats,getTeamsWithPOCs,deletePOCs}
+const addTeamPoints = async (req, res) => {
+  try{
+    const teamsToAddPoints = req.body;
+    if (!Array.isArray(teamsToAddPoints) || teamsToAddPoints.length === 0) {
+      return res.status(400).json({ error: 'Invalid request format' });
+    }
+    for (const { teamId, points } of teamsToAddPoints) {
+      const team = await Team.findById(teamId);
+      if (!team) continue; // Skip if team not found
+      team.gitcoins += points; // Add points to the team's gitcoins
+      await team.save();
+    }
+    return res.status(200).json({ message: 'Points successfully added to teams.' });
+  }catch(error){
+    console.error('Error adding points to teams:', error);
+    res.status(500).json({ error: 'Failed to add points to teams' });
+  }
+};
+
+const getEventStatus = async (req, res) => {
+  try{
+    const admin = await Admin.findOne({ username: req.user.username });
+    if (!admin) {
+      return res.status(404).json({ message: 'Admin not found' });
+    }
+    const eventStatus = admin.eventStatus;
+    return res.status(200).json({ eventStatus });
+  }catch(error){
+    console.error('Error fetching event status:', error);
+    return res.status(500).json({ message: 'Server error' });
+  }
+}
+
+
+module.exports = {loginAdmin,registerAdmin,TeamCount,ChangeEventStatus,sellPOC,updateCurrentAuctionPOC,toggleRegistration,bidHistory,teamStats,getTeamsWithPOCs,deletePOCs,getTeamWithPoints,addTeamPoints,getEventStatus}

@@ -11,7 +11,10 @@ const {
     bidHistory,
     teamStats,
     getTeamsWithPOCs,
-    deletePOCs
+    deletePOCs,
+    getTeamWithPoints,
+    addTeamPoints,
+    getEventStatus
 } = require('../controllers/adminController');
 const adminAuthMiddleware = require('../middlewares/adminAuthMiddleware');
 
@@ -30,4 +33,8 @@ router.get('/bidHistory',adminAuthMiddleware,bidHistory);
 router.get('/teamStats',adminAuthMiddleware,teamStats);
 router.get('/getTeamsWithPOCs',adminAuthMiddleware,getTeamsWithPOCs); //get all teams with their POCs
 router.post('/deletePOCs',adminAuthMiddleware,deletePOCs); //delete POC from all teams
+router.get('/getTeamWithPoints',adminAuthMiddleware,getTeamWithPoints); //get all teams with their points
+router.post('/addTeamPoints',adminAuthMiddleware,addTeamPoints); //add points to teams
+router.get('/eventStatus', adminAuthMiddleware, getEventStatus); // Get event status
+
 module.exports = router;
