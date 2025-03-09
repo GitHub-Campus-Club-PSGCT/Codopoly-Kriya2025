@@ -1,0 +1,96 @@
+.maincontainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    min-width: 320px;
+    background-color: #171717;
+    background-image: radial-gradient(#3a3a3a 15%, transparent 16%), radial-gradient(#494949 15%, transparent 16%);
+    background-size: 60px 60px;
+    background-position: 0 0, 30px 30px;
+    animation: blink 1s ease-in-out infinite;
+}
+
+@keyframes blink {
+    0%, 100% {
+        background-image: radial-gradient(#3a3a3a 15%, transparent 16%), radial-gradient(#494949 15%, transparent 16%);
+    }
+    50% {
+        background-image: radial-gradient(#494949 15%, transparent 16%), radial-gradient(#3a3a3a 15%, transparent 16%);
+    }
+
+}
+
+.gameContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 800px;
+    background-color:#282828;
+    border-radius: 30px;
+    padding: 30px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.gameTitle {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #F96024;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    font-family: 'Arial', sans-serif;
+}
+
+.gameSubtitle {
+    font-size: 1.2rem;
+    color: white;
+    margin-bottom: 25px;
+    text-align: center;
+    max-width: 600px;
+}
+
+.choosephasecontainer{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    background-color: #282828;
+    width: fit-content;
+    min-width: 350px;
+    padding: 30px;
+    border-radius: 30px;
+    margin: 20px 0;
+    position: relative;
+}
+
+.button {
+    background-color: #F96024;
+    color: white;
+    padding: 15px 35px;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.button:hover {
+    background-color: #e04f15;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(249, 96, 36, 0.4);
+}
+
+.button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(249, 96, 36, 0.3);
+}
+
+.footerText {
+    margin-top: 20px;
+    color: white;
+    font-size: 0.9rem;
+}
