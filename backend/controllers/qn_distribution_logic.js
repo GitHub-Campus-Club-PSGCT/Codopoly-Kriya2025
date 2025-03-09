@@ -89,20 +89,30 @@ const logic= async(req,res) => {
   
     const teams = {};
   
-    for (let i = 0; i < qnsCount; i++) {
-      teams[i] = [`${qns[i]}1`];
-      qns[i] += '1';
+    let freq2 = {};
+  let freq3 = {};
+  for (let i = 0; i < qnsCount; i++) {
+    teams[i] = [`${qns[i]}1`];
+    qns[i] += '1';
   
-      let temp = qns2[i];
-      temp += (temp.charCodeAt(0) % 2 === 0) ? '2' : '3';
-      qns2[i] = temp;
-      teams[i].push(temp);
-  
-      temp = qns3[i];
-      temp += (temp.charCodeAt(0) % 2 === 0) ? '3' : '2';
-      qns3[i] = temp;
-      teams[i].push(temp);
+    let char2 = qns2[i];
+    freq2[char2] = (freq2[char2] || 0) + 1;
+    if (freq2[char2] === 1) {
+      qns2[i] = char2 + '2';
+    } else {
+      qns2[i] = char2 + '3';
     }
+    teams[i].push(qns2[i]);
+  
+    let char3 = qns3[i];
+    freq3[char3] = (freq3[char3] || 0) + 1;
+    if (freq3[char3] === 1) {
+      qns3[i] = char3 + '2';
+    } else {
+      qns3[i] = char3 + '3';
+    }
+    teams[i].push(qns3[i]);
+  }
   
     console.log(teams);
     admin.qn_distribution = teams;

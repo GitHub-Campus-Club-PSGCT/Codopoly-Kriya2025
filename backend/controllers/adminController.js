@@ -197,4 +197,13 @@ const teamStats = async(req,res)=>{
   }
 }
 
-module.exports = {loginAdmin,registerAdmin,TeamCount,ChangeEventStatus,sellPOC,updateCurrentAuctionPOC,toggleRegistration,bidHistory,teamStats}
+const saveDistributedPOC = async(req,res)=>{
+  try{
+    const admin = Admin.findOne({username : req.user.unsername});
+    
+  }catch(error){
+
+  }
+}
+
+module.exports = {loginAdmin,registerAdmin,TeamCount,ChangeEventStatus,sellPOC,updateCurrentAuctionPOC,toggleRegistration,bidHistory,teamStats,saveDistributedPOC}

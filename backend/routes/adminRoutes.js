@@ -9,7 +9,8 @@ const {
     updateCurrentAuctionPOC,
     toggleRegistration,
     bidHistory,
-    teamStats
+    teamStats,
+    saveDistributedPOC
 } = require('../controllers/adminController');
 const adminAuthMiddleware = require('../middlewares/adminAuthMiddleware');
 
@@ -26,4 +27,5 @@ router.post('/distributePOC',adminAuthMiddleware,logic);
 router.post('/toggle-registration',adminAuthMiddleware,toggleRegistration);
 router.get('/bidHistory',adminAuthMiddleware,bidHistory);
 router.get('/teamStats',adminAuthMiddleware,teamStats);
-module.exports = router;
+//router.post('/saveDistributedPOC',adminAuthMiddleware,saveDistributedPOC);    
+module.exports = router;    
