@@ -5,7 +5,7 @@ const Code = ({ teamPOCs, setTeamPOCs, currentPOCIndex, setCurrentPOCIndex }) =>
     useEffect(() => {
         const fetchCode = async () => {
             try {
-                const token = localStorage.getItem("token");
+                const token = localStorage.getItem("codopoly_token");
                 if (!token) {
                     alert("No token found. Please log in.");
                     return;
