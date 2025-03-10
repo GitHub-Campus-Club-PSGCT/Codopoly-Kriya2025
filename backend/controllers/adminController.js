@@ -216,31 +216,61 @@ const getTeamsWithPOCs = async (req, res) => {
  */
 const deletePOCs = async (req, res) => {
   try {
-    console.log('Received request to delete POCs:', req.body);
-    const teamsToDeleteFrom = req.body; // Expecting an array of { teamId, pocIndexes }
+    console.log("Received request to delete POCs:", req.body);
+    const teamsToDeleteFrom = req.body;
 
     if (!Array.isArray(teamsToDeleteFrom) || teamsToDeleteFrom.length === 0) {
-      return res.status(400).json({ error: 'Invalid request format' });
+      return res.status(400).json({ error: "Invalid request format" });
     }
 
-    // Iterate over each team and remove the selected POCs
+    let uniquePOCs = new Set(); // To store unique POCs case-insensitively
+
     for (const { teamId, pocIndexes } of teamsToDeleteFrom) {
       const team = await Team.findById(teamId);
-      if (!team) continue; // Skip if team not found
+      if (!team) continue;
 
-      const pocsToRemove = pocIndexes.map((index) => team.POC[index]); // Get actual POC names
+      // Collect POCs to be deleted
+      pocIndexes.forEach(index => {
+        if (team.POC[index]) {
+          uniquePOCs.add(team.POC[index].toUpperCase()); // Ensure uniqueness
+        }
+      });
 
+      // Remove POCs from team
       await Team.findByIdAndUpdate(teamId, {
-        $pull: { POC: { $in: pocsToRemove } } // Correct usage of $pull with $in
+        $pull: { POC: { $in: pocIndexes.map(index => team.POC[index]) } },
       });
     }
 
-    res.json({ message: 'POCs successfully deleted from selected teams.' });
+    // Fetch admin record and update `POCsToBeSold`
+    const admin = await Admin.findOne();
+    if (!admin) {
+      return res.status(500).json({ error: "Admin record not found" });
+    }
+
+    // Convert set to array of objects: { name, isAuctioned: false }
+    const newPOCs = [...uniquePOCs].map(name => ({
+      name,
+      isAuctioned: false,
+    }));
+
+    // Append only unique POCs that aren’t already in POCsToBeSold
+    const updatedPOCs = [
+      ...admin.POCsToBeSold.filter(p => !uniquePOCs.has(p.name.toUpperCase())),
+      ...newPOCs,
+    ];
+
+    // Update Admin Schema
+    admin.POCsToBeSold = updatedPOCs;
+    await admin.save();
+
+    res.status(200).json({ message: "POCs successfully deleted and added to auction pool." });
   } catch (error) {
-    console.error('Error deleting POCs:', error);
-    res.status(500).json({ error: 'Failed to delete POCs' });
+    console.error("Error deleting POCs:", error);
+    res.status(500).json({ error: "Failed to delete POCs" });
   }
 };
+
 
 const getTeamWithPoints = async (req, res) => {
   try{
@@ -283,7 +313,45 @@ const getEventStatus = async (req, res) => {
     console.error('Error fetching event status:', error);
     return res.status(500).json({ message: 'Server error' });
   }
-}
+};
+
+const getPOCsToBeSold = async (req, res) => {
+  try {
+    const admin = await Admin.findOne();
+    if (!admin) {
+      return res.status(404).json({ error: 'Admin record not found' });
+    }
+    
+    res.json({ POCsToBeSold: admin.POCsToBeSold });
+  } catch (error) {
+    console.error('Error fetching POCs to be sold:', error);
+    res.status(500).json({ error: 'Failed to fetch POCs to be sold' });
+  }
+};
+
+const markPOCSold = async (req, res) => {
+  try {
+    const { POC_name } = req.body;
+
+    const admin = await Admin.findOne();
+    if (!admin) return res.status(500).json({ error: "Admin record not found" });
+
+    console.log('aaaaaa ',POC_name);
+
+    const pocIndex = admin.POCsToBeSold.findIndex(p => p.name === POC_name);
+    if (pocIndex !== -1) {
+      admin.POCsToBeSold[pocIndex].isAuctioned = true;
+      await admin.save();
+    }
+
+    console.log('bbbbb  ',POC_name);
+
+    res.json({ message: "POC marked as sold" });
+  } catch (error) {
+    console.error("Error marking POC as sold:", error);
+    res.status(500).json({ error: "Failed to update POC status" });
+  }
+};
 
 
-module.exports = {loginAdmin,registerAdmin,TeamCount,ChangeEventStatus,sellPOC,updateCurrentAuctionPOC,toggleRegistration,bidHistory,teamStats,getTeamsWithPOCs,deletePOCs,getTeamWithPoints,addTeamPoints,getEventStatus}
+module.exports = {loginAdmin,registerAdmin,TeamCount,ChangeEventStatus,sellPOC,updateCurrentAuctionPOC,toggleRegistration,bidHistory,teamStats,getTeamsWithPOCs,deletePOCs,getTeamWithPoints,addTeamPoints,getEventStatus,getPOCsToBeSold,markPOCSold}

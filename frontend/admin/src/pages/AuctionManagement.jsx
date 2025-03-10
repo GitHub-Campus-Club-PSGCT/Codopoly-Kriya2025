@@ -24,6 +24,21 @@ const AuctionManagement = () => {
   const [isLoadingStats, setIsLoadingStats] = useState(false);
   const [activeTab, setActiveTab] = useState('history'); // 'history' or 'stats'
 
+  const [availablePOCs, setAvailablePOCs] = useState([]);
+
+  useEffect(() => {
+    const fetchPOCs = async () => {
+      try {
+        const response = await adminAPI.getPOCsToBeSold();
+        setAvailablePOCs(response.POCsToBeSold);
+      } catch (error) {
+        console.error("Error fetching POCs:", error);
+      }
+    };
+    fetchPOCs();
+  }, []);
+
+
   useEffect(() => {
     // Connect to the socket server using socketAPI
     socketAPI.connect();
@@ -64,11 +79,33 @@ const AuctionManagement = () => {
       toast.success('Auction timer ended');
     });
 
-    socketAPI.onSellPOCSuccess((data) => {
+    socketAPI.onSellPOCSuccess(async (data) => {
+      console.log(data);
       toast.success(data.message);
-      setCurrentPOC('');
+      setCurrentPOC("");
+    
+      // Extract POC name from message (e.g., "POC: 'A3' sold successfully")
+      const match = data.message.match(/POC: '(.+?)'/);
+      const pocName = match ? match[1] : null; // Extracts "A3"
+    
+      if (!pocName) {
+        console.error("Failed to extract POC name from message:", data.message);
+        return;
+      }
+    
+      try {
+        await adminAPI.markPOCSold(pocName);
+        setAvailablePOCs((prev) =>
+          prev.map((poc) => (poc.name === pocName ? { ...poc, isAuctioned: true } : poc))
+        );
+      } catch (error) {
+        console.error("Error marking POC as sold:", error);
+      }
+    
       loadTeamStats();
     });
+    
+    
 
     socketAPI.onSellPOCFailed((data) => {
       toast.error(data.message);
@@ -288,20 +325,36 @@ const AuctionManagement = () => {
           </h2>
           
           <form onSubmit={handleUpdatePOC} className="space-y-4">
-            <div>
-              <label htmlFor="poc" className="block text-sm font-medium text-gray-700 mb-1">
-                POC Name
-              </label>
-              <input
-                type="text"
-                id="poc"
-                value={currentPOC}
-                onChange={(e) => setCurrentPOC(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                placeholder="Enter POC name (e.g., A1)"
-                required
-              />
-            </div>
+          <div>
+  <label htmlFor="poc" className="block text-sm font-medium text-gray-700 mb-1">
+    Select POC for Auction
+  </label>
+  <select
+    id="poc"
+    value={currentPOC}
+    onChange={(e) => setCurrentPOC(e.target.value)}
+    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+    required
+  >
+    <option value="">-- Select a POC --</option>
+    {availablePOCs
+      .slice()
+      .sort((a, b) => a.isAuctioned - b.isAuctioned) // Move sold POCs to bottom
+      .map((poc) => (
+        <option 
+          key={poc._id} 
+          value={poc.isAuctioned ? "" : poc.name} // Prevent selection if sold
+          disabled={poc.isAuctioned} // Disable if sold
+          style={{ color: poc.isAuctioned ? "gray" : "black", fontWeight: poc.isAuctioned ? "bold" : "normal" }}
+        >
+          {poc.name} {poc.isAuctioned ? "(Sold)" : ""}
+        </option>
+      ))}
+  </select>
+</div>
+
+
+
             
             <div>
               <label htmlFor="round" className="block text-sm font-medium text-gray-700 mb-1">
