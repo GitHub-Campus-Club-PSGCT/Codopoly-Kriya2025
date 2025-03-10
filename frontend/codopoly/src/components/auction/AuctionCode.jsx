@@ -5,7 +5,7 @@ import {io} from 'socket.io-client';
 const AuctionCode  = ()=>{
     const [currentPOCForSale, setCurrentPOCForSale] = useState('');
     useEffect(() => {
-        const savedPOC = localStorage.getItem('currentPOC') || '';
+        const savedPOC = localStorage.getItem('currentPOC') || 'The code will be availabe when the auction starts';
         setCurrentPOCForSale(savedPOC);
 
         const socket = io('http://localhost:3000');
