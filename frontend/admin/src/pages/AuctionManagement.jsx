@@ -185,6 +185,16 @@ const AuctionManagement = () => {
     }
   };
 
+  const makeBuyPOCtrueHandler = async()=>{
+    try{
+      await adminAPI.canBuyPOCtrue();
+      toast.success('Allowed all teams to buy POC')
+    }catch(error){
+      console.error('Error allowing team to buy POC:', error);
+      toast.error('Error allowing team to buy POC');
+    }
+  }
+
   const startAuctionTimer = () => {
     if (timerDuration > 0) {
       socketAPI.startAuction(timerDuration);

@@ -19,7 +19,8 @@ const {
     deleteQnDistribution,
     getPOCsToBeSold,
     markPOCSold,
-    fetchDistributionData
+    fetchDistributionData,
+    makeCanBuyPocTrue
 
 } = require('../controllers/adminController');
 const adminAuthMiddleware = require('../middlewares/adminAuthMiddleware');
@@ -46,6 +47,7 @@ router.get('/eventStatus', adminAuthMiddleware, getEventStatus); // Get event st
 router.post('/saveDistributedPOC',adminAuthMiddleware,saveDistributedPOC);
 router.get('/deleteQnDistribution',adminAuthMiddleware,deleteQnDistribution)
 router.get('/fetchQnData',adminAuthMiddleware,fetchDistributionData);
+router.get('/makeBuyPOCtrue',adminAuthMiddleware,makeCanBuyPocTrue);
 
 router.post('/markPOCSold', adminAuthMiddleware, markPOCSold); // Mark POC as sold
 router.get('/POCsToBeSold', adminAuthMiddleware, getPOCsToBeSold); // Get POCs to be sold

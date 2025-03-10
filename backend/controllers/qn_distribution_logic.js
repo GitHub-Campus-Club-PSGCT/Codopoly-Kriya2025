@@ -88,11 +88,8 @@ const logic= async(req,res) => {
     }
   
     const teams = {};
-  
-    let freq2 = {};
-  let freq3 = {};
   let numarr = new Array(26).fill(null).map(() => ['2', '3']);
-
+  let numarr2 = new Array(26).fill(null).map(() => ['3', '2']);
 // "teams" object already created above
 for (let i = 0; i < qnsCount; i++) {
   // First label
@@ -115,12 +112,12 @@ for (let i = 0; i < qnsCount; i++) {
   // Third label
   temp = qns3[i];
   const idx3 = qns3[i].charCodeAt(0) - 65;
-  if (numarr[idx3].length !== 1) {
-    temp += numarr[idx3].pop();
+  if (numarr2[idx3].length !== 1) {
+    temp += numarr2[idx3].pop();
   } else {
-    temp += numarr[idx3].pop();
-    numarr[idx3].push('3');
-    numarr[idx3].push('2');
+    temp += numarr2[idx3].pop();
+    numarr2[idx3].push('3');
+    numarr2[idx3].push('2');
     
   }
   teams[i].push(temp);
@@ -145,7 +142,6 @@ for (let i = 0; i < qnsCount; i++) {
       teams[i].push(letter2+1);
     }
 }
-
   
     console.log(teams);
     admin.qn_distribution = {};

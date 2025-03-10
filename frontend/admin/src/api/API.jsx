@@ -4,7 +4,7 @@ import { io } from 'socket.io-client';
 // Create axios instance with base URL
 const API = axios.create({
   baseURL: 'http://localhost:3000', // Replace with your actual backend URL
-  timeout: 10000,
+  timeout: 30000,
 });
 
 // Add request interceptor to include auth token in headers
@@ -70,6 +70,7 @@ export const adminAPI = {
   getTeamWithPoints : ()=>API.get('/admin/getTeamWithPoints'),
   addTeamPoints : (teamsToUpdate)=>API.post('/admin/addTeamPoints',teamsToUpdate),
   fetchQnData : ()=>API.get('/admin/fetchQnData'),
+  makeBuyPOCtrue : ()=>API.get('/admin/makeBuyPOCtrue'),
   getBidHistory: async () => {
     try {
       const response = await API.get('/admin/bidHistory');

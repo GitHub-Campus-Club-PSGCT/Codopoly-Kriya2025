@@ -114,10 +114,7 @@ const socketHandler = (server) => {
 
       team.gitcoins -= amount;
       team.POC.push(POC);
-      if (team.POC.length === round) {
-        team.canBuyPOC = false;
-      }
-
+      team.canBuyPOC = false;
       await team.save();
       await newAuction.save();
 

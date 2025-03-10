@@ -443,6 +443,18 @@ const fetchDistributionData = async(req,res)=>{
   }
 }
 
+const makeCanBuyPocTrue = async (req, res) => {
+  try {
+    const result = await Team.updateMany({}, { $set: { canBuyPOC: true } });
+    res.status(200).json({
+      message: 'Updated canBuyPOC to true for all teams successfully'
+    });
+  } catch (err) {
+    console.error('Error updating canBuyPOC:', err);
+    res.status(500).json({ message: 'Failed to update canBuyPOC for teams', error: err.message });
+  }
+};
+
 module.exports = {
   loginAdmin,
   registerAdmin,
@@ -462,5 +474,6 @@ module.exports = {
   deleteQnDistribution,
   getPOCsToBeSold,
   markPOCSold,
-  fetchDistributionData
+  fetchDistributionData,
+  makeCanBuyPocTrue
 }
