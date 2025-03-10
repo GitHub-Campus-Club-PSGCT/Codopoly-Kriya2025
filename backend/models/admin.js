@@ -11,6 +11,12 @@ const adminSchema = new mongoose.Schema({
       of: [String],   // Array of strings for each key (e.g., '0': ['B1', 'Q3', 'N3'])
       default: {} 
     },
+    POCsToBeSold: [
+    {
+      name: { type: String, unique: true }, // POC Name
+      isAuctioned: { type: Boolean, default: false }, // Auction status
+    },
+    ],
     currentBiddingPOC : {type : String},
     eventStatus: { type: String, enum: ['debugging', 'auction', 'closed'], default: 'closed' },
     currentAuctionRound:{type: Number, default: 0},

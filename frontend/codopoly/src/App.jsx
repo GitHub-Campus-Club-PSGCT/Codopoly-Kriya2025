@@ -6,6 +6,7 @@ import BiddingPage from './pages/BiddingPage.jsx';
 import DebuggingPage from './pages/DebuggingPage.jsx';
 import QuestionPage from './pages/QuestionPage.jsx';
 import ChoosePhasePage from './pages/ChoosePhasePage.jsx';
+import OwnedCodesPage from './pages/OwnedCodesPage.jsx';
 
 const AppRouter = () => {
     return (
@@ -16,6 +17,7 @@ const AppRouter = () => {
                 <Route path="/register" element={<RegisterPage/>} />
                 <Route path='/choosephase' element={<ChoosePhasePage/>}/>
                 <Route path="/bidding" element={<BiddingPage/>} />
+                <Route path='/ownedcodes' element={<OwnedCodesPage/>} />
                 <Route path="/debugging" element={<DebuggingPage/>} />
                 <Route path="/question" element={<QuestionPage/>}/>
              </Routes>

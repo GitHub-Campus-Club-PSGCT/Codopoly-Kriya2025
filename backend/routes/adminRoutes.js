@@ -15,8 +15,13 @@ const {
     getTeamWithPoints,
     addTeamPoints,
     getEventStatus,
+<<<<<<< HEAD
     saveDistributedPOC,
     deleteQnDistribution
+=======
+    getPOCsToBeSold,
+    markPOCSold
+>>>>>>> 18307b7ba3d4b10e9c5ebcfb53299505cc3da559
 } = require('../controllers/adminController');
 const adminAuthMiddleware = require('../middlewares/adminAuthMiddleware');
 
@@ -38,6 +43,12 @@ router.post('/deletePOCs',adminAuthMiddleware,deletePOCs); //delete POC from all
 router.get('/getTeamWithPoints',adminAuthMiddleware,getTeamWithPoints); //get all teams with their points
 router.post('/addTeamPoints',adminAuthMiddleware,addTeamPoints); //add points to teams
 router.get('/eventStatus', adminAuthMiddleware, getEventStatus); // Get event status
+<<<<<<< HEAD
 router.post('/saveDistributedPOC',adminAuthMiddleware,saveDistributedPOC);
 router.get('/deleteQnDistribution',adminAuthMiddleware,deleteQnDistribution)
+=======
+router.post('/markPOCSold', adminAuthMiddleware, markPOCSold); // Mark POC as sold
+router.get('/POCsToBeSold', adminAuthMiddleware, getPOCsToBeSold); // Get POCs to be sold
+
+>>>>>>> 18307b7ba3d4b10e9c5ebcfb53299505cc3da559
 module.exports = router;

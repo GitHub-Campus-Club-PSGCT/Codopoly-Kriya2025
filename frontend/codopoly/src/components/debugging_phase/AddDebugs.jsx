@@ -1,17 +1,18 @@
 import React, { useState } from "react";
 import axios from "axios";
+import "./AddDebugs.css"; // External CSS for styling
 
 const AddDebugs = ({ currentPOC, debugs, setDebugs }) => {
     const [error, setError] = useState(""); // Store error messages
 
     if (!currentPOC) {
-        return <p className="text-center text-red-500">No POC selected</p>;
+        return <p className="no-poc">No POC selected</p>;
     }
 
     const questionTitle = currentPOC.pocName.charAt(0);
     const pocName = currentPOC.pocName.charAt(1);
 
-    console.log('aaaaaa :',questionTitle, pocName);
+    console.log("aaaaaa :", questionTitle, pocName);
 
     const handleAddDebug = () => {
         setDebugs({
@@ -63,43 +64,32 @@ const AddDebugs = ({ currentPOC, debugs, setDebugs }) => {
     };
 
     return (
-        <div className="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-md mt-6">
-            <h2 className="text-2xl font-bold text-center mb-4">
-                Add Debugs for {pocName}
-            </h2>
-
-            {/* Display Errors */}
-            {error && <p className="text-red-500 text-center">{error}</p>}
+        <div className="debug-container">
+            <h2 className="debug-title">Add Debugs for {pocName}</h2>
+            {error && <p className="debug-error">{error}</p>}
 
             {debugs[pocName]?.map((debug, index) => (
-                <div key={index} className="mb-4 border p-2 rounded">
+                <div key={index} className="debug-item">
                     <input
                         type="number"
                         placeholder="Line Number"
                         value={debug.line}
                         onChange={(e) => handleUpdateDebug(index, "line", e.target.value)}
-                        className="border p-2 rounded mr-2"
+                        className="debug-input"
                     />
                     <input
                         type="text"
                         placeholder="New Code"
                         value={debug.newCode}
                         onChange={(e) => handleUpdateDebug(index, "newCode", e.target.value)}
-                        className="border p-2 rounded"
+                        className="debug-input"
                     />
-                    <button onClick={() => handleRemoveDebug(index)} className="ml-2 text-red-500">
-                        ❌ Remove
-                    </button>
+                    <button onClick={() => handleRemoveDebug(index)} className="remove-btn">❌</button>
                 </div>
             ))}
 
-            <button onClick={handleAddDebug} className="bg-blue-500 text-white px-4 py-2 rounded">
-                ➕ Add Debug
-            </button>
-
-            <button onClick={handleSubmit} className="bg-green-500 text-white px-4 py-2 rounded ml-4">
-                🚀 Submit Debugs
-            </button>
+            <button onClick={handleAddDebug} className="add-btn">➕ Add Debug</button>
+            <button onClick={handleSubmit} className="submit-btn">🚀 Submit Debugs</button>
         </div>
     );
 };

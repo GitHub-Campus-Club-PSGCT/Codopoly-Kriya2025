@@ -1,0 +1,82 @@
+.debug-container {
+    width: 100%;
+    background-color: #282828;
+    padding: 20px;
+    border-radius: 10px;
+    border: 2px solid #F96024;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    margin-top: 70px; /* Ensures spacing below Submitted Debugs */
+}
+
+.debug-title {
+    color: #FBBD13; /* Yellow Accent */
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.debug-error {
+    color: #F96024; /* Orange Error Text */
+    text-align: center;
+    font-weight: bold;
+}
+
+.debug-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    background: #383838; /* Slightly Lighter Gray */
+    padding: 8px;
+    border-radius: 5px;
+    border: 2px solid #F96024; /* Orange Border */
+    gap: 5px;
+    flex-wrap: nowrap; /* Ensures the button doesn't wrap */
+}
+
+.debug-input {
+    flex: 1;
+    min-width: 0; /* Prevents input from overflowing */
+    padding: 8px;
+    border-radius: 5px;
+    background: #FFF; /* White Input Background */
+    color: #282828; /* Dark Gray Text */
+    border: 1px solid #F96024; /* Orange Border */
+}
+
+.add-btn {
+    background-color: #F96024; /* Orange */
+    color: white;
+    padding: 10px;
+    width: 100%;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    border: none;
+}
+
+.submit-btn {
+    background-color: #383838; /* Darker Gray */
+    color: #FBBD13; /* Yellow Text */
+    padding: 10px;
+    width: 100%;
+    margin-top: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    border: 2px solid #F96024; /* Orange Border */
+}
+
+.remove-btn {
+    background: transparent;
+    border: none;
+    color: #F96024; /* Orange */
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 30px; /* Ensures visibility */
+}

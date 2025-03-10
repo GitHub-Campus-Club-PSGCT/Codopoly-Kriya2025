@@ -88,6 +88,20 @@ export const adminAPI = {
       console.error('Error fetching team stats:', error);
       throw error;
     }
+  },
+
+  getPOCsToBeSold: async () => {
+    try {
+      const response = await API.get('/admin/POCsToBeSold');
+      return response.data || { POCsToBeSold: [] }; // Ensure it returns an object
+    } catch (error) {
+      console.error("Error fetching POCs to be sold:", error);
+      return { POCsToBeSold: [] }; // Return a fallback to prevent crashing
+    }
+  },
+
+  markPOCSold: async (POC_name) => {
+    return await API.post('/admin/markPOCSold', { POC_name });
   }
 };
 
