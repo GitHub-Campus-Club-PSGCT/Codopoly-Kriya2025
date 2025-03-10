@@ -10,7 +10,15 @@ const OwnedCode = () => {
     useEffect(() => {
         const fetchOwnedCodes = async () => {
            try{
-                //Need to write a api call here to fetch the owned codes here
+                const token = localStorage.getItem('codopoly_token')
+                const resposne = await axios.get('http://localhost:3000/debug/poc',{
+                    headers:{Authorization:`Bearer ${token}`}
+                })
+                let teamPOCs = resposne.data.teamPOCs;
+                if(teamPOCs.length >1){
+                    setOwnedCodes(teamPOCs)
+                }
+                setLoading(false)
            }
            catch(error){
             console.log(error);
@@ -37,11 +45,8 @@ const OwnedCode = () => {
         <div className={styles.codesContainer}>
             {ownedCodes.map((code, index) => (
                 <div key={index} className={styles.codeCard}>
-                    <div className={styles.codeTitle}>
-                        {code.title || `Code #${index + 1}`}
-                    </div>
                     <pre className={styles.codeContent}>
-                        {code.content}
+                        {code.code}
                     </pre>
                 </div>
             ))}
