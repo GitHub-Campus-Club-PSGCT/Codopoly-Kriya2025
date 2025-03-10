@@ -353,5 +353,127 @@ const markPOCSold = async (req, res) => {
   }
 };
 
+const saveDistributedPOC = async (req, res) => {
+  try {
+    // round passed from frontend (1 or 2, etc.)
 
-module.exports = {loginAdmin,registerAdmin,TeamCount,ChangeEventStatus,sellPOC,updateCurrentAuctionPOC,toggleRegistration,bidHistory,teamStats,getTeamsWithPOCs,deletePOCs,getTeamWithPoints,addTeamPoints,getEventStatus,getPOCsToBeSold,markPOCSold}
+
+    // Fetch the admin document that holds the distribution map
+    const admin = await Admin.findOne({ username: 'Akash' });
+    if (!admin) {
+      console.error('Admin not found');
+      return res.status(404).json({ message: 'Admin not found' });
+    }
+    const round = admin.currentAuctionRound;
+    console.log(round)
+    // Get the map that holds multiple arrays
+    const distribution = admin.qn_distribution; // Map<string, string[]>
+
+    // Fetch all teams
+    const teams = await Team.find({}).sort({ team_name: 1 });
+
+    // For each team, assemble only the POCs at the desired indices
+    for (let i = 0; i < teams.length; i++) {
+      const team = teams[i];
+      const pocArray = distribution.get(i.toString()); // Get the array for this team
+      let newPocs = [];
+
+      if (round === 1) {
+        // Add indices [0, 1, 3] if they exist
+        if (pocArray?.[0]) newPocs.push(pocArray[0]);
+        if (pocArray?.[1]) newPocs.push(pocArray[1]);
+        if (pocArray?.[3]) newPocs.push(pocArray[3]);
+      } else if (round === 2) {
+        // Add indices [2, 4] if they exist
+        if (pocArray?.[2]) newPocs.push(pocArray[2]);
+        if (pocArray?.[4]) newPocs.push(pocArray[4]);
+      }
+
+      // Append new POCs to existing ones without duplicates
+      const updatedPocs = Array.from(new Set([...team.POC, ...newPocs]));
+      team.POC = updatedPocs;
+      await team.save();
+      console.log(team.POC)
+      console.log(`Updated POC for team: ${team.team_name}`);
+    }
+
+    // Mark the map as modified so Mongoose knows to update it
+    
+    console.log('Distribution assignment completed.');
+    return res.status(200).json({ message: 'Distribution assignment completed.' });
+  } catch (error) {
+    console.error('Error assigning POCs:', error);
+    return res.status(500).json({ message: 'Server error' });
+  }
+};
+
+const deleteQnDistribution = async (req, res) => {
+  try {
+    const admin = await Admin.findOne({ username: req.user.username });
+    if (!admin) {
+      return res.status(404).json({ message: 'Admin not found' });
+    }
+
+    admin.qn_distribution = {}; 
+    await admin.save();
+
+    return res.status(200).json({ message: 'Qn distribution deleted successfully' });
+  } catch (err) {
+    console.error('Error deleting Qn distribution:', err);
+    return res.status(500).json({ message: 'Server error' });
+  }
+};
+
+const fetchDistributionData = async(req,res)=>{
+  try{
+    const admin = await Admin.findOne({username : req.user.username});
+    const teams = await Team.find({}).sort({ team_name: 1 });
+    if(!admin){
+      console.log("Admin not found");
+      return res.status(404).json({message:'Admin not found'});
+    }
+    const teamName = [];
+    for(const team of teams){
+      teamName.push(team.team_name);
+    }
+    return res.status(200).json({message : "Qn distribution data fetched successfully",data : admin.qn_distribution,team : teamName})
+  }catch(err){
+    console.log('Error while fetching qn distibution data');
+    return res.status(500).json({message : 'Server Error'});
+  }
+}
+
+const makeCanBuyPocTrue = async (req, res) => {
+  try {
+    const result = await Team.updateMany({}, { $set: { canBuyPOC: true } });
+    res.status(200).json({
+      message: 'Updated canBuyPOC to true for all teams successfully'
+    });
+  } catch (err) {
+    console.error('Error updating canBuyPOC:', err);
+    res.status(500).json({ message: 'Failed to update canBuyPOC for teams', error: err.message });
+  }
+};
+
+module.exports = {
+  loginAdmin,
+  registerAdmin,
+  TeamCount,
+  ChangeEventStatus,
+  sellPOC,
+  updateCurrentAuctionPOC,
+  toggleRegistration,
+  bidHistory,
+  teamStats,
+  getTeamsWithPOCs,
+  deletePOCs,
+  getTeamWithPoints,
+  addTeamPoints,
+  getEventStatus,
+  saveDistributedPOC,
+  deleteQnDistribution,
+  getPOCsToBeSold,
+  markPOCSold,
+  fetchDistributionData,
+  makeCanBuyPocTrue
+}

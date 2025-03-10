@@ -88,23 +88,63 @@ const logic= async(req,res) => {
     }
   
     const teams = {};
+  let numarr = new Array(26).fill(null).map(() => ['2', '3']);
+  let numarr2 = new Array(26).fill(null).map(() => ['3', '2']);
+// "teams" object already created above
+for (let i = 0; i < qnsCount; i++) {
+  // First label
+  teams[i] = [qns[i] + '1'];
+  qns[i] = qns[i] + '1';
+
+  // Second label
+  let temp = qns2[i];
+  const idx2 = qns2[i].charCodeAt(0) - 65;
+  if (numarr[idx2].length !== 1) {
+    temp += numarr[idx2].pop();
+  } else {
+    temp += numarr[idx2].pop();
+    numarr[idx2].push('3');
+    numarr[idx2].push('2');
+    
+  }
+  teams[i].push(temp);
+
+  // Third label
+  temp = qns3[i];
+  const idx3 = qns3[i].charCodeAt(0) - 65;
+  if (numarr2[idx3].length !== 1) {
+    temp += numarr2[idx3].pop();
+  } else {
+    temp += numarr2[idx3].pop();
+    numarr2[idx3].push('3');
+    numarr2[idx3].push('2');
+    
+  }
+  teams[i].push(temp);
+  qns3[i] = temp;
+  const usedUpper = [
+      qns[i][0].toLowerCase(),
+      qns2[i][0].toLowerCase(),
+      qns3[i][0].toLowerCase()
+    ];
+    const allLower = 'abcdefghijklm'.split('');
+    const available = allLower.filter(letter => !usedUpper.includes(letter));
   
-    for (let i = 0; i < qnsCount; i++) {
-      teams[i] = [`${qns[i]}1`];
-      qns[i] += '1';
-  
-      let temp = qns2[i];
-      temp += (temp.charCodeAt(0) % 2 === 0) ? '2' : '3';
-      qns2[i] = temp;
-      teams[i].push(temp);
-  
-      temp = qns3[i];
-      temp += (temp.charCodeAt(0) % 2 === 0) ? '3' : '2';
-      qns3[i] = temp;
-      teams[i].push(temp);
+    if (available.length >= 2) {
+      const idx1 = Math.floor(Math.random() * available.length);
+      const letter1 = available[idx1];
+      available.splice(idx1, 1);
+    
+      const idx2 = Math.floor(Math.random() * available.length);
+      const letter2 = available[idx2];
+    
+      teams[i].push(letter1+1);
+      teams[i].push(letter2+1);
     }
+}
   
     console.log(teams);
+    admin.qn_distribution = {};
     admin.qn_distribution = teams;
     await admin.save();
     

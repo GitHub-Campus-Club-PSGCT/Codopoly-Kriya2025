@@ -70,7 +70,7 @@ const AuctionManagement = () => {
     socketAPI.onAuctionStarted((duration) => {
       setRemainingTime(duration);
       setIsAuctionActive(true);
-      toast.info(`Auction timer started for ${duration} seconds`);
+      toast.info(`Auction timer started for ${duration.time} seconds`);
     });
 
     socketAPI.onAuctionEnded(() => {
@@ -184,6 +184,16 @@ const AuctionManagement = () => {
       setIsSelling(false);
     }
   };
+
+  const makeBuyPOCtrueHandler = async()=>{
+    try{
+      await adminAPI.canBuyPOCtrue();
+      toast.success('Allowed all teams to buy POC')
+    }catch(error){
+      console.error('Error allowing team to buy POC:', error);
+      toast.error('Error allowing team to buy POC');
+    }
+  }
 
   const startAuctionTimer = () => {
     if (timerDuration > 0) {
