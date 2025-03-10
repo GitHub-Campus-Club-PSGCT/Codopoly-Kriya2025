@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 const RemovePOC = () => {
   const [teams, setTeams] = useState([]);
   const [selectedPOCs, setSelectedPOCs] = useState({});
+  const [temp, setTemp] = useState(0);
   
   const token = localStorage.getItem('adminToken');
 
@@ -59,6 +60,7 @@ const RemovePOC = () => {
       });
 
       toast.success('Selected POCs deleted successfully.');
+      setTemp((prev) => (prev+1)%10);
       setSelectedPOCs({});
     } catch (error) {
       console.error('Error deleting POCs:', error);

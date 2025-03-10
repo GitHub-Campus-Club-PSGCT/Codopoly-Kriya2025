@@ -28,6 +28,7 @@ const getTeamPOC = async (req, res) => {
                 code: question ? question.POC[poc[1]] : null
             }
         })
+        console.log("Team POCs:", teamPOCs);
 
         res.status(200).json({ teamPOCs }); 
     }catch(error){
