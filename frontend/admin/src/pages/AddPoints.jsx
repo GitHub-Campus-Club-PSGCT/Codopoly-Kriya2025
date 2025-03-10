@@ -1,35 +1,31 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { toast } from 'react-toastify';
+import { adminAPI } from '../api/API';
 
 const AddPoints = () => {
   const [teams, setTeams] = useState([]);
   const [points, setPoints] = useState({});
-  const [temp, setTemp] = useState(0); // Temporary state for debugging
-  const token = localStorage.getItem('adminToken');
+
+  // Fetch teams function moved outside useEffect
+  const fetchTeams = async () => {
+    try {
+      const response = await adminAPI.getTeamWithPoints();
+      if (Array.isArray(response.data)) {
+        setTeams(response.data);
+        toast.success('Teams fetched successfully.');
+      } else {
+        toast.error('Invalid response from server.');
+        console.error('Unexpected API response:', response.data);
+      }
+    } catch (error) {
+      console.error('Error fetching teams:', error);
+      toast.error('Failed to fetch teams.');
+    }
+  };
 
   useEffect(() => {
-    const fetchTeams = async () => {
-      try {
-        const response = await axios.get('http://localhost:3000/admin/getTeamWithPoints', {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
-        if (Array.isArray(response.data)) {
-          setTeams(response.data);
-          toast.success('Teams fetched successfully.');
-        } else {
-          toast.error('Invalid response from server.');
-          console.error('Unexpected API response:', response.data);
-        }
-      } catch (error) {
-        console.error('Error fetching teams:', error);
-        toast.error('Failed to fetch teams.');
-      }
-    };
-
-    fetchTeams();
-  }, [temp]);
+    fetchTeams(); // Fetch teams initially
+  }, []);
 
   const handlePointsChange = (teamId, value) => {
     setPoints((prev) => ({
@@ -42,9 +38,9 @@ const AddPoints = () => {
     const teamsToUpdate = Object.keys(points)
       .map((teamId) => ({
         teamId,
-        points: parseInt(points[teamId], 10) || 0, // Convert input to number
+        points: parseInt(points[teamId], 10) || 0,
       }))
-      .filter((team) => team.points !== 0); // Only send teams with nonzero points
+      .filter((team) => team.points !== 0);
 
     if (teamsToUpdate.length === 0) {
       toast.error('No points entered for any team.');
@@ -52,13 +48,10 @@ const AddPoints = () => {
     }
 
     try {
-      await axios.post('http://localhost:3000/admin/addTeamPoints', teamsToUpdate, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      toast.success('Points successfully updated.');
+      const response = await adminAPI.addTeamPoints(teamsToUpdate);
+      toast.success(response.message);
       setPoints({}); // Clear input fields after submission
-      setTemp((prev) => (prev+1)%10);
+      await fetchTeams(); // Fetch updated team points after submission
     } catch (error) {
       console.error('Error adding points:', error);
       toast.error('Failed to update points.');
@@ -76,7 +69,9 @@ const AddPoints = () => {
           {teams.map((team) => (
             <div key={team._id} className="p-4 border rounded-lg">
               <p className="font-semibold text-lg">{team.team_name || 'Unnamed Team'}</p>
-              <p className="text-gray-600">Current Points: <span className="font-bold">{team.gitcoins}</span></p>
+              <p className="text-gray-600">
+                Current Points: <span className="font-bold">{team.gitcoins}</span>
+              </p>
 
               <input
                 type="number"

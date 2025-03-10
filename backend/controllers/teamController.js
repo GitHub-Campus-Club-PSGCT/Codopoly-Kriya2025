@@ -65,5 +65,18 @@ const getTeamDetails = async (req, res) => {
     }
   };
 
-  
-module.exports = { registerTeam, loginTeam, getTeamDetails };
+const clearAllTeamPOCs = async (req, res) => { //just using during the development process
+    try {
+      const teams = await Team.find({});
+      for (const team of teams) {
+        team.POC = [];
+        await team.save();
+      }
+      return res.status(200).json({ message: 'All POCs cleared successfully.' });
+    } catch (error) {
+      console.error('Error clearing POCs:', error);
+      return res.status(500).json({ message: 'Server error' });
+    }
+  };
+
+module.exports = { registerTeam, loginTeam, getTeamDetails ,clearAllTeamPOCs};

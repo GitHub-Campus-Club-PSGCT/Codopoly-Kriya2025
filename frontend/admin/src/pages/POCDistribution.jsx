@@ -8,12 +8,12 @@ const POCDistribution = () => {
   const [distributionData, setDistributionData] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
 
+ 
   const handleDistributePOC = async () => {
     setIsDistributing(true);
     
     try {
       const response = await adminAPI.distributePOC();
-      setDistributionData(response.data.teams);
       toast.success('POC distribution completed successfully!');
     } catch (error) {
       console.error('Error distributing POC:', error);
@@ -29,21 +29,7 @@ const POCDistribution = () => {
       )
     : [];
 
-  const downloadDistribution = () => {
-    if (!distributionData) return;
-    
-    const jsonString = JSON.stringify(distributionData, null, 2);
-    const blob = new Blob([jsonString], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'poc_distribution.json';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  };
+ 
 
   return (
     <div className="space-y-6">

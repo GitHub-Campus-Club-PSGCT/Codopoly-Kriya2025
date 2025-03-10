@@ -91,28 +91,61 @@ const logic= async(req,res) => {
   
     let freq2 = {};
   let freq3 = {};
-  for (let i = 0; i < qnsCount; i++) {
-    teams[i] = [`${qns[i]}1`];
-    qns[i] += '1';
-  
-    let char2 = qns2[i];
-    freq2[char2] = (freq2[char2] || 0) + 1;
-    if (freq2[char2] === 1) {
-      qns2[i] = char2 + '2';
-    } else {
-      qns2[i] = char2 + '3';
-    }
-    teams[i].push(qns2[i]);
-  
-    let char3 = qns3[i];
-    freq3[char3] = (freq3[char3] || 0) + 1;
-    if (freq3[char3] === 1) {
-      qns3[i] = char3 + '2';
-    } else {
-      qns3[i] = char3 + '3';
-    }
-    teams[i].push(qns3[i]);
+  let numarr = new Array(26).fill(null).map(() => ['2', '3']);
+
+// "teams" object already created above
+for (let i = 0; i < qnsCount; i++) {
+  // First label
+  teams[i] = [qns[i] + '1'];
+  qns[i] = qns[i] + '1';
+
+  // Second label
+  let temp = qns2[i];
+  const idx2 = qns2[i].charCodeAt(0) - 65;
+  if (numarr[idx2].length !== 1) {
+    temp += numarr[idx2].pop();
+  } else {
+    temp += numarr[idx2].pop();
+    numarr[idx2].push('3');
+    numarr[idx2].push('2');
+    
   }
+  teams[i].push(temp);
+
+  // Third label
+  temp = qns3[i];
+  const idx3 = qns3[i].charCodeAt(0) - 65;
+  if (numarr[idx3].length !== 1) {
+    temp += numarr[idx3].pop();
+  } else {
+    temp += numarr[idx3].pop();
+    numarr[idx3].push('3');
+    numarr[idx3].push('2');
+    
+  }
+  teams[i].push(temp);
+  qns3[i] = temp;
+  const usedUpper = [
+      qns[i][0].toLowerCase(),
+      qns2[i][0].toLowerCase(),
+      qns3[i][0].toLowerCase()
+    ];
+    const allLower = 'abcdefghijklm'.split('');
+    const available = allLower.filter(letter => !usedUpper.includes(letter));
+  
+    if (available.length >= 2) {
+      const idx1 = Math.floor(Math.random() * available.length);
+      const letter1 = available[idx1];
+      available.splice(idx1, 1);
+    
+      const idx2 = Math.floor(Math.random() * available.length);
+      const letter2 = available[idx2];
+    
+      teams[i].push(letter1+1);
+      teams[i].push(letter2+1);
+    }
+}
+
   
     console.log(teams);
     admin.qn_distribution = teams;

@@ -66,6 +66,9 @@ export const adminAPI = {
   updateCurrentAuctionPOC: (data) => API.post('/admin/biddingPOC', data),
   distributePOC: () => API.post('/admin/distributePOC'),
   toggleRegistration: () => API.post('/admin/toggle-registration'),
+  saveDistributedPOC: ()=>API.post('/admin/saveDistributedPOC'),
+  getTeamWithPoints : ()=>API.get('/admin/getTeamWithPoints'),
+  addTeamPoints : (teamsToUpdate)=>API.post('/admin/addTeamPoints',teamsToUpdate),
   
   getBidHistory: async () => {
     try {
