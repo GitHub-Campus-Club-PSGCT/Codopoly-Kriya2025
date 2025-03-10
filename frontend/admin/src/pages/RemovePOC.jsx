@@ -81,21 +81,22 @@ const RemovePOC = () => {
               <p className="font-semibold text-lg">{team.team_name || 'Unnamed Team'}</p>
 
               <div className="ml-6 mt-2 space-y-1">
-                {Array.isArray(team.POC) && team.POC.length > 0 ? (
-                  team.POC.map((poc, index) => (
-                    <label key={index} className="flex items-center">
-                      <input
-                        type="checkbox"
-                        checked={!!selectedPOCs[team._id]?.[index]}
-                        onChange={() => handlePOCSelect(team._id, index)}
-                        className="mr-2"
-                      />
-                      {poc}
-                    </label>
-                  ))
-                ) : (
-                  <p className="text-gray-500 italic">No POCs available</p>
-                )}
+              {Array.isArray(team.POC) && team.POC.length > 1 ? ( // Ensure there are more than 1 POCs
+  team.POC.slice(1).map((poc, index) => ( // Skip first POC (Main Code)
+    <label key={index + 1} className="flex items-center">
+      <input
+        type="checkbox"
+        checked={!!selectedPOCs[team._id]?.[index + 1]} // Adjust index to match original array
+        onChange={() => handlePOCSelect(team._id, index + 1)} // Adjust index for selection
+        className="mr-2"
+      />
+      {poc}
+    </label>
+  ))
+) : (
+  <p className="text-gray-500 italic">No deletable POCs available</p>
+)}
+
               </div>
             </div>
           ))}
