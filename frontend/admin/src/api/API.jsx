@@ -69,7 +69,7 @@ export const adminAPI = {
   saveDistributedPOC: ()=>API.post('/admin/saveDistributedPOC'),
   getTeamWithPoints : ()=>API.get('/admin/getTeamWithPoints'),
   addTeamPoints : (teamsToUpdate)=>API.post('/admin/addTeamPoints',teamsToUpdate),
-  
+  fetchQnData : ()=>API.get('/admin/fetchQnData'),
   getBidHistory: async () => {
     try {
       const response = await API.get('/admin/bidHistory');

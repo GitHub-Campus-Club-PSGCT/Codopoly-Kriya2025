@@ -148,6 +148,7 @@ for (let i = 0; i < qnsCount; i++) {
 
   
     console.log(teams);
+    admin.qn_distribution = {};
     admin.qn_distribution = teams;
     await admin.save();
     

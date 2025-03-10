@@ -1,5 +1,5 @@
 const express = require('express');
-const {logic} = require('../controllers/qn_distribution_logic')
+const {logic} = require('../controllers/qn_distribution_logic');
 const {
     TeamCount,
     registerAdmin,
@@ -15,13 +15,12 @@ const {
     getTeamWithPoints,
     addTeamPoints,
     getEventStatus,
-<<<<<<< HEAD
     saveDistributedPOC,
-    deleteQnDistribution
-=======
+    deleteQnDistribution,
     getPOCsToBeSold,
-    markPOCSold
->>>>>>> 18307b7ba3d4b10e9c5ebcfb53299505cc3da559
+    markPOCSold,
+    fetchDistributionData
+
 } = require('../controllers/adminController');
 const adminAuthMiddleware = require('../middlewares/adminAuthMiddleware');
 
@@ -43,12 +42,12 @@ router.post('/deletePOCs',adminAuthMiddleware,deletePOCs); //delete POC from all
 router.get('/getTeamWithPoints',adminAuthMiddleware,getTeamWithPoints); //get all teams with their points
 router.post('/addTeamPoints',adminAuthMiddleware,addTeamPoints); //add points to teams
 router.get('/eventStatus', adminAuthMiddleware, getEventStatus); // Get event status
-<<<<<<< HEAD
+
 router.post('/saveDistributedPOC',adminAuthMiddleware,saveDistributedPOC);
 router.get('/deleteQnDistribution',adminAuthMiddleware,deleteQnDistribution)
-=======
+router.get('/fetchQnData',adminAuthMiddleware,fetchDistributionData);
+
 router.post('/markPOCSold', adminAuthMiddleware, markPOCSold); // Mark POC as sold
 router.get('/POCsToBeSold', adminAuthMiddleware, getPOCsToBeSold); // Get POCs to be sold
 
->>>>>>> 18307b7ba3d4b10e9c5ebcfb53299505cc3da559
 module.exports = router;

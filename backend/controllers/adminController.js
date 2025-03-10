@@ -355,21 +355,22 @@ const markPOCSold = async (req, res) => {
 
 const saveDistributedPOC = async (req, res) => {
   try {
-    const { round } = req.body; // round passed from frontend (1 or 2, etc.)
+    // round passed from frontend (1 or 2, etc.)
 
-<<<<<<< HEAD
+
     // Fetch the admin document that holds the distribution map
     const admin = await Admin.findOne({ username: 'Akash' });
     if (!admin) {
       console.error('Admin not found');
       return res.status(404).json({ message: 'Admin not found' });
     }
-
+    const round = admin.currentAuctionRound;
+    console.log(round)
     // Get the map that holds multiple arrays
     const distribution = admin.qn_distribution; // Map<string, string[]>
 
     // Fetch all teams
-    const teams = await Team.find({});
+    const teams = await Team.find({}).sort({ team_name: 1 });
 
     // For each team, assemble only the POCs at the desired indices
     for (let i = 0; i < teams.length; i++) {
@@ -394,17 +395,10 @@ const saveDistributedPOC = async (req, res) => {
       await team.save();
       console.log(team.POC)
       console.log(`Updated POC for team: ${team.team_name}`);
-
-      // Store these newly added POCs under the team name
-      const existingTeamPocs = distribution.get(team.team_name) || [];
-      const updatedTeamPocs = Array.from(new Set([...existingTeamPocs, ...newPocs]));
-      distribution.set(team.team_name, updatedTeamPocs);
     }
 
     // Mark the map as modified so Mongoose knows to update it
-    admin.markModified('qn_distribution');
-    await admin.save();
-
+    
     console.log('Distribution assignment completed.');
     return res.status(200).json({ message: 'Distribution assignment completed.' });
   } catch (error) {
@@ -430,6 +424,25 @@ const deleteQnDistribution = async (req, res) => {
   }
 };
 
+const fetchDistributionData = async(req,res)=>{
+  try{
+    const admin = await Admin.findOne({username : req.user.username});
+    const teams = await Team.find({}).sort({ team_name: 1 });
+    if(!admin){
+      console.log("Admin not found");
+      return res.status(404).json({message:'Admin not found'});
+    }
+    const teamName = [];
+    for(const team of teams){
+      teamName.push(team.team_name);
+    }
+    return res.status(200).json({message : "Qn distribution data fetched successfully",data : admin.qn_distribution,team : teamName})
+  }catch(err){
+    console.log('Error while fetching qn distibution data');
+    return res.status(500).json({message : 'Server Error'});
+  }
+}
+
 module.exports = {
   loginAdmin,
   registerAdmin,
@@ -446,8 +459,8 @@ module.exports = {
   addTeamPoints,
   getEventStatus,
   saveDistributedPOC,
-  deleteQnDistribution
+  deleteQnDistribution,
+  getPOCsToBeSold,
+  markPOCSold,
+  fetchDistributionData
 }
-=======
-module.exports = {loginAdmin,registerAdmin,TeamCount,ChangeEventStatus,sellPOC,updateCurrentAuctionPOC,toggleRegistration,bidHistory,teamStats,getTeamsWithPOCs,deletePOCs,getTeamWithPoints,addTeamPoints,getEventStatus,getPOCsToBeSold,markPOCSold}
->>>>>>> 18307b7ba3d4b10e9c5ebcfb53299505cc3da559
