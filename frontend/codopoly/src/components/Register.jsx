@@ -9,7 +9,7 @@ const Register = () => {
     teamName: '',
     password: '',
     confirmPassword: '',
-    members: [{ kriya_id: '' }, { kriya_id: '' }, { kriya_id: '' }]
+    members: [{ kriya_id: '' }, { kriya_id: '' }]  // Start with 2 members
   });
 
   const handleChange = (e, index) => {
@@ -20,6 +20,15 @@ const Register = () => {
       setFormData({ ...formData, members: updatedMembers });
     } else {
       setFormData({ ...formData, [name]: value });
+    }
+  };
+
+  const handleAddMember = () => {
+    if (formData.members.length < 4) {
+      setFormData({
+        ...formData,
+        members: [...formData.members, { kriya_id: '' }]
+      });
     }
   };
 
@@ -77,7 +86,7 @@ const Register = () => {
             placeholder="Confirm Password"
           />
         </div>
-        <h3 className={styles.text}>Members (1-3)</h3>
+        <h3 className={styles.text}>Members (2-4)</h3>
         {formData.members.map((member, index) => (
           <div key={index} className="mb-2">
             <input
@@ -87,9 +96,19 @@ const Register = () => {
               onChange={(e) => handleChange(e, index)}
               className={styles.inputbox}
               placeholder={`Kriya ID for Member ${index + 1}`}
+              required
             />
           </div>
         ))}
+        <button
+          type="button"
+          onClick={handleAddMember}
+          disabled={formData.members.length >= 4}
+          className={styles.registerbutton}
+          style={{ marginBottom: '10px' }}
+        >
+          Add Member
+        </button>
         <button type="submit" className={styles.registerbutton}>
           Register
         </button>

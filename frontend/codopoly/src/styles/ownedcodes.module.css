@@ -1,0 +1,148 @@
+/* Global box-sizing fix */
+* {
+    box-sizing: border-box;
+}
+
+/* Header styles */
+.header {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 10vh;
+    border-bottom: 1px solid #F96024;
+}
+
+.headerTitle {
+    color: #F96024;
+    font-weight: bold;
+    font-size: 2em;
+    margin: 0;
+}
+
+/* Page container styles */
+.pageContainer {
+    position: relative;
+    display: flex;
+    height: 90vh;
+    width: 100%;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding-top: 2rem;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* Codes container styles */
+.codesContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 90%;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+    margin: 0;
+}
+
+/* Individual code card styles */
+.codeCard {
+    background-color: #282828;
+    border-radius: 15px;
+    width: 300px;
+    min-height: 200px;
+    max-height: 350px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-bottom: 15px;
+}
+
+.codeCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(249, 96, 36, 0.2);
+}
+
+.codeTitle {
+    color: #F96024;
+    font-weight: bold;
+    font-size: 1.2em;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #F96024;
+    padding-bottom: 8px;
+}
+
+.codeContent {
+    background-color: #171717;
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+    overflow-y: auto;
+    flex-grow: 1;
+    font-family: monospace;
+    font-size: 0.9em;
+    white-space: pre-wrap;
+}
+
+/* Loading and error states */
+.loadingText, .errorText, .emptyText {
+    color: white;
+    font-size: 1.2em;
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.errorText {
+    color: #ff4d4d;
+}
+
+/* For Webkit browsers (Chrome, Safari) */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #282828;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #F96024;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #F96024;
+}
+
+/* For Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #F96024 #282828;
+}
+
+/* Body fix to prevent overflow */
+body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+/* Add specific responsive adjustments */
+@media (max-width: 768px) {
+    .codesContainer {
+        width: 95%;
+        padding: 10px;
+    }
+
+    .codeCard {
+        width: 100%;
+        max-width: 300px;
+    }
+}

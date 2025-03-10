@@ -62,7 +62,6 @@
     height: 480px;
     width: 400px;
     border-radius: 30px;
-    margin-top: 70px;
 }
 
 .biddingsubcontainer {
@@ -225,6 +224,8 @@
     background-color:#171717;
     border-radius: 20px;
     overflow: scroll;
+    color: white;
+    padding: 20px;
 }
 
 /*
