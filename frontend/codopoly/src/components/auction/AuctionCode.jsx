@@ -8,7 +8,7 @@ const AuctionCode  = ()=>{
         const savedPOC = localStorage.getItem('currentPOC') || 'The code will be availabe when the auction starts';
         setCurrentPOCForSale(savedPOC);
 
-        const socket = io('http://localhost:3000');
+        const socket = io('http://localhost:3001');
         socket.on('updatePOCSuccess', async (data) => {
           console.log(data.message);
           console.log('POC NAME : ', data.poc);

@@ -3,7 +3,7 @@ import { io } from 'socket.io-client';
 
 // Create axios instance with base URL
 const API = axios.create({
-  baseURL: 'http://localhost:3000', // Replace with your actual backend URL
+  baseURL: 'http://localhost:3000', // HTTP server URL
   timeout: 30000,
 });
 
@@ -25,7 +25,7 @@ let socket = null;
 export const socketAPI = {
   connect: () => {
     if (!socket) {
-      socket = io('http://localhost:3000'); // Match your server URL
+      socket = io('http://localhost:3001'); // Socket.IO server URL
       console.log('Socket connected');
     }
     return socket;
@@ -94,10 +94,10 @@ export const adminAPI = {
   getPOCsToBeSold: async () => {
     try {
       const response = await API.get('/admin/POCsToBeSold');
-      return response.data || { POCsToBeSold: [] }; // Ensure it returns an object
+      return response.data || { POCsToBeSold: [] };
     } catch (error) {
       console.error("Error fetching POCs to be sold:", error);
-      return { POCsToBeSold: [] }; // Return a fallback to prevent crashing
+      return { POCsToBeSold: [] };
     }
   },
 

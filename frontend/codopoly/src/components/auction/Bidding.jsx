@@ -19,7 +19,7 @@ const Bidding = () => {
 
   useEffect(() => {
     // Initialize socket connection
-    const socketInstance = io('http://localhost:3000');
+    const socketInstance = io('http://localhost:3001');
     setSocket(socketInstance);
 
     // Fetch team details
