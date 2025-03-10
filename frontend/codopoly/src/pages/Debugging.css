@@ -1,0 +1,8 @@
+.debug-section {
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    align-items: flex-end; /* Align to the right */
+    width: 450px;
+    margin-top: -400px; 
+    margin-left:950px/* Match the width of debug components */
+}

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Code from "../components/debugging_phase/Code";
 import AddDebugs from "../components/debugging_phase/AddDebugs";
 import SubmittedDebugs from "../components/debugging_phase/SubmittedDebugs";
+import './Debugging.css'
 
 const DebuggingPage = () => {
     const [teamPOCs, setTeamPOCs] = useState([]); // Store all POCs
@@ -16,15 +17,19 @@ const DebuggingPage = () => {
                 currentPOCIndex={currentPOCIndex}
                 setCurrentPOCIndex={setCurrentPOCIndex}
             />
-            <SubmittedDebugs
-                questionTitle={teamPOCs[currentPOCIndex]?.pocName.charAt(0)} // ✅ Correct key
-                pocName={teamPOCs[currentPOCIndex]?.pocName.charAt(1)} // ✅ Directly use pocName
-            />
-            <AddDebugs
-                currentPOC={teamPOCs[currentPOCIndex]} // Pass the currently displayed POC
-                debugs={debugs}
-                setDebugs={setDebugs}
-            />
+
+<div className="debug-section">
+    <SubmittedDebugs 
+        questionTitle={teamPOCs[currentPOCIndex]?.pocName.charAt(0)}
+        pocName={teamPOCs[currentPOCIndex]?.pocName.charAt(1)}
+    />
+    <AddDebugs 
+        currentPOC={teamPOCs[currentPOCIndex]} 
+        debugs={debugs} 
+        setDebugs={setDebugs} 
+    />
+</div>
+
         </>
     );
 };

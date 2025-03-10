@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import axios from "axios";
+import './Code.css'
 
 const Code = ({ teamPOCs, setTeamPOCs, currentPOCIndex, setCurrentPOCIndex }) => {
     useEffect(() => {
@@ -28,29 +29,36 @@ const Code = ({ teamPOCs, setTeamPOCs, currentPOCIndex, setCurrentPOCIndex }) =>
         return <p className="text-center text-gray-500">No POCs available.</p>;
     }
 
-    return (
-        <div className="max-w-lg mx-auto bg-white p-8 rounded-xl shadow-md">
-            <h2 className="text-2xl font-bold text-center mb-4">Current POC</h2>
+    const codeLines = (teamPOCs[currentPOCIndex].code || "No code assigned").split("\n");
 
-            <h3 className="font-semibold text-center">{teamPOCs[currentPOCIndex].pocName}</h3>
-            <pre className="bg-gray-100 p-4 rounded-lg overflow-x-auto">
-                {teamPOCs[currentPOCIndex].code || "No code assigned"}
+    return (
+        <div className="code-container">
+            <h2 className="code-title">Current POC</h2>
+            <h3 className="poc-name">{teamPOCs[currentPOCIndex].pocName}</h3>
+
+            {/* Code Block */}
+            <pre className="code-block">
+                {codeLines.map((line, index) => (
+                    <div key={index} className="code-line">
+                        <span className="line-number">{index + 1}.</span>
+                        <span className="code-text">{line}</span>
+                    </div>
+                ))}
             </pre>
 
             {/* Navigation Buttons */}
-            <div className="flex justify-between mt-4">
+            <div className="nav-buttons">
                 <button
                     onClick={() => setCurrentPOCIndex((prev) => Math.max(prev - 1, 0))}
                     disabled={currentPOCIndex === 0}
-                    className="bg-gray-500 text-white px-4 py-2 rounded disabled:opacity-50"
+                    className="nav-button"
                 >
                     ◀ Previous
                 </button>
-
                 <button
                     onClick={() => setCurrentPOCIndex((prev) => Math.min(prev + 1, teamPOCs.length - 1))}
                     disabled={currentPOCIndex === teamPOCs.length - 1}
-                    className="bg-gray-500 text-white px-4 py-2 rounded disabled:opacity-50"
+                    className="nav-button"
                 >
                     Next ▶
                 </button>
