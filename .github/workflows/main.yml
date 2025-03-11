@@ -6,8 +6,8 @@ on:
 
 env:
   REGISTRY: docker.io
-  FIRST_IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/infinitum-backend
-  SECOND_IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/infinitum-frontend
+  FIRST_IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/codopoly-http
+  SECOND_IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/codopoly-socket
 
 jobs:
   build-and-push:
@@ -26,21 +26,23 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      # Step 1: build and push first image
-      - name: Build and Push Backend
+      # Step 1: build and push HTTP server image
+      - name: Build and Push Backend-http
         uses: docker/build-push-action@v5
         with:
-          context: ./backend  # or '.'
+          context: ./backend
+          file: ./backend/Dockerfile.server  # Use your Dockerfile path
           push: true
           tags: |
             ${{ env.REGISTRY }}/${{ env.FIRST_IMAGE_NAME }}:latest
             ${{ env.REGISTRY }}/${{ env.FIRST_IMAGE_NAME }}:${{ github.sha }}
 
-      # Step 2: build and push second image
-      - name: Build and Push Frontend
+      # Step 2: build and push Socket server image
+      - name: Build and Push Backend-socket
         uses: docker/build-push-action@v5
         with:
-          context: ./frontend  # Adjust path as needed
+          context: ./backend
+          file: ./backend/Dockerfile.socket  # Use your Dockerfile path
           push: true
           tags: |
             ${{ env.REGISTRY }}/${{ env.SECOND_IMAGE_NAME }}:latest
