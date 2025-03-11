@@ -1,5 +1,5 @@
 const { QuestionWithError, QuestionCorrect } = require('../models/question');
-const { runPythonCode } = require('../utils/pythonRunner');
+const { runPythonCode } = require('../utils/python');
 
 const getQuestions = async (req, res) => {
     try{
