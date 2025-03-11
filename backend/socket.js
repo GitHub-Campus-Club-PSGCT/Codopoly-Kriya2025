@@ -261,8 +261,12 @@ io.on('connection', async (socket) => {
   });
 });
 
+app.get("/", (req, res) => {
+  res.send("Socket.io Server is running! 🚀");
+});
+
 // Start Socket.IO server
-server.listen(SOCKET_PORT, () => {
+server.listen(SOCKET_PORT,"0.0.0.0",() => {
   console.log(`Socket.IO Server is running on port ${SOCKET_PORT}`);
 });
 
