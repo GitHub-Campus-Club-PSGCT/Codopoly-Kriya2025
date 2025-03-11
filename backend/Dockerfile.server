@@ -1,0 +1,20 @@
+# Use Node.js LTS version
+FROM node:20-slim
+
+# Set working directory
+WORKDIR /usr/src/app
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy application code
+COPY . .
+
+# Expose HTTP server port
+EXPOSE 6000
+
+# Start HTTP server
+CMD ["node", "server.js"]

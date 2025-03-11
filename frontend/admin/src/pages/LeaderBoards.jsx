@@ -1,19 +1,14 @@
 import React, { useState,useEffect } from "react";
 import {toast,ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { io } from 'socket.io-client';
-
+import { socketAPI } from "../api/API";
 
 const Leaderboards = () => {
     const [teamData, setTeamData] = useState([]);
-    const [socket,setSocket]=useState(null);
     useEffect(()=>{
-        const socket = io('http://localhost:3000');
-        setSocket(socket);
-
-        socket.on('leaderboard',(teamArray)=>{
-            console.log(teamArray)
-            setTeamData(teamArray);
+        socketAPI.connect();
+        socketAPI.leaderBoard((data)=>{
+          setTeamData(data);
         })
     },[]);
 

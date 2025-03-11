@@ -17,6 +17,10 @@ const AuctionCode  = ()=>{
           setCurrentPOCForSale(response.data.poc);
           localStorage.setItem('currentPOC', response.data.poc);
         });
+
+        socket.on('auctionEnded',async()=>{
+          localStorage.setItem('currentPOC', "Auctioning POC will be announced soon..!");
+        })
         return () => {
           socket.disconnect();
         };

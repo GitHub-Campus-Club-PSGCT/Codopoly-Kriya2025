@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  http-server:
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    ports:
+      - "6000:6000"
+    environment:
+      - PORT=6000
+      - SOCKET_PORT=6001
+      - MONGO_URI=${MONGO_URI}
+      - JWT_SECRET=${JWT_SECRET}
+    networks:
+      - codopoly-network
+    restart: unless-stopped
+
+  socket-server:
+    build:
+      context: .
+      dockerfile: Dockerfile.socket
+    ports:
+      - "6001:6001"
+    environment:
+      - PORT=6000
+      - SOCKET_PORT=6001
+      - MONGO_URI=${MONGO_URI}
+      - JWT_SECRET=${JWT_SECRET}
+    networks:
+      - codopoly-network
+    restart: unless-stopped
+
+networks:
+  codopoly-network:
+    driver: bridge
