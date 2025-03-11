@@ -3,7 +3,7 @@ import { io } from 'socket.io-client';
 
 // Create axios instance with base URL
 const API = axios.create({
-  baseURL: 'http://localhost:3000', // HTTP server URL
+  baseURL: 'http://localhost:6000', // HTTP server URL
   timeout: 30000,
 });
 
@@ -25,7 +25,7 @@ let socket = null;
 export const socketAPI = {
   connect: () => {
     if (!socket) {
-      socket = io('http://localhost:3001'); // Socket.IO server URL
+      socket = io('http://localhost:6001'); // Socket.IO server URL
       console.log('Socket connected');
     }
     return socket;
