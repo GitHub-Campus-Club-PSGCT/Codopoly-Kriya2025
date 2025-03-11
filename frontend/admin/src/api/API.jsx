@@ -53,7 +53,8 @@ export const socketAPI = {
   onSellPOCSuccess: (callback) => socket?.on('sellPOCSuccess', callback),
   onSellPOCFailed: (callback) => socket?.on('sellPOCFailed', callback),
   onBidFailed: (callback) => socket?.on('bidFailed', callback),
-  onAdminLogs: (callback) => socket?.on('adminLogs', callback)
+  onAdminLogs: (callback) => socket?.on('adminLogs', callback),
+  leaderBoard: (callback) => socket?.on('leaderboard',callback)
 };
 
 // Admin API endpoints
