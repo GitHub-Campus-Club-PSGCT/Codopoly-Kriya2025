@@ -53,9 +53,7 @@ const RemovePOC = () => {
     }
 
     try {
-      await axios.post('http://localhost:3000/admin/deletePOCs', selectedData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await adminAPI.deletePOCs(selectedData);
 
       toast.success('Selected POCs deleted successfully.');
       setTemp((prev) => (prev+1)%10);
