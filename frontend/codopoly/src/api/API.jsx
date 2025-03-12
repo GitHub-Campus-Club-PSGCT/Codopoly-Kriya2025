@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { io } from 'socket.io-client';
 const API = axios.create({
-  baseURL: 'http://localhost:3000', // HTTP server URL
+  baseURL: 'https://codopoly-kriya2025.onrender.com', // HTTP server URL
   timeout: 30000,
 });
 
@@ -22,7 +22,7 @@ let socket = null;
 export const socketAPI = {
   connect: () => {
     if (!socket) {
-      socket = io('http://localhost:3001'); // Socket.IO server URL
+      socket = io('https://codopoly-kriya2025-1.onrender.com'); // Socket.IO server URL
       console.log('Socket connected');
     }
     return socket;
