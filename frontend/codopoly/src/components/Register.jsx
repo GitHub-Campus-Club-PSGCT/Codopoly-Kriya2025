@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import styles from '../styles/register.module.css'
 import { useNavigate } from 'react-router-dom';
+import { serverAPI } from '../api/API';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -39,7 +39,7 @@ const Register = () => {
       return;
     }
     try {
-      const response = await axios.post('http://localhost:3000/team/register', formData);
+      const response = await serverAPI.register(formData);
       console.log(response);
       navigate('/login');
       alert(response.data.message);

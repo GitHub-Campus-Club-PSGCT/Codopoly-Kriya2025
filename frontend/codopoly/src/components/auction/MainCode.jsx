@@ -1,7 +1,7 @@
 import styles from '../../styles/bidding.module.css';
 import BackButton from '../../assets/backbutton.png'
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { serverAPI } from '../../api/API';
 
 const MainPart = ({mainPart, setmainPart})=>{
     const handleClose = () => {
@@ -14,10 +14,7 @@ const MainPart = ({mainPart, setmainPart})=>{
 
         const fetchMainPOC = async ()=>{
             try{
-                const token = localStorage.getItem('codopoly_token');
-                const response = await axios.get('http://localhost:3000/debug/poc', {
-                    headers:{Authorization:`Bearer ${token}`}
-                })
+                const response = await serverAPI.getDebugPOC();
                 let teamPOCs = response.data.teamPOCs;
                 if(teamPOCs.length != 0){
                     setMainPOC(teamPOCs[0])

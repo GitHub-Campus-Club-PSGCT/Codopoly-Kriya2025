@@ -1,13 +1,14 @@
 const { Server } = require('socket.io');
+const express = require("express");
 const http = require('http');
 const Admin = require('./models/admin');
 const Team = require('./models/team');
 const Auction = require('./models/auction');
-
-const connectDB = require('./config/db');
-const SOCKET_PORT = process.env.SOCKET_PORT || 3001;
-const USERNAME = 'Akash';
 require('dotenv').config();
+const connectDB = require('./config/db');
+const SOCKET_PORT = process.env.SOCKET_PORT ;
+const USERNAME = 'Akash';
+const app = express();
 let currentBid = {
   amount: 0,
   team: null,
@@ -17,7 +18,7 @@ let auctionTimer = null;
 let auctionTimeLeft = 0;
 
 // Create HTTP server for Socket.IO
-const server = http.createServer();
+const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
     origin: '*',
@@ -261,8 +262,9 @@ io.on('connection', async (socket) => {
   });
 });
 
+
 app.get("/", (req, res) => {
-  res.send("Socket.io Server is running! 🚀");
+  res.send("Socket.IO Server is running!");
 });
 
 // Start Socket.IO server

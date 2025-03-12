@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Expose HTTP server port
-EXPOSE 6000
+EXPOSE 5000
 
 # Start HTTP server
 CMD ["node", "server.js"]

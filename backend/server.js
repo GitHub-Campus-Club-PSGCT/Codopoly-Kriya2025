@@ -13,9 +13,8 @@ const app = express();
 
 const HTTP_PORT = process.env.PORT || 3000;
 
-app.use(cors());
 app.use(express.json());
-
+app.use(cors({ origin: '*' }));
 connectDB();
 
 // Define routes

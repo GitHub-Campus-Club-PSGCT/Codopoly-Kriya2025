@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import "./SubmittedDebugs.css"; // External CSS for styling
+import { serverAPI } from '../../api/API';
 
 const SubmittedDebugs = ({ questionTitle, pocName, teamId }) => {
     const [debugs, setDebugs] = useState([]);
@@ -16,11 +17,7 @@ const SubmittedDebugs = ({ questionTitle, pocName, teamId }) => {
                     return;
                 }
 
-                const response = await axios.get('http://localhost:3000/debug/getdebugs', {
-                    params: { questionTitle, pocName },
-                    headers: { Authorization: `Bearer ${token}` }
-                });
-
+                const response = await serverAPI.getDebugs(questionTitle, pocName );
                 setDebugs(response.data.debugs || []);
             } catch (error) {
                 setError(error.response?.data?.message || error.message);

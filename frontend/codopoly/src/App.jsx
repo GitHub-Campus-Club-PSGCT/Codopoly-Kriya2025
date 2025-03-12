@@ -19,7 +19,7 @@ const AppRouter = () => {
                 <Route path="/bidding" element={<BiddingPage/>} />
                 <Route path='/ownedcodes' element={<OwnedCodesPage/>} />
                 <Route path="/debugging" element={<DebuggingPage/>} />
-                <Route path="/question" element={<QuestionPage/>}/>
+               {/* <Route path="/question" element={<QuestionPage/>}*/}
              </Routes>
         </Router>
     );

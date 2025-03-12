@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import styles from '../styles/login.module.css'
+import { serverAPI } from '../api/API';
 
 const Login = () => {
   const [formData, setFormData] = useState({ teamName: '', password: '' });
@@ -15,7 +15,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3000/team/login', formData);
+      const response = await serverAPI.login(formData);
       localStorage.setItem('codopoly_token', response.data.token);  // Store token
       alert('Login successful!');
       navigate('/choosephase');
