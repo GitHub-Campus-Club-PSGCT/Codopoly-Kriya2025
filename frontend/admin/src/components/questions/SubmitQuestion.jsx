@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-
+import { adminAPI } from '../../api/API';
 const SubmitQuestion = () => {
     const [title, setTitle] = useState("");
     const [correctPOCs, setCorrectPOCs] = useState(["", "", ""]);
@@ -14,7 +13,7 @@ const SubmitQuestion = () => {
         try {
             const formattedTestCases = JSON.parse(testCases); // Convert to JSON array
 
-            const response = await axios.post("http://localhost:3000/question/submit", {
+            const response = await adminAPI.SubmitQuestion( {
                 title,
                 POC: correctPOCs,
                 errorPOC: errorPOCs,

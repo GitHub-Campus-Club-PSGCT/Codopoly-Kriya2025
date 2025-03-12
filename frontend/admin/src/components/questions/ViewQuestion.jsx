@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { adminAPI } from '../../api/API';
 
 const ViewQuestion = () => {
     const [questions, setQuestions] = useState([]);
@@ -8,7 +8,7 @@ const ViewQuestion = () => {
     useEffect(() => {
         const fetchQuestions = async () => {
             try {
-                const response = await axios.get('http://localhost:3000/question'); // Added 'await'
+                const response = await adminAPI.viewQuestion(); // Added 'await'
                 setQuestions(response.data.questions || []); // Ensuring it's an array
             } catch (error) {
                 console.error('Failed to fetch questions:', error);

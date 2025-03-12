@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { io } from 'socket.io-client';
+import SubmitQuestion from '../components/questions/SubmitQuestion';
 
 // Create axios instance with base URL
 const API = axios.create({
@@ -72,6 +73,9 @@ export const adminAPI = {
   addTeamPoints : (teamsToUpdate)=>API.post('/admin/addTeamPoints',teamsToUpdate),
   fetchQnData : ()=>API.get('/admin/fetchQnData'),
   makeBuyPOCtrue : ()=>API.get('/admin/makeBuyPOCtrue'),
+  SubmitQuestion : (data)=>API.post('/question/submit',data),
+  viewQuestion : ()=>API.get('/question'),
+  getTeamsWithPOC : ()=>API.get('admin/getTeamsWithPOCs'),
   getBidHistory: async () => {
     try {
       const response = await API.get('/admin/bidHistory');

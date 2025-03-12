@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { adminAPI } from '../api/API';
 
 const RemovePOC = () => {
   const [teams, setTeams] = useState([]);
@@ -12,10 +13,7 @@ const RemovePOC = () => {
   useEffect(() => {
     const fetchTeams = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/admin/getTeamsWithPOCs', {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
+        const response = await adminAPI.getTeamWithPoints();
         if (Array.isArray(response.data)) {
           setTeams(response.data);
         } else {
