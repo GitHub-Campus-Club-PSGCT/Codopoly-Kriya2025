@@ -85,6 +85,15 @@ export const adminAPI = {
       throw error;
     }
   },
+  deletePOCs : async (data) => {
+    try {
+      const response = await API.post('/admin/deletePOCs', data);
+      return response.data;
+    } catch (error) {
+      console.error('Error deleting POCs:', error);
+      throw error;
+    }
+  },
   
   getTeamStats: async () => {
     try {
