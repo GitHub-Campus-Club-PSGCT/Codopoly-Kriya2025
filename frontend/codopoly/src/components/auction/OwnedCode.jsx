@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import styles from '../../styles/ownedcodes.module.css';
-import axios from 'axios';
+import { serverAPI } from '../../api/API';
 
 const OwnedCode = () => {
     const [ownedCodes, setOwnedCodes] = useState([]);
@@ -10,14 +10,11 @@ const OwnedCode = () => {
     useEffect(() => {
         const fetchOwnedCodes = async () => {
            try{
-                const token = localStorage.getItem('codopoly_token')
-                const resposne = await axios.get('http://localhost:3000/debug/poc',{
-                    headers:{Authorization:`Bearer ${token}`}
-                })
-                let teamPOCs = resposne.data.teamPOCs;
-                if(teamPOCs.length >1){
-                    setOwnedCodes(teamPOCs)
-                }
+                const response = await serverAPI.getDebugPOC();
+                let teamPOCs = response.data.teamPOCs;
+                if (teamPOCs.length > 1) {
+                    setOwnedCodes(teamPOCs.slice(1)); // skip the first element
+                  }
                 setLoading(false)
            }
            catch(error){

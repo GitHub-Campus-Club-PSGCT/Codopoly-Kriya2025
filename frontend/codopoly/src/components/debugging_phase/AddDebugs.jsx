@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "./AddDebugs.css"; // External CSS for styling
-
+import { serverAPI } from "../../api/API";
 const AddDebugs = ({ currentPOC, debugs, setDebugs }) => {
     const [error, setError] = useState(""); // Store error messages
 
@@ -44,15 +44,11 @@ const AddDebugs = ({ currentPOC, debugs, setDebugs }) => {
                 return;
             }
 
-            const response = await axios.post(
-                "http://localhost:3000/debug/submit",
+            const response = await serverAPI.submitDebug(
                 {
                     questionTitle,
                     pocName,
                     debugs: debugs[pocName] || [],
-                },
-                {
-                    headers: { Authorization: `Bearer ${token}` },
                 }
             );
 

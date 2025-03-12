@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import axios from "axios";
 import './Code.css'
-
+import { serverAPI } from "../../api/API";
 const Code = ({ teamPOCs, setTeamPOCs, currentPOCIndex, setCurrentPOCIndex }) => {
     useEffect(() => {
         const fetchCode = async () => {
@@ -12,10 +12,7 @@ const Code = ({ teamPOCs, setTeamPOCs, currentPOCIndex, setCurrentPOCIndex }) =>
                     return;
                 }
 
-                const response = await axios.get("http://localhost:3000/debug/poc", {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
-
+                const response = await serverAPI.getDebugPOC();
                 setTeamPOCs(response.data.teamPOCs);
             } catch (error) {
                 console.error("Failed to fetch code:", error);

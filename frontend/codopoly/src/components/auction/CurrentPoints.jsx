@@ -1,16 +1,13 @@
 import styles from '../../styles/bidding.module.css';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { serverAPI } from '../../api/API';
 
 const Score = ()=>{
     const [gitcoins, setGitcoins] = useState(0);
 
     useEffect(() => {
         const fetchTeamGitcoins = async ()=>{
-            const token = localStorage.getItem('codopoly_token');
-            let teamsDetails = await axios.get('http://localhost:3000/team/details',{
-                headers: {Authorization: `Bearer ${token}`}
-            })
+            let teamsDetails = await serverAPI.fetchTeam();
             setGitcoins(parseInt(teamsDetails.data.gitcoins));
         }
         fetchTeamGitcoins(); // Add this line to call the function

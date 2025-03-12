@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { io } from 'socket.io-client';
-import axios from 'axios';
 import { Clock } from 'lucide-react';
-import styles from '../../styles/bidding.module.css'
+import styles from '../../styles/bidding.module.css';
+import { socketAPI,serverAPI } from '../../api/API';
 
 const Bidding = () => {
-  const [socket, setSocket] = useState(null);
   const [currentBid, setCurrentBid] = useState({ amount: 0, team: null });
   const [newBidAmount, setNewBidAmount] = useState(0);
   const [teamName, setTeamName] = useState('');
@@ -17,25 +15,15 @@ const Bidding = () => {
   const [auctionStatus, setAuctionStatus] = useState('');
   const [sellPOCDetails, setSellPOCDetails] = useState('');
 
+  // 1. Fetch team details and connect socket on mount
   useEffect(() => {
-    // Initialize socket connection
-    const socketInstance = io('http://localhost:3001');
-    setSocket(socketInstance);
+    // Connect to socket
+    socketAPI.connect();
 
-    // Fetch team details
+    // Fetch team details from backend
     const fetchTeamDetails = async () => {
       try {
-        const token = localStorage.getItem('codopoly_token');
-        if (!token) {
-          setBidMessage('No token found. Please log in.');
-          setIsLoading(false);
-          return;
-        }
-
-        const response = await axios.get('http://localhost:3000/team/details', {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-
+        const response = await serverAPI.fetchTeam();
         setTeamName(response.data.team_name);
         setTeamId(response.data._id);
         setIsLoading(false);
@@ -48,95 +36,83 @@ const Bidding = () => {
 
     fetchTeamDetails();
 
-    // Clean up socket connection on component unmount
+    // Cleanup on unmount
     return () => {
-      if (socketInstance) {
-        socketInstance.disconnect();
-      }
+      socketAPI.disconnect();
     };
   }, []);
 
-  // Set up socket event listeners when socket is available
+  // 2. Set up socket event listeners
   useEffect(() => {
-    if (!socket) return;
-
-    // Listen for current bid updates
-    socket.on('currentBid', (bid) => {
+    socketAPI.onCurrentBid((bid) => {
       console.log('Current bid received:', bid);
       setCurrentBid(bid);
     });
 
-    // Listen for new bids
-    socket.on('newBid', (bid) => {
+    socketAPI.onNewBid((bid) => {
       console.log('New bid received:', bid);
       setCurrentBid(bid);
-      // Clear any previous bid message when a new bid is placed
       setBidMessage('');
     });
 
-    // Listen for bid failures
-    socket.on('bidFailed', (data) => {
+    socketAPI.onBidFailed((data) => {
       console.log('Bid failed:', data.message);
       setBidMessage(data.message);
       setShowConfirmBox(false);
     });
 
-    // Listen for auction status
-    socket.on('auctionStatus', (data) => {
+    socketAPI.onAuctionStatus((data) => {
       setAuctionStatus(data.message);
     });
 
-    // Listen for timer updates
-    socket.on('timerUpdate', (timeLeft) => {
+    socketAPI.onTimerUpdate((timeLeft) => {
       setAuctionTimeLeft(timeLeft);
     });
 
-    // Listen for auction start
-    socket.on('auctionStarted', async (data) => {
+    socketAPI.onAuctionStarted((data) => {
       setAuctionTimeLeft(data.time);
       setAuctionStatus('Auction in progress');
     });
 
-    // Listen for sell POC success
-    socket.on('sellPOCSuccess', (data) => {
+    socketAPI.onSellPOCSuccess((data) => {
       setSellPOCDetails(data.message);
       setCurrentBid({ amount: 0, team: null });
       setAuctionStatus('Auction has ended');
     });
 
-    // Listen for auction end
-    socket.on('auctionEnded', () => {
+    socketAPI.onAuctionEnded(() => {
       setAuctionTimeLeft(0);
       setAuctionStatus('Auction has ended');
     });
 
+    // Remove listeners on unmount
     return () => {
-      socket.off('currentBid');
-      socket.off('newBid');
-      socket.off('bidFailed');
-      socket.off('auctionStatus');
-      socket.off('timerUpdate');
-      socket.off('auctionStarted');
-      socket.off('sellPOCSuccess');
-      socket.off('auctionEnded');
+      socketAPI.offCurrentBid();
+      socketAPI.offNewBid();
+      socketAPI.offBidFailed();
+      socketAPI.offAuctionStatus();
+      socketAPI.offTimerUpdate();
+      socketAPI.offAuctionStarted();
+      socketAPI.offSellPOCSuccess();
+      socketAPI.offAuctionEnded();
     };
-  }, [socket]);
+  }, []);
 
+  // 3. Bidding logic
   const handleIncrementBid = (amount) => {
     setNewBidAmount((prev) => prev + amount);
     setShowConfirmBox(true);
   };
 
   const handleBid = () => {
-    if (!socket || newBidAmount === 0) return;
+    if (newBidAmount === 0) return;
 
-    const finalBid = currentBid.amount + newBidAmount;
     setBidMessage('Placing your bid...');
 
-    socket.emit('placeBid', {
+    socketAPI.placeBid({
       teamId,
       teamName,
-      bidAmount: finalBid
+      bidAmount: currentBid.amount + newBidAmount,
     });
 
     setNewBidAmount(0);
@@ -147,7 +123,6 @@ const Bidding = () => {
     const secs = seconds % 60;
     return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
   };
-
   return (
     <div className={styles.biddingcontainer}>
       <div className={styles.biddingsubcontainer}>
