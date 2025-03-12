@@ -13,7 +13,7 @@ const RemovePOC = () => {
   useEffect(() => {
     const fetchTeams = async () => {
       try {
-        const response = await adminAPI.getTeamWithPoints();
+        const response = await adminAPI.getTeamsWithPOC();
         if (Array.isArray(response.data)) {
           setTeams(response.data);
         } else {
