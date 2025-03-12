@@ -6,13 +6,8 @@ const Code = ({ teamPOCs, setTeamPOCs, currentPOCIndex, setCurrentPOCIndex }) =>
     useEffect(() => {
         const fetchCode = async () => {
             try {
-                const token = localStorage.getItem("codopoly_token");
-                if (!token) {
-                    alert("No token found. Please log in.");
-                    return;
-                }
-
                 const response = await serverAPI.getDebugPOC();
+                console.log('Code ',response.data.teamPOCs);
                 setTeamPOCs(response.data.teamPOCs);
             } catch (error) {
                 console.error("Failed to fetch code:", error);
