@@ -18,7 +18,7 @@ let auctionTimer = null;
 let auctionTimeLeft = 0;
 
 // Create HTTP server for Socket.IO
-const server = http.createServer();
+const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
     origin: '*',
