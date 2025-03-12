@@ -18,7 +18,8 @@ app.use(cors({ origin: '*' }));
 connectDB();
 
 // Define routes
-//app.use(checkEventStatus);
+app.use(checkEventStatus);
+
 app.use('/debug', debugRoutes);
 app.use('/bank', bankRoutes);
 app.use('/team', teamRoutes);
