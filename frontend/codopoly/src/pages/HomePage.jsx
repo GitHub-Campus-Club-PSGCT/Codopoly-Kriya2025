@@ -10,7 +10,12 @@ const HomePage = ()=>{
   const navigate = useNavigate();
 
   const handleClick = ()=>{
-    navigate('/register');
+    if(localStorage.getItem('codopoly_token')){
+      navigate('/choosephase')
+    }
+    else{
+      navigate('/register');
+    }
   }
 
   return (
