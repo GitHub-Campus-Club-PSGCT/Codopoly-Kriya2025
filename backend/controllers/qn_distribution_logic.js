@@ -1,3 +1,4 @@
+const logger = require('../config/logger');
 const Admin = require('../models/admin');  
 
 const logic= async(req,res) => {
@@ -137,13 +138,13 @@ for (let i = 0; i < qnsCount; i++) {
     
       const idx2 = Math.floor(Math.random() * available.length);
       const letter2 = available[idx2];
-    
-      teams[i].push(letter1+1);
-      teams[i].push(letter2+1);
+      const random = Math.floor(Math.random()*2);
+      teams[i].push(letter1+(random + 2));
+      teams[i].push(letter2+(random + 2));
     }
 }
   
-    console.log(teams);
+    logger.info(teams);
     admin.qn_distribution = {};
     admin.qn_distribution = teams;
     await admin.save();
@@ -151,7 +152,7 @@ for (let i = 0; i < qnsCount; i++) {
     res.status(200).json({ message: 'POC distribution stored successfully', teams });
     
   } catch (error) {
-    console.error('Error in POC distribution:', error);
+    logger.error('Error in POC distribution:', error);
     res.status(500).json({ error: 'POC distribution failed' });
   }
   }
