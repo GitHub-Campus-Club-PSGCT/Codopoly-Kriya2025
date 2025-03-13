@@ -72,7 +72,7 @@ const submitDebugs = async (req, res) => {
             return res.status(404).json({ message: "Question not found" });
         }
 
-        let allPOCs = JSON.parse(JSON.stringify(questionCorrect.POC)); // Deep copy of POC
+        let allPOCs = JSON.parse(JSON.stringify(questionCorrect.POC));  // Deep copy of POC
         let pocCode = questionCorrect.POC[pocName];
         let pocCodeError = questionError.POC[pocName];
 
@@ -121,8 +121,11 @@ ${mainFunction.trim()}
 if __name__ == "__main__":
     import json
     parsed_input = json.loads('${input}')
-    print(main(parsed_input))
+    print(main(*parsed_input))
 `;
+
+console.log("Code to run:", codeToRun); // Debugging line
+
                 console.log(codeToRun);
                 const result = await runPythonCode(codeToRun);
                 console.log(result);
