@@ -39,17 +39,14 @@ const getPOC = async (req, res) => {
         });
     }
 };
-
 const submitQuestions = async (req, res) => {
-    try{
+    try {
         const { title, POC, errorPOC, testCases } = req.body;
         console.log(testCases);
 
-        const check = await QuestionCorrect.findOne({
-            title: title
-        })
+        const check = await QuestionCorrect.findOne({ title: title });
 
-        if(check){
+        if (check) {
             return res.status(400).json({
                 message: "Question title already exists"
             });
@@ -60,7 +57,7 @@ const submitQuestions = async (req, res) => {
         try {
             for (const testCase of testCases) {
                 const jsonInput = testCase.input;
-                console.log('input : ',jsonInput);
+                console.log('input : ', jsonInput);
 
                 const mainFunction = POC["0"];
                 const otherFunctions = Object.values(POC).slice(1).join("\n\n");
@@ -72,7 +69,7 @@ ${mainFunction}
 if __name__ == "__main__":
     import json
     parsed_input = json.loads('${jsonInput}')
-    print(main(parsed_input))
+    print(main(*parsed_input))
 `;
 
                 const result = await runPythonCode(codeToRun);
@@ -84,10 +81,10 @@ if __name__ == "__main__":
 
                 processedTestCases.push({
                     input: testCase.input,
-                    expectedOutput: result.output.trim()
-                });
+                    expectedOutput: result.output || "None" // Default value
+                });                
             }
-        }catch (error) {
+        } catch (error) {
             return res.status(400).json({ message: "Error processing test cases", error: error.message });
         }
 
@@ -104,33 +101,33 @@ if __name__ == "__main__":
             testCases: processedTestCases
         });
 
-        try{
+        try {
             await correctQuestion.save();
-        }catch(error){
+        } catch (error) {
             return res.status(400).json({
                 message: "Failed to save the correct question",
                 error: error.message
-            })
+            });
         }
-        try{
+        try {
             await errorQuestion.save();
-        }catch(error){
+        } catch (error) {
             return res.status(400).json({
                 message: "Failed to save the error question",
                 error: error.message
-            })
+            });
         }
 
         return res.status(201).json({
             message: "Question added successfully"
-        })
-    }catch(error){
+        });
+    } catch (error) {
         return res.status(400).json({
             message: "Server error",
             error: error.message
-        })
+        });
     }
-}
+};
 
 module.exports = {
     getQuestions,
