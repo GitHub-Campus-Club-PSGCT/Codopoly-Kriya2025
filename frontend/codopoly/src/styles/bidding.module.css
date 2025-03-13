@@ -68,6 +68,7 @@
     padding: 1.5rem;
     width: 100%;
     max-width: 300px;
+    overflow: scroll;
 }
 
 .maintext{
@@ -91,11 +92,11 @@
 
 .btn{
     background-color:#F96024;
-    width: 80px;
-    height: 50px;
+    width: 100px;
+    height: 40px;
     border: none;
-    border-radius: 10px;
-    font-size: 20px;
+    border-radius: 3px;
+    font-size: 13px;
 }
 
 .confirmbox{

@@ -15,6 +15,11 @@ const Header = ({ sidebarOpen, setSidebarOpen, mainPartOpen, setMainPartOpen}) =
         navigate('/debugging')
     }
 
+    const handleLogout = ()=>{
+        localStorage.removeItem('codopoly_token');
+        navigate('/login')
+    }
+
     return (
         <>
             <div className={styles.header}>
@@ -24,12 +29,18 @@ const Header = ({ sidebarOpen, setSidebarOpen, mainPartOpen, setMainPartOpen}) =
                 >
                     <img src={SidebarBtn} alt="Toggle Sidebar" className={styles.sidebarbtn} />
                 </button>
-                <p style={{"fontSize": "2em" }} className={styles.maintext}>
+                <p style={{"fontSize": "2em", "marginLeft":"200px" }} className={styles.maintext}>
                     Auction
                 </p>
-                <button className={styles.headerbutton} onClick={handleRedirect}>
-                Debugging
-                </button>
+                <div>
+                    <button className={styles.headerbutton} onClick={handleRedirect}>
+                    Debugging
+                    </button>
+                    <button className={styles.headerbutton} onClick={handleLogout}>
+                    Logout
+                    </button>
+                </div>
+
             </div>
             <SideBar
                 isOpen={sidebarOpen}

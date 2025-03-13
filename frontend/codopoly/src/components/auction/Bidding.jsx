@@ -125,9 +125,8 @@ const Bidding = () => {
   };
   return (
     <div className={styles.biddingcontainer}>
+      <h2 className={styles.maintext}>Auction Bidding</h2>
       <div className={styles.biddingsubcontainer}>
-        <h2 className="text-2xl font-bold text-center mb-6">Auction Bidding</h2>
-
         {auctionStatus && (
           <div className="bg-blue-50 border border-blue-200 rounded-md p-3 mb-4">
             <p className="text-blue-800">{auctionStatus}</p>
@@ -136,7 +135,7 @@ const Bidding = () => {
 
         {sellPOCDetails && (
           <div className="bg-blue-50 border border-blue-200 rounded-md p-3 mb-4">
-            <p className="text-blue-800">{sellPOCDetails}</p>
+            <p className={styles.maintext}>{sellPOCDetails}</p>
           </div>
         )}
 
@@ -172,12 +171,12 @@ const Bidding = () => {
 
             <div className="mb-6">
               <p className="text-gray-600 mb-2">Increase bid by:</p>
-              <div className="grid grid-cols-5 gap-2">
+              <div style={{"display":"flex", "flexDirection":"row", "gap":"10px"}}>
                 {[5, 10, 20, 30, 40].map((amount) => (
                   <button
                     key={amount}
                     onClick={() => handleIncrementBid(amount)}
-                    className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-3 rounded-md transition-colors"
+                    className={styles.btn}
                     disabled={auctionTimeLeft === 0}
                   >
                     +₹{amount}
