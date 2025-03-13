@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import axios from "axios";
 import "./AddDebugs.css"; // External CSS for styling
 import { serverAPI } from "../../api/API";
 const AddDebugs = ({ currentPOC, debugs, setDebugs }) => {
