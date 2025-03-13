@@ -79,10 +79,12 @@ if __name__ == "__main__":
                     return res.status(400).json({ message: "Error running correct code", error: result.error });
                 }
 
+                const normalizeLineEndings = (str) => str.replace(/\r\n/g, "\n");
+
                 processedTestCases.push({
                     input: testCase.input,
-                    expectedOutput: result.output || "None" // Default value
-                });                
+                    expectedOutput: normalizeLineEndings(result.output || "None")
+                });
             }
         } catch (error) {
             return res.status(400).json({ message: "Error processing test cases", error: error.message });
