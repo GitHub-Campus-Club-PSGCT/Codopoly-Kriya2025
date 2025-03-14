@@ -65,10 +65,9 @@
 }
 
 .biddingsubcontainer {
-    padding: 1.5rem;
+    padding: 1rem;
     width: 100%;
     max-width: 300px;
-    overflow: scroll;
 }
 
 .maintext{
@@ -92,7 +91,7 @@
 
 .btn{
     background-color:#F96024;
-    width: 100px;
+    width: 120px;
     height: 40px;
     border: none;
     border-radius: 3px;
@@ -110,6 +109,108 @@
     display: flex;
     width: 80%;
     justify-content: space-between;
+}
+
+.auctiontext{
+    font-size: 1em;
+}
+
+.highlighttext{
+    color: #F96024;
+    font-weight: bold;
+}
+
+.textbold{
+    font-weight: bold;
+}
+
+.timer{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 120px;
+    background-color: #363434;
+}
+
+.clock{
+    width: 30px;
+    height: 30px;
+    color:#F96024;
+}
+
+.timegreen{
+    color: green;
+}
+
+.timered{
+    color: red;
+}
+
+.loadingcontainer{
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.loadingspinner{
+    height: 3rem;
+    width: 3rem;
+    border-radius: 50%;
+    border-top: 2px solid #F96024;
+    border-bottom: 2px solid #F96024;
+    border-left: 2px solid transparent;
+    border-right: 2px solid transparent;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+}
+
+.bidconfirmationbox{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 35%;
+    left: 35%;
+    width: 400px;
+    height: 250px;
+    border-radius: 40px;
+    box-shadow: 0 0 20px rgba(25, 25, 25, 0.8);
+    background-color: #363434;
+}
+
+.bidconfirmbtncontainer{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+}
+
+.bidmessagecontainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 45%;
+    left: 40%;
+    width: 300px;
+    height: 100px;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(25, 25, 25, 0.8);
+    background-color: #363434;
 }
 
 /*

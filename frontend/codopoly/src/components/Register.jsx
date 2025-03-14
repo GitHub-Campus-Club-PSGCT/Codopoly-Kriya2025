@@ -11,6 +11,7 @@ const Register = () => {
     confirmPassword: '',
     members: [{ kriya_id: '' }, { kriya_id: '' }]  // Start with 2 members
   });
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e, index) => {
     const { name, value } = e.target;
@@ -33,18 +34,21 @@ const Register = () => {
   };
 
   const handleSubmit = async (e) => {
+    setLoading(true);
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
       alert('Passwords do not match!');
+      setLoading(false);
       return;
     }
     try {
       const response = await serverAPI.register(formData);
       console.log(response);
+      setLoading(false)
       navigate('/login');
-      alert(response.data.message);
     } catch (err) {
       console.error(err);
+      setLoading(false)
       alert('Registration failed! : ',err.message);
     }
   };
@@ -104,13 +108,15 @@ const Register = () => {
           type="button"
           onClick={handleAddMember}
           disabled={formData.members.length >= 4}
-          className={styles.registerbutton}
+          className={formData.members.length == 4? `${styles.buttondisableeffect}` : `${styles.registerbutton}`}
           style={{ marginBottom: '10px' }}
         >
           Add Member
         </button>
         <button type="submit" className={styles.registerbutton}>
-          Register
+          {loading?(
+            <div className={styles.loadingspinner}></div>
+          ):"Register"}
         </button>
       </form>
       <a style={{"fontSize":"1em", "marginTop":"1em", "marginBottom":"1em","color":"#F96024"}} href="/login">Already Registered? Login here</a>

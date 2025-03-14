@@ -82,3 +82,23 @@
     align-items: center;
     flex-direction: column;
 }
+
+.loadingspinner{
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    border-top: 1px solid white;
+    border-bottom: 2px solid white;
+    border-left: 2px solid transparent;
+    border-right: 2px solid transparent;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+}
