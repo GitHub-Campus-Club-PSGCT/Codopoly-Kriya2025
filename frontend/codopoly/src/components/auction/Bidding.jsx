@@ -139,7 +139,7 @@ const Bidding = () => {
       teamName,
       bidAmount: currentBid.amount + newBidAmount,
     });
-
+    setBidMessage('');
     setNewBidAmount(0);
   };
 
