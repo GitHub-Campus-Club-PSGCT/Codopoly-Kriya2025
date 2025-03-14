@@ -1,6 +1,6 @@
 const { QuestionWithError, QuestionCorrect } = require('../models/question');
 const { runPythonCode } = require('../utils/python');
-
+const logger = require('../config/logger');
 const getQuestions = async (req, res) => {
     try{
         const questions = await QuestionWithError.find();

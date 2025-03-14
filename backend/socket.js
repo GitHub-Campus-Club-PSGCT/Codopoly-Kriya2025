@@ -195,7 +195,7 @@ io.on('connection', async (socket) => {
 
   try {
     const admin = await getAdmin();
-
+    await emitLeaderboard();
     if (admin.eventStatus !== 'auction') {
       socket.emit('auctionStatus', { message: 'Auction isn\'t started yet. Please wait.' });
       return;
@@ -214,9 +214,7 @@ io.on('connection', async (socket) => {
 
     socket.emit('currentBid', currentBid);
     console.log(currentBid);
-
-    emitLeaderboard();
-
+    console.log('New client connected:', socket.id);
     socket.on('updatePOC', (data) => handleUpdatePOC(data, socket));
     socket.on('sellPOC', () => handleSellPOC(socket));
 
@@ -256,6 +254,8 @@ io.on('connection', async (socket) => {
   } catch (error) {
     console.error('Error fetching admin data:', error);
   }
+
+
 
   socket.on('disconnect', () => {
     console.log('Client disconnected:', socket.id);
