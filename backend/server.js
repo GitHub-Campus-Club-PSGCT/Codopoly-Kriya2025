@@ -19,6 +19,7 @@ for (const envVar of requiredEnvVars) {
         process.exit(1);
     }
 }
+
 const HTTP_PORT = process.env.PORT || 3000;
 const app = express();
 app.use(express.json());
@@ -36,7 +37,7 @@ logger.log = function (message) {
   logger.info(message);
 };
 
-const allowedOrigins = [process.env.FRONTEND_URL, "http://localhost:3000"];
+const allowedOrigins = ["https://codopoly-kriya2025.vercel.app", "http://localhost:5173","http://localhost:5174"];
 app.use(cors({
     origin: function (origin, callback) {
         if (!origin) return callback(null, true);
@@ -55,9 +56,11 @@ app.use((req, res, next) => {
   });
   next();
 });
-// Define routes
 app.use(checkEventStatus);
 
+app.get('/', (req, res) => {
+  res.send('Codopoly Backend is up !');
+});
 app.use('/debug', debugRoutes);
 app.use('/bank', bankRoutes);
 app.use('/team', teamRoutes);
@@ -87,9 +90,6 @@ app.use((req, res) => {
 
 
 
-app.get('/', (req, res) => {
-  res.send('Codopoly Backend is up !');
-});
 
 // Start the HTTP server
 app.listen(HTTP_PORT, '0.0.0.0',() => {
