@@ -90,15 +90,16 @@ const Register = () => {
         />
         <h3 className={styles.text}>Members (2-4)</h3>
         {formData.members.map((member, index) => (
-          <div key={index} className="mb-2">
+          <div key={index} className={styles.inputcontainer}>
             <input
               type="text"
               name={`member${index}_kriya_id`}
               value={member.kriya_id}
               onChange={(e) => handleChange(e, index)}
               className={styles.inputbox}
-              placeholder={`Kriya ID for Member ${index + 1}`}
+              placeholder={`Kriya ID of Member ${index + 1}`}
               required
+              style={{"width":"170px"}}
             />
             <input
               type="text"
@@ -106,7 +107,7 @@ const Register = () => {
               value={member.name}
               onChange={(e) => handleChange(e, index)}
               className={styles.inputbox}
-              placeholder={`Name for Member ${index + 1}`}
+              placeholder={`Name of Member ${index + 1}`}
               required
             />
           </div>
