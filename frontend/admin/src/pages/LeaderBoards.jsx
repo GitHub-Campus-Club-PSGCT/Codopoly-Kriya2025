@@ -9,7 +9,10 @@ const Leaderboards = () => {
         socketAPI.connect();
         socketAPI.leaderBoard((data)=>{
           setTeamData(data);
-        })
+        });
+        return () => {
+          socketAPI.disconnect();
+        };
     },[]);
 
     return (

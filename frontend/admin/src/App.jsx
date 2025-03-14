@@ -13,7 +13,6 @@ import Leaderboards from './pages/LeaderBoards';
 import QuestionPage from './pages/QuestionPage';
 import RemovePOC from './pages/RemovePOC';
 import AddPoints from './pages/AddPoints';
-
 // Components
 import ProtectedRoute from './components/ProtectedRoute';
 import Layout from './components/Layout';
