@@ -10,7 +10,7 @@ const OwnedCode = () => {
     useEffect(() => {
         const fetchOwnedCodes = async () => {
            try{
-                const response = await serverAPI.getDebugPOC();
+                const response = await serverAPI.getDebugPOCduringAuction();
                 let teamPOCs = response.data.teamPOCs;
                 if (teamPOCs.length > 1) {
                     setOwnedCodes(teamPOCs.slice(1)); // skip the first element

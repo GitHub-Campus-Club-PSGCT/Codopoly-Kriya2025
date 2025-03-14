@@ -46,10 +46,10 @@ const Register = () => {
 
     try {
       const response = await serverAPI.register(formData);
-      console.log(response.data);
+      localStorage.setItem('codopoly_token', response.data.token); 
       alert(response.data.message);
       setLoading(false);
-      navigate('/login');
+      navigate('/choosephase');
     } catch (err) {
       console.error(err.response?.data || err.message);
       alert(err.response?.data?.message || 'Registration failed!');

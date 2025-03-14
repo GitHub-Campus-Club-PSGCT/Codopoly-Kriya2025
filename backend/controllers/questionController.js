@@ -131,6 +131,35 @@ if __name__ == "__main__":
     }
 };
 
+const getTeamPOCduringAuction = async(req,res)=>{
+    try {
+        const teamId = req.teamId;
+        const team = await Team.findById(teamId);
+        if (!team) {
+            logger.error("Team not found!");
+            return res.status(404).json({ message : "Team not found!" });
+        }
+
+        const assignedPOCs = team.POC;
+        const questions = await QuestionWithError.find({
+            title: { $in: assignedPOCs.map(poc => poc[0]) }
+        });
+
+        const teamPOCs = assignedPOCs.map(poc => {
+            const question = questions.find(q => q.title === poc[0]);
+            return {
+                pocName: poc,
+                code: question ? question.POC[poc[1]] : null
+            };
+        });
+        logger.info(`Successfully Fetched ${team.team_name}'s POC`);
+        return res.status(200).json({ teamPOCs });
+    } catch (error) {
+        logger.error("Error in getTeamPOC (debugController) : ", error);
+        return res.status(500).json(error);
+    }
+}
+
 module.exports = {
     getQuestions,
     getPOC,
