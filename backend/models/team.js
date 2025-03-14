@@ -5,7 +5,8 @@ const teamSchema = new mongoose.Schema({
   password: { type: String, required: true },
   members: [
     {
-      kriya_id: { type: String, required: true }
+      kriya_id: { type: String, required: true },
+      name : { type:String , required:true }
     }
   ],
   gitcoins: { type: Number, default: 0 },
