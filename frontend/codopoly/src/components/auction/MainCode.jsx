@@ -14,7 +14,7 @@ const MainPart = ({mainPart, setmainPart})=>{
 
         const fetchMainPOC = async ()=>{
             try{
-                const response = await serverAPI.getDebugPOC();
+                const response = await serverAPI.getDebugPOCduringAuction();
                 let teamPOCs = response.data.teamPOCs;
                 if(teamPOCs.length != 0){
                     setMainPOC(teamPOCs[0])

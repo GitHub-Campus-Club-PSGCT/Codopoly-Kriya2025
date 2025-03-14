@@ -68,6 +68,7 @@ export const serverAPI = {
     getPOC : (data)=>API.get(`/question/getPOC/${data}`),
     fetchTeam : ()=>API.get('/team/details'),
     getDebugPOC : ()=>API.get('/debug/poc'),
+    getDebugPOCduringAuction : ()=>('/question/POC'),
     submitDebug : (data)=>API.post('/debug/submit',data),
     getDebugs: (questionTitle, pocName) => 
       API.get('/debug/getdebugs', {
