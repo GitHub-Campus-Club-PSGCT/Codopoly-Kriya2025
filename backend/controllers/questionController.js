@@ -163,5 +163,6 @@ const getTeamPOCduringAuction = async(req,res)=>{
 module.exports = {
     getQuestions,
     getPOC,
-    submitQuestions
+    submitQuestions,
+    getTeamPOCduringAuction
 }
