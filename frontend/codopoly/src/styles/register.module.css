@@ -64,6 +64,8 @@
     cursor: pointer;
     transition: all 0.3s ease;
     margin-top: 20px;
+    justify-content: center;
+    align-items: center;
 }
 
 .registerbutton:hover {
@@ -77,9 +79,41 @@
     box-shadow: 0 2px 4px rgba(249, 96, 36, 0.3);
 }
 
+.buttondisableeffect{
+    background-color: #5b5b5b;
+    color: white;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
 .form{
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+}
+
+.loadingspinner{
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    border-top: 1px solid white;
+    border-bottom: 2px solid white;
+    border-left: 2px solid transparent;
+    border-right: 2px solid transparent;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
 }

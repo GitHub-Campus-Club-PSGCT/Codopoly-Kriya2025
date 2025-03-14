@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Clock } from 'lucide-react';
 import styles from '../../styles/bidding.module.css';
 import { socketAPI,serverAPI } from '../../api/API';
+import {useNavigate} from 'react-router-dom';
+import jwtDecode from 'jwt-decode';
 
 const Bidding = () => {
   const [currentBid, setCurrentBid] = useState({ amount: 0, team: null });
@@ -15,10 +17,33 @@ const Bidding = () => {
   const [auctionStatus, setAuctionStatus] = useState('');
   const [sellPOCDetails, setSellPOCDetails] = useState('');
 
+  const navigate = useNavigate();
+
   // 1. Fetch team details and connect socket on mount
   useEffect(() => {
     // Connect to socket
     socketAPI.connect();
+
+    // Check for valid token
+    const token = localStorage.getItem('codopoly_token');
+
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+
+    try {
+      const decoded = jwtDecode(token);
+      // Check if the token is expired
+      if (decoded.exp * 1000 < Date.now()) {
+        localStorage.removeItem('codopoly_token'); // Remove expired token
+        navigate('/login');
+      }
+    } catch (error) {
+      console.error('Invalid token:', error);
+      localStorage.removeItem('codopoly_token'); // Remove invalid token
+      navigate('/login');
+    }
 
     // Fetch team details from backend
     const fetchTeamDetails = async () => {
@@ -106,7 +131,7 @@ const Bidding = () => {
 
   const handleBid = () => {
     if (newBidAmount === 0) return;
-
+    setShowConfirmBox(false)
     setBidMessage('Placing your bid...');
 
     socketAPI.placeBid({
@@ -128,49 +153,37 @@ const Bidding = () => {
       <h2 className={styles.maintext}>Auction Bidding</h2>
       <div className={styles.biddingsubcontainer}>
         {auctionStatus && (
-          <div className="bg-blue-50 border border-blue-200 rounded-md p-3 mb-4">
-            <p className="text-blue-800">{auctionStatus}</p>
-            </div>
+            <p className={`${styles.auctiontext} ${styles.highlighttext}`}>{auctionStatus}</p>
         )}
 
         {sellPOCDetails && (
-          <div className="bg-blue-50 border border-blue-200 rounded-md p-3 mb-4">
-            <p className={styles.maintext}>{sellPOCDetails}</p>
-          </div>
+            <p className={`${styles.auctiontext} ${styles.highlighttext} ${styles.textbold}`}>{sellPOCDetails}</p>
         )}
 
         {auctionTimeLeft > 0 && (
-          <div className="flex items-center justify-center mb-4 bg-yellow-50 p-3 rounded-md">
-            <Clock className="w-5 h-5 mr-2 text-yellow-600" />
-            <span className="text-xl font-semibold text-yellow-800">
+          <div className={styles.timer}>
+            <Clock className={styles.clock} />
+            <span className={auctionTimeLeft<10? `${styles.timered}`: `${styles.timegreen}`}>
               {formatTime(auctionTimeLeft)}
             </span>
           </div>
         )}
 
         {isLoading ? (
-          <div className="flex justify-center my-8">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+          <div className={styles.loadingcontainer}>
+            <div className={styles.loadingspinner}></div>
           </div>
         ) : (
           <>
-            <div className="mb-6">
-              <p className="text-gray-600 mb-1">Your Team:</p>
-              <p className="text-lg font-semibold">{teamName || 'Not available'}</p>
-            </div>
-
-            <div className="bg-gray-50 p-4 rounded-lg mb-6">
-              <p className="text-gray-600 mb-1">Current Highest Bid:</p>
-              <div className="flex justify-between items-center">
-                <p className="text-2xl font-bold text-green-600">₹{currentBid.amount}</p>
-                <p className="text-gray-700">
-                  by <span className="font-semibold">{currentBid.team || 'No bids yet'}</span>
+              <p className={`${styles.auctiontext} ${styles.textbold}`}>Your Team:</p>
+              <p className={`${styles.auctiontext} ${styles.highlighttext}`}>{teamName || 'Not available'}</p>
+              <p className={`${styles.auctiontext} ${styles.textbold}`}>Current Highest Bid:</p>
+                <p className={`${styles.auctiontext} ${styles.highlighttext}`}>₹{currentBid.amount}</p>
+                <p className={`${styles.auctiontext} ${styles.textbold}`}>
+                  by <span className={`${styles.auctiontext} ${styles.highlighttext}`}>{currentBid.team || 'No bids yet'}</span>
                 </p>
-              </div>
-            </div>
 
-            <div className="mb-6">
-              <p className="text-gray-600 mb-2">Increase bid by:</p>
+              <p className={`${styles.auctiontext} ${styles.textbold}`}>Increase bid by:</p>
               <div style={{"display":"flex", "flexDirection":"row", "gap":"10px"}}>
                 {[5, 10, 20, 30, 40].map((amount) => (
                   <button
@@ -179,20 +192,20 @@ const Bidding = () => {
                     className={styles.btn}
                     disabled={auctionTimeLeft === 0}
                   >
-                    +₹{amount}
+                    ₹{amount}
                   </button>
                 ))}
               </div>
-            </div>
 
             {showConfirmBox && (
-              <div className="border border-gray-200 rounded-lg p-4 mb-6 bg-gray-50">
-                <p className="text-gray-700 mb-2">Confirm your bid:</p>
-                <p className="text-xl font-bold mb-4">₹{currentBid.amount + newBidAmount}</p>
-                <div className="flex space-x-3">
+              <div className={styles.bidconfirmationbox}>
+                <p className={`${styles.auctiontext} ${styles.highlighttext}`} style={{"fontSize":"1.5rem","marginBottom":"20px"}}>Confirm your bid</p>
+                <p className={styles.highlighttext} style={{"fontSize":"2rem","margin":0, "marginBottom":"20px"}}>₹{currentBid.amount + newBidAmount}</p>
+                <div className={styles.bidconfirmbtncontainer}>
                   <button
                     onClick={handleBid}
-                    className="flex-1 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-md transition-colors"
+                    className={styles.headerbutton}
+                    style={{"margin":0}}
                   >
                     Place Bid
                   </button>
@@ -201,7 +214,8 @@ const Bidding = () => {
                       setNewBidAmount(0);
                       setShowConfirmBox(false);
                     }}
-                    className="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 px-4 rounded-md transition-colors"
+                    className={styles.headerbutton}
+                    style={{"margin":0}}
                   >
                     Cancel
                   </button>
@@ -210,8 +224,8 @@ const Bidding = () => {
             )}
 
             {bidMessage && (
-              <div className={`p-3 rounded-md ${bidMessage.includes('Failed') || bidMessage.includes('exceeds') ? 'bg-red-50 text-red-700' : 'bg-blue-50 text-blue-700'}`}>
-                {bidMessage}
+              <div className={styles.bidmessagecontainer}>
+                <p className={`${styles.highlighttext}`} style={{"fontSize":"1.3rem"}}>Placing your Bid ... </p>
               </div>
             )}
           </>

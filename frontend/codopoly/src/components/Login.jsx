@@ -6,6 +6,7 @@ import { serverAPI } from '../api/API';
 const Login = () => {
   const [formData, setFormData] = useState({ teamName: '', password: '' });
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -13,14 +14,16 @@ const Login = () => {
   };
 
   const handleSubmit = async (e) => {
+    setLoading(true);
     e.preventDefault();
     try {
       const response = await serverAPI.login(formData);
-      localStorage.setItem('codopoly_token', response.data.token);  // Store token
-      alert('Login successful!');
+      localStorage.setItem('codopoly_token', response.data.token); // Store token
+      setLoading(false);
       navigate('/choosephase');
     } catch (err) {
       console.error(err);
+      setLoading(false);
       alert('Login failed!');
     }
   };
@@ -52,7 +55,9 @@ const Login = () => {
           />
         </div>
         <button type="submit" className={styles.loginbutton}>
-          Login
+          {loading?(
+          <div className={styles.loadingspinner}></div>
+          ):"Login"}
         </button>
       </form>
       <a style={{"fontSize":"1em", "marginTop":"1em", "marginBottom":"1em","color":"#F96024"}} href="/register">Register your team here</a>
