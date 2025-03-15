@@ -7,7 +7,7 @@ const Code = ({ teamPOCs, setTeamPOCs, currentPOCIndex, setCurrentPOCIndex }) =>
         const fetchCode = async () => {
             try {
                 const response = await serverAPI.getDebugPOC();
-                console.log('Code ',response.data.teamPOCs);
+                // console.log('Code ',response.data.teamPOCs);
                 setTeamPOCs(response.data.teamPOCs);
             } catch (error) {
                 console.error("Failed to fetch code:", error);
@@ -26,7 +26,7 @@ const Code = ({ teamPOCs, setTeamPOCs, currentPOCIndex, setCurrentPOCIndex }) =>
     return (
         <div className="code-container">
             <h2 className="code-title">Current POC</h2>
-           
+
 
             {/* Code Block */}
             <pre className="code-block">
