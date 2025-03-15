@@ -16,8 +16,9 @@ const getQuestions = async (req, res) => {
 
 const getPOC = async (req, res) => {
     try {
-        const pocName = req.params.pocName; // Assuming the parameter is named pocName
-        const title = pocName.charAt(0);
+        const pocName = req.params.pocName.toUpperCase();
+        const title = pocName.charAt(0).toUpperCase();
+
         const pocIndex = pocName.charAt(1);
         console.log(title,pocIndex);
         const question = await QuestionCorrect.findOne({ title });
