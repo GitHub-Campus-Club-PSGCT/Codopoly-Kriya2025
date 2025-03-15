@@ -17,11 +17,11 @@ const getTeamPOC = async (req, res) => {
 
         const assignedPOCs = team.POC;
         const questions = await QuestionWithError.find({
-            title: { $in: assignedPOCs.map(poc => poc[0]) }
+            title: { $in: assignedPOCs.map(poc => poc[0].toUpperCase()) }
         });
 
         const teamPOCs = assignedPOCs.map(poc => {
-            const question = questions.find(q => q.title === poc[0]);
+            const question = questions.find(q => q.title === poc[0].toUpperCase());
             return {
                 pocName: poc,
                 code: question ? question.POC[poc[1]] : null
@@ -56,7 +56,9 @@ const isRedundantDebug = (originalLine, debugLine) => {
 
 const submitDebugs = async (req, res) => {
     try {
-        const { questionTitle, pocName, debugs } = req.body;
+        let { questionTitle, pocName, debugs } = req.body;
+        questionTitle = questionTitle.toUpperCase();
+
         const teamId = req.teamId;
         const questionCorrect = await QuestionCorrect.findOne({ title: questionTitle });
         const questionError = await QuestionWithError.findOne({ title: questionTitle });

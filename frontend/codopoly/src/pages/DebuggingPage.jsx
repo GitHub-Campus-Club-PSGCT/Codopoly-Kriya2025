@@ -31,10 +31,13 @@ const DebuggingPage = () => {
             />
 
             <div className="debug-section">
-                <SubmittedDebugs 
-                    questionTitle={teamPOCs[currentPOCIndex]?.pocName?.charAt(0)}
-                    pocName={teamPOCs[currentPOCIndex]?.pocName?.charAt(1)}
-                />
+            <SubmittedDebugs 
+                questionTitle={teamPOCs[currentPOCIndex]?.pocName?.charAt(0)}
+                pocName={teamPOCs[currentPOCIndex]?.pocName?.charAt(1)}
+                debugs={debugs} 
+                setDebugs={setDebugs} // ✅ Pass this to refresh on submit
+            />
+
                 <AddDebugs 
                     currentPOC={teamPOCs[currentPOCIndex]} 
                     debugs={debugs} 
