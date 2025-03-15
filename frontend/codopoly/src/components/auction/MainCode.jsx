@@ -46,7 +46,7 @@ const MainPart = ({mainPart, setmainPart})=>{
                     <p style={{"marginTop":10, "marginBottom":10, "marginLeft":"37%"}} className={styles.maintext}>Main Part</p>
                 </div>
                 <div className={styles.mainpart}>
-                    <pre>{mainPOC.code}</pre>
+                    <pre className={styles.codeblock}>{mainPOC.code}</pre>
                 </div>
             </div>
         </>

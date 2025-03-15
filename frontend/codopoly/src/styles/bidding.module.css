@@ -204,10 +204,10 @@
     justify-content: center;
     align-items: center;
     position: fixed;
-    top: 45%;
-    left: 40%;
-    width: 300px;
-    height: 100px;
+    top: 40%;
+    left: 37%;
+    width: 450px;
+    height: 150px;
     border-radius: 20px;
     box-shadow: 0 0 20px rgba(25, 25, 25, 0.8);
     background-color: #363434;
@@ -350,9 +350,6 @@
     height: 78%;
     background-color:#171717;
     border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     padding: 15px;
     overflow: scroll;
 }
@@ -407,4 +404,13 @@
 * {
     scrollbar-width: thin;
     scrollbar-color:#F96024 #282828;
+}
+
+.codeblock {
+    background-color: #171717;
+    color: white;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    line-height: 2.4;
+    padding: 15px;
+    font-size: 14px;
 }

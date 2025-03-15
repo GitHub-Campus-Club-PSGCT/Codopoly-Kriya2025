@@ -1,6 +1,6 @@
 import styles from '../styles/choosephase.module.css';
 import {useNavigate} from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import Logo from '../assets/Logo.png'
 
 const PhaseChoose = ()=>{
     const navigate = useNavigate();
@@ -12,7 +12,7 @@ const PhaseChoose = ()=>{
     return(
         <div className={styles.maincontainer}>
             <div className={styles.gameContainer}>
-                <h1 className={styles.gameTitle}>CODOPOLY</h1>
+                <img src={Logo} className={styles.gameTitle}/>
                 <p className={styles.gameSubtitle}>
                     Welcome to the ultimate coding board game! Choose your next move wisely.
                 </p>
@@ -24,6 +24,7 @@ const PhaseChoose = ()=>{
                     <button className={styles.button} onClick={()=>handleClick('/bidding')}>
                         Auction Phase
                     </button>
+                    <button className={styles.button} onClick={()=>{handleClick('/leaderboards')}}>LeaderBoards</button>
                 </div>
 
                 <p className={styles.footerText}>

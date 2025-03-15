@@ -1,0 +1,130 @@
+.leaderboardContainer {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    width: 100%;
+    margin-bottom: 40px;
+}
+
+.subcontainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 80vw;
+}
+
+.leaderboardTable {
+    width: 80%;
+    max-width: 800px;
+    border-collapse: collapse;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    font-family: 'Courier New', Courier, monospace;
+    border: 1px solid #444;
+    background-color: #2d2d2d;
+    color: #e0e0e0;
+    border-radius: 8px;
+}
+
+.leaderboardTable thead {
+    background-color: #F96024;
+    color: white;
+}
+
+.leaderboardTable th {
+    padding: 15px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 18px;
+    width: 500px;
+    border: 1px solid #444;
+}
+
+.leaderboardTable tbody tr:hover {
+    background-color: #3a3a3a;
+}
+
+.leaderboardTable td {
+    padding: 12px 15px;
+    text-align: center;
+    border-bottom: 1px solid #444;
+}
+
+.first {
+    background-color: rgba(255, 215, 0, 0.2);
+    font-weight: bold;
+    font-size: 1.1em;
+    position: relative;
+}
+
+.first td:first-child {
+    color: gold;
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+.first td:first-child::before {
+    content: "👑 ";
+}
+
+.second {
+    background-color: rgba(192, 192, 192, 0.2);
+}
+
+.second td:first-child {
+    color: silver;
+    font-weight: bold;
+}
+
+.third {
+    background-color: rgba(205, 127, 50, 0.2);
+}
+
+.third td:first-child {
+    color: #cd7f32;
+    font-weight: bold;
+}
+
+.leaderboardTitle {
+    text-align: center;
+    color: #F96024;
+    font-weight: bold;
+    font-size: 30px;
+    margin-bottom: 20px;
+    font-family: 'Courier New', Courier, monospace;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.codeComment {
+    color: #6a9955;
+    text-align: center;
+    font-family: 'Courier New', Courier, monospace;
+    margin-bottom: 10px;
+}
+
+.codeBrackets {
+    color: #F96024;
+    font-size: 22px;
+    font-family: 'Courier New', Courier, monospace;
+    margin: 5px 0;
+}
+
+.lineNumbers {
+    color: #858585;
+    text-align: right;
+    padding-right: 10px;
+    user-select: none;
+    border-right: 1px solid #444;
+    width: 30px;
+}
+
+.tableContainer {
+    position: relative;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #1e1e1e;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+    width: 85%;
+    max-width: 850px;
+}

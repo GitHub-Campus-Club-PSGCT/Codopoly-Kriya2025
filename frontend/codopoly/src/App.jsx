@@ -7,6 +7,8 @@ import DebuggingPage from './pages/DebuggingPage.jsx';
 import QuestionPage from './pages/QuestionPage.jsx';
 import ChoosePhasePage from './pages/ChoosePhasePage.jsx';
 import OwnedCodesPage from './pages/OwnedCodesPage.jsx';
+import Leaderboards from './pages/leaderboard.jsx';
+
 
 const AppRouter = () => {
     return (
@@ -19,6 +21,7 @@ const AppRouter = () => {
                 <Route path="/bidding" element={<BiddingPage/>} />
                 <Route path='/ownedcodes' element={<OwnedCodesPage/>} />
                 <Route path="/debugging" element={<DebuggingPage/>} />
+                <Route path='/leaderboards' element={<Leaderboards/>}/>
                {/* <Route path="/question" element={<QuestionPage/>}*/}
              </Routes>
         </Router>

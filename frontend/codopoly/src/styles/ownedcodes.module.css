@@ -62,7 +62,7 @@
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     margin-bottom: 15px;
     overflow: scroll;
-    
+
 }
 
 .codeCard:hover {
@@ -89,6 +89,44 @@
     font-family: monospace;
     font-size: 0.9em;
     white-space: pre-wrap;
+}
+
+.codeblock {
+    background-color: #171717;
+    color: white;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    line-height: 2.4;
+    padding: 15px;
+    font-size: 14px;
+}
+
+
+/* Loading Spinner */
+.loadingcontainer{
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.loadingspinner{
+    height: 3rem;
+    width: 3rem;
+    border-radius: 50%;
+    border-top: 2px solid #F96024;
+    border-bottom: 2px solid #F96024;
+    border-left: 2px solid transparent;
+    border-right: 2px solid transparent;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
 }
 
 /* Loading and error states */

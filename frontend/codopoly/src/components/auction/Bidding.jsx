@@ -163,7 +163,7 @@ const Bidding = () => {
         {auctionTimeLeft > 0 && (
           <div className={styles.timer}>
             <Clock className={styles.clock} />
-            <span className={auctionTimeLeft<10? `${styles.timered}`: `${styles.timegreen}`}>
+            <span style={{"fontWeight":"bold","fontSize":"1.5em","margin":0}} className={auctionTimeLeft<10? `${styles.timered}`: `${styles.timegreen}`}>
               {formatTime(auctionTimeLeft)}
             </span>
           </div>
@@ -225,7 +225,10 @@ const Bidding = () => {
 
             {bidMessage && (
               <div className={styles.bidmessagecontainer}>
-                <p className={`${styles.highlighttext}`} style={{"fontSize":"1.3rem"}}>Placing your Bid ... </p>
+                <p className={`${styles.highlighttext}`} style={{"fontSize":"1.3rem"}}>{bidMessage}</p>
+                <button className={styles.headerbutton} onClick={()=>{setBidMessage('')}}>
+                  Cancel
+                </button>
               </div>
             )}
           </>

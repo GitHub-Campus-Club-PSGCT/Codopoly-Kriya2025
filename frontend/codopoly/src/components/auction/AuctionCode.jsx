@@ -13,7 +13,7 @@ const AuctionCode = () => {
     socketAPI.onUpdatePOCSuccess(async (data) => {
       console.log('POC Update:', data.message);
       console.log('POC NAME:', data.poc);
-      
+
       try {
         const response = await serverAPI.getPOC(data.poc);
         console.log('Fetched POC:', response.data.poc);
@@ -33,11 +33,18 @@ const AuctionCode = () => {
     };
   }, []);
 
+  // Process the POC string to remove everything up to the first closing parenthesis
+  const processedPOC = currentPOCForSale.includes('(')
+    ? currentPOCForSale.substring(currentPOCForSale.indexOf('(')).trim()
+    : currentPOCForSale;
+
   return (
     <div className={styles.auctioncodecontainer}>
       <p style={{ margin: 10, fontSize: '1.5em' }} className={styles.maintext}>Auction Code</p>
       <div className={styles.auctioncodesubcontainer}>
-        {currentPOCForSale}
+        <pre className={styles.codeblock}>
+          {processedPOC}
+        </pre>
       </div>
     </div>
   );
