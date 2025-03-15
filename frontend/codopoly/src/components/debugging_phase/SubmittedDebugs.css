@@ -1,7 +1,9 @@
 .debugs-wrapper {
     width: 100%;
+    min-height: 100px; /* Ensures it doesn't collapse */
     max-height: 40vh; /* Prevents excessive growth */
-    overflow-y: auto; /* Adds scroll if needed */
+    flex-grow: 1; /* Allows expansion while keeping constraints */
+    overflow-y: auto; /* Adds scrolling when needed */
     background-color: #282828;
     padding: 20px;
     border-radius: 10px;

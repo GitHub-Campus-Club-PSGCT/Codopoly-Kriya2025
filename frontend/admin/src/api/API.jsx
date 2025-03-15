@@ -26,7 +26,7 @@ let socket = null;
 export const socketAPI = {
   connect: () => {
     if (!socket) {
-      socket = io('https://codopoly-kriya2025-1.onrender.com'); // Socket.IO server URL
+      socket = io('https://codopoly-kriya2025-1.onrender.com'); // Socket.IO server URL  https://codopoly-kriya2025-1.onrender.com
       console.log('Socket connected');
     }
     return socket;
