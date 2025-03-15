@@ -10,7 +10,7 @@ const logic= async(req,res) => {
       alphabets.push(String.fromCharCode(i));
     }
   
-    const fract = Math.floor(0.6 * n);
+    const fract = Math.floor(0.5 * n);
     let qns = [];
     for (let i = 0; i < fract; i++) {
       qns.push(alphabets[i]);
