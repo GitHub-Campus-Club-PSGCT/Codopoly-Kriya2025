@@ -130,7 +130,7 @@ const handleSellPOC = async (socket) => {
     await admin.save();
 
     console.log(`POC: '${POC}' sold successfully to ${teamName}`);
-    io.emit('sellPOCSuccess', { message: `POC: '${POC}' sold successfully` });
+    io.emit('sellPOCSuccess', { message: `POC  sold successfully` });
     io.emit('currentBid', currentBid);
     clearInterval(auctionTimer);
     io.emit('auctionEnded');

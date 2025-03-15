@@ -161,7 +161,7 @@ if __name__ == "__main__":
 
             let team = await Team.findById(teamId);
             if (team) {
-                const pointsPerDebug = 50;
+                const pointsPerDebug = 20;
                 team.gitcoins += correctDebugs.length * pointsPerDebug;
                 team.no_of_debugs.push(correctDebugs.length);
                 await team.save();
