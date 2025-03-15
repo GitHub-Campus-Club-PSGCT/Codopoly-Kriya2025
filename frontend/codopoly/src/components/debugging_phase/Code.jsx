@@ -26,7 +26,7 @@ const Code = ({ teamPOCs, setTeamPOCs, currentPOCIndex, setCurrentPOCIndex }) =>
     return (
         <div className="code-container">
             <h2 className="code-title">Current POC</h2>
-            <h3 className="poc-name">{teamPOCs[currentPOCIndex].pocName}</h3>
+           
 
             {/* Code Block */}
             <pre className="code-block">
