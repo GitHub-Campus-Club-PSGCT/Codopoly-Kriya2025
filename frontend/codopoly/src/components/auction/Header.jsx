@@ -20,6 +20,10 @@ const Header = ({ sidebarOpen, setSidebarOpen, mainPartOpen, setMainPartOpen}) =
         navigate('/login')
     }
 
+    const handleleaderboards = ()=>{
+        navigate('/leaderboards');
+    }
+
     return (
         <>
             <div className={styles.header}>
@@ -29,12 +33,15 @@ const Header = ({ sidebarOpen, setSidebarOpen, mainPartOpen, setMainPartOpen}) =
                 >
                     <img src={SidebarBtn} alt="Toggle Sidebar" className={styles.sidebarbtn} />
                 </button>
-                <p style={{"fontSize": "2em", "marginLeft":"200px" }} className={styles.maintext}>
+                <p style={{"fontSize": "2em", "marginLeft":"350px" }} className={styles.maintext}>
                     Auction
                 </p>
                 <div>
                     <button className={styles.headerbutton} onClick={handleRedirect}>
                     Debugging
+                    </button>
+                    <button className={styles.headerbutton} onClick={handleleaderboards}>
+                    LeaderBoards
                     </button>
                     <button className={styles.headerbutton} onClick={handleLogout}>
                     Logout

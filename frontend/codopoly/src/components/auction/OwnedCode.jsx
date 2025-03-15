@@ -27,7 +27,11 @@ const OwnedCode = () => {
     }, []);
 
     if (loading) {
-        return <div className={styles.loadingText}>Loading your codes...</div>;
+        return (
+            <div className={styles.loadingcontainer}>
+                <div className={styles.loadingspinner}></div>
+            </div>
+        );
     }
 
     if (error) {
@@ -41,11 +45,13 @@ const OwnedCode = () => {
     return (
         <div className={styles.codesContainer}>
             {ownedCodes.map((code, index) => (
-                <div key={index} className={styles.codeCard}>
+                code.code && (
+                    <div key={index} className={styles.codeCard}>
                     <pre className={styles.codeContent}>
                         {code.code}
                     </pre>
-                </div>
+                    </div>
+                )
             ))}
         </div>
     );
