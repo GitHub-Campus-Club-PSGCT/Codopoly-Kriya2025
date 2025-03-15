@@ -11,12 +11,12 @@ const AuctionCode = () => {
     socketAPI.connect();
 
     socketAPI.onUpdatePOCSuccess(async (data) => {
-      console.log('POC Update:', data.message);
-      console.log('POC NAME:', data.poc);
+      // console.log('POC Update:', data.message); Removed logs
+      // console.log('POC NAME:', data.poc);
 
       try {
         const response = await serverAPI.getPOC(data.poc);
-        console.log('Fetched POC:', response.data.poc);
+        // console.log('Fetched POC:', response.data.poc);
         setCurrentPOCForSale(response.data.poc);
         localStorage.setItem('currentPOC', response.data.poc);
       } catch (error) {

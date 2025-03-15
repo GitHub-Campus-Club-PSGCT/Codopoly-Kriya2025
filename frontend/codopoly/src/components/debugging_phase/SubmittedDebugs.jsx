@@ -13,7 +13,7 @@ const SubmittedDebugs = ({ questionTitle, pocName, debugs = {}, setDebugs }) => 
                 }
 
                 const response = await serverAPI.getDebugs(questionTitle, pocName);
-                console.log("Fetched debugs:", response.data.debugs); // Debugging log
+                // console.log("Fetched debugs:", response.data.debugs); // Debugging log
 
                 // Ensure `setDebugs` correctly updates the previous state
                 setDebugs(prevDebugs => ({
@@ -38,7 +38,7 @@ const SubmittedDebugs = ({ questionTitle, pocName, debugs = {}, setDebugs }) => 
             <ul className="debugs-list">
                 {debugs[pocName]?.map((debug, index) => (
                     <li key={index} className="debug-item">
-                        <strong className="debug-line-num">Line {debug.line}:</strong> 
+                        <strong className="debug-line-num">Line {debug.line}:</strong>
                         <span className="debug-content">{debug.newCode}</span>
                     </li>
                 ))}

@@ -1,6 +1,7 @@
 import styles from '../../styles/bidding.module.css';
 import { useEffect, useState } from 'react';
-import { serverAPI } from '../../api/API';
+import { serverAPI } from '../../api/API'
+import { socketAPI } from '../../api/API';
 
 const Score = ()=>{
     const [gitcoins, setGitcoins] = useState(0);
@@ -11,6 +12,14 @@ const Score = ()=>{
             setGitcoins(parseInt(teamsDetails.data.gitcoins));
         }
         fetchTeamGitcoins(); // Add this line to call the function
+
+        socketAPI.connect();
+        socketAPI.onSellPOCSuccess(()=>{
+            fetchTeamGitcoins();
+        });
+        return () => {
+            socketAPI.disconnect();
+        };
     }, []);
 
     return(
