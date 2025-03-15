@@ -1,13 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useEffect } from 'react';
 import "./SubmittedDebugs.css"; // External CSS for styling
 import { serverAPI } from '../../api/API';
 
-const SubmittedDebugs = ({ questionTitle, pocName, teamId }) => {
-    const [debugs, setDebugs] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-
+const SubmittedDebugs = ({ questionTitle, pocName, debugs = {}, setDebugs }) => {
     useEffect(() => {
         const fetchDebugs = async () => {
             try {
@@ -17,27 +12,31 @@ const SubmittedDebugs = ({ questionTitle, pocName, teamId }) => {
                     return;
                 }
 
-                const response = await serverAPI.getDebugs(questionTitle, pocName );
-                setDebugs(response.data.debugs || []);
+                const response = await serverAPI.getDebugs(questionTitle, pocName);
+                console.log("Fetched debugs:", response.data.debugs); // Debugging log
+
+                // Ensure `setDebugs` correctly updates the previous state
+                setDebugs(prevDebugs => ({
+                    ...prevDebugs,
+                    [pocName]: response.data.debugs || []
+                }));
             } catch (error) {
-                setError(error.response?.data?.message || error.message);
-            } finally {
-                setLoading(false);
+                console.error("Error fetching debugs:", error);
             }
         };
 
-        fetchDebugs();
-    }, [questionTitle, pocName, teamId]);
+        if (pocName) fetchDebugs();
+    }, [questionTitle, pocName, setDebugs]);
 
-    if (loading) return <p className="debug-loading">Loading submitted debugs...</p>;
-    if (error) return <p className="debug-error">Error: {error}</p>;
-    if (debugs.length === 0) return <p className="debug-no-data">No debugs submitted yet.</p>;
+    if (!debugs || !debugs[pocName] || debugs[pocName].length === 0) {
+        return <p className="debug-no-data">No debugs submitted yet.</p>;
+    }
 
     return (
         <div className="debugs-wrapper">
             <h2 className="debugs-header">Submitted Debugs</h2>
             <ul className="debugs-list">
-                {debugs.map((debug, index) => (
+                {debugs[pocName]?.map((debug, index) => (
                     <li key={index} className="debug-item">
                         <strong className="debug-line-num">Line {debug.line}:</strong> 
                         <span className="debug-content">{debug.newCode}</span>

@@ -6,19 +6,12 @@
     border: 2px solid #F96024;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
     overflow: hidden;
-    margin-top: 70px; /* Ensures spacing below Submitted Debugs */
 }
 
 .debug-title {
     color: #FBBD13; /* Yellow Accent */
     text-align: center;
     font-size: 20px;
-    font-weight: bold;
-}
-
-.debug-error {
-    color: #F96024; /* Orange Error Text */
-    text-align: center;
     font-weight: bold;
 }
 
@@ -31,7 +24,7 @@
     border-radius: 5px;
     border: 2px solid #F96024; /* Orange Border */
     gap: 5px;
-    flex-wrap: nowrap; /* Ensures the button doesn't wrap */
+    flex-wrap: nowrap; /* Prevents button wrapping */
 }
 
 .debug-input {
@@ -79,4 +72,30 @@
     align-items: center;
     justify-content: center;
     min-width: 30px; /* Ensures visibility */
+    transition: all 0.3s ease-in-out;
+}
+
+/* Hover Effect */
+.remove-btn:hover {
+    background: rgba(249, 96, 36, 0.2); /* Light orange tint */
+    color: #FBBD13; /* Slightly brighter orange */
+    transform: scale(1.1); /* Slight zoom effect */
+    border-radius: 5px;
+}
+/* Customizing Toastify styles */
+.Toastify__toast {
+    background: black !important; /* Black background */
+    color: #FBBD13 !important; /* Orange text */
+    font-weight: bold;
+    border-radius: 8px;
+    border: 2px solid #F96024;
+    margin-top: 50px;
+}
+
+.Toastify__progress-bar {
+    background: #F96024 !important; /* Orange progress bar */
+}
+
+.Toastify__toast-container {
+    top: 60px !important; /* Adjust this value to move it down */
 }
