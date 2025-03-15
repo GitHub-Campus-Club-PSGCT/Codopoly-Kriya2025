@@ -8,7 +8,8 @@ const questionRoutes = require('./routes/questionRoutes');
 const checkEventStatus = require('./middlewares/checkEventStatus');
 const cors = require('cors');
 const logger = require('./config/logger');
-
+const fs = require("fs");
+const path = require("path");
 require('dotenv').config();
 
 
@@ -66,7 +67,32 @@ app.use('/bank', bankRoutes);
 app.use('/team', teamRoutes);
 app.use('/admin', adminRoutes);
 app.use('/question', questionRoutes);
+app.get("/logs", (req, res) => {
+  try {
+    const logFilePath = path.join(__dirname, "logs/combined.log");
+    const errorLogPath = path.join(__dirname, "logs/error.log");
 
+    // Read activity_log.log first
+    fs.readFile(logFilePath, "utf8", (err, activityData) => {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+
+      // Then read error.log
+      fs.readFile(errorLogPath, "utf8", (err2, errorData) => {
+        if (err2) {
+          return res.status(500).json({ error: err2.message });
+        }
+
+        // Combine both logs, reverse for latest first
+        const combinedLogs = (activityData + "\n" + errorData).split("\n").reverse();
+        res.json({ logs: combinedLogs });
+      });
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 app.use((err, req, res, next) => {
   logger.error({
     message: err.message,
