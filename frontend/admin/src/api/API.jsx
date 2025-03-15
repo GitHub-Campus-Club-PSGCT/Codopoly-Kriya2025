@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { io } from 'socket.io-client';
-import SubmitQuestion from '../components/questions/SubmitQuestion';
+
 
 // Create axios instance with base URL
 const API = axios.create({

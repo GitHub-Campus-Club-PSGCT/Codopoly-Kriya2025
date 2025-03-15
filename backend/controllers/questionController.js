@@ -1,6 +1,7 @@
 const { QuestionWithError, QuestionCorrect } = require('../models/question');
 const { runPythonCode } = require('../utils/python');
-
+const logger = require('../config/logger');
+const Team = require('../models/team');
 const getQuestions = async (req, res) => {
     try{
         const questions = await QuestionWithError.find();
@@ -156,6 +157,7 @@ const getTeamPOCduringAuction = async(req,res)=>{
         return res.status(200).json({ teamPOCs });
     } catch (error) {
         logger.error("Error in getTeamPOC (debugController) : ", error);
+        console.log(error);
         return res.status(500).json(error);
     }
 }
@@ -165,5 +167,4 @@ module.exports = {
     getPOC,
     submitQuestions,
     getTeamPOCduringAuction
-
 }
